@@ -12,6 +12,7 @@ from discord.ext.commands.cooldowns import BucketType
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='%', intents=intents)
 
+
 bot.load_extension(f"cogs.functions")
 bot.load_extension(f"cogs.currency")
 bot.load_extension(f"cogs.utility")

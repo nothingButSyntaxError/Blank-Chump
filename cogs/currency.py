@@ -7,18 +7,29 @@ import pymongo
 from pymongo import MongoClient
 import asyncio
 
+#MONGODB
 cluster = MongoClient("mongodb+srv://Admin-MyName:Parth!7730@my-dbs.xlx4y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 db = cluster["discord"]
 collection = db["user_data"]
+inv_db = cluster["discord"]
+inv_collection = db["inventory"] 
+
+#SHOP
+mainshop = [{"name": "watch", "price": 2000, "description": "Show off your watch to all!, However its just useless"},
+            {"name": "fishing_rod", "price": 10000,
+             "description": "Helps you in fishing you can use the #fish command if you have a fishing rod!"},
+            {"name": "second_hand_laptop", "price": 11000,
+             "description": "Just a second hand laptop which might be in your budget"},
+            {"name": "fidget_spinner", "price": 2000,
+             "description": "Spin it the fastest you can!"},
+            {"name": "mobile_phone", "price": 7000,
+             "description": "Just an amazing mobile phone but who cares its just for show off"},
+            {"name": "bag_lock", "price": 13000, "description": "Nobody can rob you if you have even one of these"},
+            {"name":"hunting_rifle", "price":9000, "description":"Use it to show off and also for the `%hunt` command!"},
+            {"name":"apple", "price":25, "description":"An apple a day keeps the doctor away. Eat an apple and feel better!"},
+            {"name":"cookie", "price":15, "description":"A good mouth blending cookie!"}]
 
 
-def pm_check(ctx):
-    inventory_info = collection.find_one({"user":ctx.author.id})
-    inventory = inventory_info["inventory"]
-    if 'laptop' in inventory:
-        return True
-    else:
-        return False
 
 class Currency(commands.Cog):
     def __init__(self, bot):
@@ -31,7 +42,8 @@ class Currency(commands.Cog):
         bankinfo = collection.find_one({"user": member.id})
         if not bankinfo:
         #make new entry
-            collection.insert_one({"user": member.id, "wallet": 0, "bank": 0, "inventory":[]})
+            collection.insert_one({"user": member.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user":ctx.author.id, "watch":0, "second_hand_laptop":0, "hunting_rifle":0, "fidget_spinner":0, "fishing_rod":0, "mobile_phone":0, "bag_lock":0, "apple":0, "cookie":0})
             await ctx.send(f'{member.name} opening new bank account for you as you dont have one yet.')
             return
         else:
@@ -48,7 +60,9 @@ class Currency(commands.Cog):
         bankinfo = collection.find_one({"user": ctx.author.id})
         if not bankinfo:
             #make new entry
-            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0, "inventory":[]})
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,
+                                       "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
             await ctx.send(f'{ctx.author.name} opening new bank account for you as you dont have one yet. Please use the beg command again after that!')
             return
         else:
@@ -63,7 +77,9 @@ class Currency(commands.Cog):
         bankinfo = collection.find_one({"user": ctx.author.id})
         if not bankinfo:
             #make new entry
-            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0, "inventory":[]})
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,
+                                       "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
             await ctx.send(f'{ctx.author.name} opening new bank account for you as you dont have one yet! Actually I am thinking what were you depositing if you had no account nor money?!')
             return
         else:
@@ -89,7 +105,9 @@ class Currency(commands.Cog):
         bankinfo = collection.find_one({"user": ctx.author.id})
         if not bankinfo:
             #make new entry
-            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0, "inventory":[]})
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,
+                                       "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
             await ctx.send(f'{ctx.author.name} opening new bank account for you as you dont have one yet! Actually I am thinking from where were you withdrawing if you had no account nor money?!')
             return
         else:
@@ -116,7 +134,9 @@ class Currency(commands.Cog):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
             await ctx.send("Creating an account for you as you dont have one!")
-            collection.insert_one({"user":ctx.author.id, "wallet":0, "bank":0, "inventory":[]})    
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,
+                                       "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
             return
         else:
             wallet = bankinfo["wallet"]
@@ -150,11 +170,15 @@ class Currency(commands.Cog):
         mem_bankinfo = collection.find_one({"user":member.id})
         if not bankinfo:
             await ctx.send("Creating your account first as you don't have one!")
-            collection.insert_one({"user":ctx.author.id, "wallet":0, "bank":0, "inventory":[]})
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,
+                                       "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
             return
         elif not mem_bankinfo:
             await ctx.send(f"{member.mention}, doesnt have an account creating one for him!")
-            collection.insert_one({"user":member.id, "wallet":0, "bank":0, "inventory":[]})
+            collection.insert_one({"user": member.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": member.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,
+                                       "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
             mem_wallet = mem_bankinfo['bank']
             return
         else:
@@ -175,13 +199,16 @@ class Currency(commands.Cog):
                     await asyncio.sleep(2)
                     await ctx.send(f"Payed the amount from your wallet to {member.mention}'s bank account!")
 
+
+
     @commands.command(aliases=['pm', 'postmemes'])
-    @commands.check(pm_check)
     async def postmeme(self, ctx):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
             await ctx.send("You dont have an account creating one for you!...")
-            collection.insert_one({"user":ctx.author.id, "wallet":0, "bank":0, "inventory":[]})
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,
+                                       "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
             return
         else:
             earning = random.randrange(1, 1000)
@@ -196,23 +223,47 @@ class Currency(commands.Cog):
                 await ctx.send(f"You earned a fairly good response from the internet regarding the meme. So you get **{earning}**")
                 collection.update_one({"user": ctx.author.id}, {"$inc": {"wallet": earning}})
 
-    @postmeme.error
-    async def postmeme_error(self, ctx, error):
-        if isinstance(error, commands.CheckFailure):
-            await ctx.send("You need to have a laptop for using the command and posting memes on the internet!")
 
     @commands.command()
-    async def hello(self, ctx):
+    async def shop(self, ctx):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
-           await ctx.send("we are creating you an account as it does not exist...")
-           collection.insert_one({"user":ctx.author.id,"bank":0, "wallet":0, "inventory":[]})
-           return
+            await ctx.send("You dont have an account creating one for you!...")
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0, "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+            return
         else:
-            collection.update_one({"user":ctx.author.id},{"$inc":{"wallet":69}})
-            await ctx.send("sent")
-            
+            embed = discord.Embed(title=f"**{self.bot.user}'s shop**", colour=discord.Colour.red())
+            for item in mainshop:
+                name = item["name"]
+                price = item["price"]
+                description = item["description"]
+                embed.add_field(name=f'**{name}--${price}**',value=f'description: {description}', inline=False)
+                embed.set_footer(text="To buy something use %buy 'Thing'")
+            await ctx.send(embed=embed)
 
+
+    @commands.command()
+    async def buy(self, ctx, item, amount=1):
+        author_inv = inv_collection.find_one({"user":ctx.author.id})
+        author_bank = collection.find_one({"user":ctx.author.id})
+        if not author_bank:
+            await ctx.send("You dont have an account creating one for you!...")
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,"fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+            return
+        else:
+            wallet = author_bank["wallet"]
+            if item in mainshop:
+                price = item['price']
+                if wallet < price:
+                    await ctx.reply("You don't have that much money!")
+                else:
+                    new_wall_amt = wallet-price
+                    new_wallet = collection.update_one({"user":ctx.author.id}, {"$set":{"wallet":new_wall_amt}})
+                    item_inv = author_inv[item]
+                    new_inv = inv_collection.update_one({"user":ctx.author.id}, {"$inc": {item_inv:amount}})
+                    await ctx.send(f"Oh you bought {amount}, {item}")
 
 
 
