@@ -201,6 +201,17 @@ class Currency(commands.Cog):
         if isinstance(error, commands.CheckFailure):
             await ctx.send("You need to have a laptop for using the command and posting memes on the internet!")
 
+    @commands.command()
+    async def hello(self, ctx):
+        bankinfo = collection.find_one({"user":ctx.author.id})
+        if not bankinfo:
+           await ctx.send("we are creating you an account as it does not exist...")
+           collection.insert_one({"user":ctx.author.id,"bank":0, "wallet":0, "inventory":[]})
+           return
+        else:
+            collection.update_one({"user":ctx.author.id},{"$inc":{"wallet":69}})
+            await ctx.send("sent")
+            
 
 
 
