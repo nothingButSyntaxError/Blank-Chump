@@ -1,5 +1,6 @@
 import asyncio
 import discord
+from discord import colour
 from discord.ext import commands
 import os
 import pymongo
@@ -35,6 +36,7 @@ class Utility(commands.Cog):
         embed.set_thumbnail(url=guild.icon_url)
         embed.set_footer(text=f"{guild.id}")
         await ctx.send(embed=embed)
+
 
 
 
