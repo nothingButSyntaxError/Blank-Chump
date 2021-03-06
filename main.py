@@ -17,7 +17,7 @@ bot = commands.Bot(command_prefix='%', intents=intents)
 bot.load_extension(f"cogs.functions")
 bot.load_extension(f"cogs.currency")
 bot.load_extension(f"cogs.utility")
-
+bot.load_extension(f"cogs.fun")
 
 
 bot.run('ODA5NzM1NDgzNzEwMTExNzY0.YCZa7w.4qz1St9r9ktva6AANexlBNtEeeA')

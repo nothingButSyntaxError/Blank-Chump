@@ -247,10 +247,26 @@ class Currency(commands.Cog):
     
     @commands.command()
     @commands.check(fish_check)
+    @commands.cooldown(1, 60, BucketType.user)
     async def fish(self, ctx):
-        fish_type = random.choice(['common fish', 'rare fish', 'epic fish', 'legendary fish', 'common fish', 'common fish', 'common fish', 'rare fish', 'rare fish', 'epic fish', 'legendary fish'])
-        amount_fish = random.randrange(1, 5)
-        await ctx.send("This command is under development! Please dont use!?")
+        bankinfo = collection.find_one({"user":ctx.author.id})
+        if not bankinfo:
+            await ctx.send("You dont have an account creating one for you!...")
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0, "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+            return
+        else:
+            fish_type = random.choices(['common fish', 'rare fish', 'epic fish', 'legendary fish'], weights=[85, 10, 3, 2])
+            indexed_fish = fish_type[0]
+            amount_fish = random.randrange(1, 5)
+            await ctx.send(f"Hey you went fishing and got {amount_fish}, {fish_type[0]}")
+            inv_collection.update_one({"user":ctx.author.id}, {"$inc": {indexed_fish:amount_fish}})
+
+    @fish.error
+    async def fish_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send("You need to buy a fishing rob for fishing! Buy one from the shop!")
+
 
 
     @commands.command()
@@ -441,7 +457,7 @@ class Currency(commands.Cog):
             else:
                 await ctx.send("**That Item Is Not Even there in the shop!**WHAT AN IDIOT!")
 
-
+    
 
 
 def setup(bot):
