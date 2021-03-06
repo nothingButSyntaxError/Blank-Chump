@@ -9,6 +9,7 @@ import random
 from pymongo import results
 from discord.ext.commands.cooldowns import BucketType
 
+
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='%', intents=intents)
 

@@ -23,13 +23,28 @@ mainshop = [{"name": "watch", "price": 2000, "description": "Show off your watch
             {"name": "fidget_spinner", "price": 2000,
              "description": "Spin it the fastest you can!"},
             {"name": "mobile_phone", "price": 7000,
-             "description": "Just an amazing mobile phone but who cares its just for show off"},
+             "description": "Just an amazing mobile phone which can be used for sending messages or for calling the devs or police in case of robbery!"},
             {"name": "bag_lock", "price": 13000, "description": "Nobody can rob you if you have even one of these"},
             {"name":"hunting_rifle", "price":9000, "description":"Use it to show off and also for the `%hunt` command!"},
             {"name":"apple", "price":25, "description":"An apple a day keeps the doctor away. Eat an apple and feel better!"},
             {"name":"cookie", "price":15, "description":"A good mouth blending cookie!"}]
 
+#CHECKS
+def pm_check(ctx):
+    author_inv = inv_collection.find_one({"user":ctx.author.id})
+    laptop_amt = author_inv['second_hand_laptop']
+    if laptop_amt > 0:
+        return True
+    else:
+        return False
 
+def fish_check(ctx):
+    author_inv = inv_collection.find_one({"user":ctx.author.id})
+    fish_amt = author_inv['fishing_rod']
+    if fish_amt > 0:
+        return True
+    else:
+        return False
 
 class Currency(commands.Cog):
     def __init__(self, bot):
@@ -51,7 +66,7 @@ class Currency(commands.Cog):
             wallet = bankinfo['wallet']
             bank = bankinfo['bank']
             net_worth = wallet + bank
-            embed = discord.Embed(title=f"{member.name}'s balance", description=f"**WALLET:** {wallet}\n**BANK:** {bank}\n**NET WORTH:** {net_worth}", colour=discord.Colour.blue())
+            embed = discord.Embed(title=f"{member.name}'s balance", description=f"\n\n**WALLET:** {wallet}\n**BANK:** {bank}\n**NET WORTH:** {net_worth}", colour=discord.Colour.blue())
             embed.set_thumbnail(url=ctx.author.avatar_url)
             await ctx.send(embed=embed)
 
@@ -202,6 +217,7 @@ class Currency(commands.Cog):
 
 
     @commands.command(aliases=['pm', 'postmemes'])
+    @commands.check(pm_check)
     async def postmeme(self, ctx):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
@@ -222,6 +238,19 @@ class Currency(commands.Cog):
             elif earning < 1000:
                 await ctx.send(f"You earned a fairly good response from the internet regarding the meme. So you get **{earning}**")
                 collection.update_one({"user": ctx.author.id}, {"$inc": {"wallet": earning}})
+
+    @postmeme.error
+    async def postmeme_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send("You need to buy a laptop for posting memes on the internet! Buy it using `%buy second_hand_laptop`")
+
+    
+    @commands.command()
+    @commands.check(fish_check)
+    async def fish(self, ctx):
+        fish_type = random.choice(['common fish', 'rare fish', 'epic fish', 'legendary fish', 'common fish', 'common fish', 'common fish', 'rare fish', 'rare fish', 'epic fish', 'legendary fish'])
+        amount_fish = random.randrange(1, 5)
+        await ctx.send("This command is under development! Please dont use!?")
 
 
     @commands.command()
@@ -244,7 +273,7 @@ class Currency(commands.Cog):
 
 
     @commands.command()
-    async def buy(self, ctx, item, amount=1):
+    async def buy(self, ctx, item, amount:int=1):
         author_inv = inv_collection.find_one({"user":ctx.author.id})
         author_bank = collection.find_one({"user":ctx.author.id})
         if not author_bank:
@@ -254,17 +283,163 @@ class Currency(commands.Cog):
             return
         else:
             wallet = author_bank["wallet"]
-            if item in mainshop:
-                price = item['price']
-                if wallet < price:
-                    await ctx.reply("You don't have that much money!")
-                else:
-                    new_wall_amt = wallet-price
-                    new_wallet = collection.update_one({"user":ctx.author.id}, {"$set":{"wallet":new_wall_amt}})
-                    item_inv = author_inv[item]
-                    new_inv = inv_collection.update_one({"user":ctx.author.id}, {"$inc": {item_inv:amount}})
-                    await ctx.send(f"Oh you bought {amount}, {item}")
-
+            if item == 'watch':
+                watch_price = 2000
+                cost = watch_price*amount
+                if wallet < cost:
+                    await ctx.send("Hey you dont have that much money!")
+                elif cost < wallet:
+                    new_wallet_amt =  wallet-cost
+                    author_inv_watch = inv_collection.update_one({"user":ctx.author.id}, {"$inc":{'watch':amount}})
+                    author_wallet_watch = collection.update_one({"user":ctx.author.id}, {"$set":{"wallet":new_wallet_amt}})
+                    await ctx.send(f"Ohh you have bought watch! for {cost}!")
+                elif cost == wallet:
+                    new_wallet_amt = wallet-cost
+                    author_inv_watch = inv_collection.update_one({"user": ctx.author.id}, {"$inc": {'watch': amount}})
+                    author_wallet_watch = collection.update_one({"user": ctx.author.id}, {"$set": {"wallet": new_wallet_amt}})
+                    await ctx.send(f"Ohh you have bought watch! for {cost}!")
+            elif item == 'second_hand_laptop':
+                lap_price = 11000
+                lap_cost = lap_price*amount
+                if wallet < lap_cost:
+                    await ctx.send("You don't have that much money in your wallet!")
+                elif lap_cost < wallet:
+                    new_wallet_amt = wallet-lap_cost
+                    author_inv_lap = inv_collection.update_one({"user":ctx.author.id}, {"$inc":{'second_hand_laptop':amount}})
+                    author_wallet_watch = collection.update_one({"user":ctx.author.id}, {"$set":{"wallet":new_wallet_amt}})
+                    await ctx.send(f"Ohh you have bought Second Hand Laptop! for {lap_cost}!")
+                elif lap_cost == wallet:
+                    new_wallet_amt = wallet-lap_cost
+                    author_inv_lap = inv_collection.update_one({"user": ctx.author.id}, {"$inc": {'second_hand_laptop': amount}})
+                    author_wallet_watch = collection.update_one({"user": ctx.author.id}, {"$set": {"wallet": new_wallet_amt}})
+                    await ctx.send(f"Ohh you have bought Second Hand Laptop! for {lap_cost}!")
+            elif item == 'fishing_rod':
+                fish_price = 10000
+                fish_cost = fish_price*amount
+                if wallet < fish_cost:
+                    await ctx.send("You don't have enough money in your wallet!")
+                elif fish_cost < wallet:
+                    new_wallet_amt = wallet-fish_cost
+                    author_inv_lap = inv_collection.update_one({"user": ctx.author.id}, {"$inc": {'fishing_rod': amount}})
+                    author_wallet_watch = collection.update_one({"user": ctx.author.id}, {"$set": {"wallet": new_wallet_amt}})
+                    await ctx.send(f"Ohh you have bought Fishing Rod! for {fish_cost}!")
+                elif fish_cost == wallet:
+                    new_wallet_amt = wallet-fish_cost
+                    author_inv_lap = inv_collection.update_one({"user": ctx.author.id}, {"$inc": {'fishing_rod': amount}})
+                    author_wallet_watch = collection.update_one({"user": ctx.author.id}, {"$set": {"wallet": new_wallet_amt}})
+                    await ctx.send(f"Ohh you have bought Fishing Rod! for {fish_cost}!")
+            elif item == 'fidget_spinner':
+                spinner_price = 2000
+                spinner_cost = spinner_price*amount
+                if wallet < spinner_cost:
+                    await ctx.send("You don't have enough money in your wallet!")
+                elif spinner_cost < wallet:
+                    new_wallet_amt = wallet-spinner_cost
+                    author_inv_spin = inv_collection.update_one({"user": ctx.author.id}, {"$inc": {'fidget_spinner': amount}})
+                    author_wallet_spin = collection.update_one({"user": ctx.author.id}, {"$set": {"wallet": new_wallet_amt}})
+                    await ctx.send(f"Ohh you have bought Fidget Spinner! for {spinner_cost}!")
+                elif spinner_cost == wallet:
+                    new_wallet_amt = wallet-spinner_cost
+                    author_inv_lap = inv_collection.update_one({"user": ctx.author.id}, {"$inc": {'fidget_spinner': amount}})
+                    author_wallet_watch = collection.update_one({"user": ctx.author.id}, {"$set": {"wallet": new_wallet_amt}})
+                    await ctx.send(f"Ohh you have bought Fidget Spinner! for {spinner_cost}!")
+            elif item == "mobile_phone":
+                mob_price = 7000
+                mob_cost = mob_price*amount
+                if wallet < mob_cost:
+                    await ctx.send("You don't have enough money in your wallet!")
+                elif mob_cost < wallet:
+                    new_wallet_amt = wallet-mob_cost
+                    author_inv_lap = inv_collection.update_one(
+                        {"user": ctx.author.id}, {"$inc": {'mobile_phone': amount}})
+                    author_wallet_watch = collection.update_one(
+                        {"user": ctx.author.id}, {"$set": {"wallet": new_wallet_amt}})
+                    await ctx.send(f"Ohh you have bought Mobile Phone! for {mob_cost}!")
+                elif mob_cost == wallet:
+                    new_wallet_amt = wallet-mob_cost
+                    author_inv_lap = inv_collection.update_one(
+                        {"user": ctx.author.id}, {"$inc": {'mobile_phone': amount}})
+                    author_wallet_watch = collection.update_one(
+                        {"user": ctx.author.id}, {"$set": {"wallet": new_wallet_amt}})
+                    await ctx.send(f"Ohh you have bought Mobile Phone! for {mob_cost}!")
+            elif item == 'bag_lock':
+                bag_price = 13000
+                bag_cost = bag_price*amount
+                if wallet < bag_cost:
+                    await ctx.send("You don't have enough money in your wallet!")
+                elif bag_cost < wallet:
+                    new_wallet_amt = wallet-bag_cost
+                    author_inv_lap = inv_collection.update_one(
+                        {"user": ctx.author.id}, {"$inc": {'bag_lock': amount}})
+                    author_wallet_watch = collection.update_one(
+                        {"user": ctx.author.id}, {"$set": {"wallet": new_wallet_amt}})
+                    await ctx.send(f"Ohh you have bought Bag Lock! for {bag_cost}!")
+                elif bag_cost == wallet:
+                    new_wallet_amt = wallet-bag_cost
+                    author_inv_lap = inv_collection.update_one(
+                        {"user": ctx.author.id}, {"$inc": {'bag_lock': amount}})
+                    author_wallet_watch = collection.update_one(
+                        {"user": ctx.author.id}, {"$set": {"wallet": new_wallet_amt}})
+                    await ctx.send(f"Ohh you have bought Bag Lock! for {bag_cost}!")
+            elif item == 'hunting_rifle':
+                rifle_price = 9000
+                rifle_cost = rifle_price*amount
+                if wallet < rifle_cost:
+                    await ctx.send("You don't have enough money in your wallet!")
+                elif rifle_cost < wallet:
+                    new_wallet_amt = wallet-rifle_cost
+                    author_inv_lap = inv_collection.update_one(
+                        {"user": ctx.author.id}, {"$inc": {'hunting_rifle': amount}})
+                    author_wallet_watch = collection.update_one(
+                        {"user": ctx.author.id}, {"$set": {"wallet": new_wallet_amt}})
+                    await ctx.send(f"Ohh you have bought Hunting Rifle! for {rifle_cost}!")
+                elif rifle_cost == wallet:
+                    new_wallet_amt = wallet-rifle_cost
+                    author_inv_lap = inv_collection.update_one(
+                        {"user": ctx.author.id}, {"$inc": {'hunting_rifle': amount}})
+                    author_wallet_watch = collection.update_one(
+                        {"user": ctx.author.id}, {"$set": {"wallet": new_wallet_amt}})
+                    await ctx.send(f"Ohh you have bought Hunting Rifle! for {rifle_cost}!")
+            elif item == 'apple':
+                apple_price = 25
+                apple_cost = apple_price*amount
+                if wallet < apple_cost:
+                    await ctx.send("You don't have enough money in your wallet!")
+                elif apple_cost < wallet:
+                    new_wallet_amt = wallet-apple_cost
+                    author_inv_lap = inv_collection.update_one(
+                        {"user": ctx.author.id}, {"$inc": {'apple': amount}})
+                    author_wallet_watch = collection.update_one(
+                        {"user": ctx.author.id}, {"$set": {"wallet": new_wallet_amt}})
+                    await ctx.send(f"Ohh you have bought Apple! for {apple_cost}!")
+                elif apple_cost == wallet:
+                    new_wallet_amt = wallet-apple_cost
+                    author_inv_lap = inv_collection.update_one(
+                        {"user": ctx.author.id}, {"$inc": {'apple': amount}})
+                    author_wallet_watch = collection.update_one(
+                        {"user": ctx.author.id}, {"$set": {"wallet": new_wallet_amt}})
+                    await ctx.send(f"Ohh you have bought Apple! for {apple_cost}!")
+            elif item == 'cookie':
+                cook_price = 15
+                cook_cost = cook_price*amount
+                if wallet < cook_cost:
+                    await ctx.send("You don't have enough money in your wallet!")
+                elif cook_cost < wallet:
+                    new_wallet_amt = wallet-cook_cost
+                    author_inv_lap = inv_collection.update_one(
+                        {"user": ctx.author.id}, {"$inc": {'cookie': amount}})
+                    author_wallet_watch = collection.update_one(
+                        {"user": ctx.author.id}, {"$set": {"wallet": new_wallet_amt}})
+                    await ctx.send(f"Ohh you have bought Cookie! for {cook_cost}!")
+                elif cook_cost == wallet:
+                    new_wallet_amt = wallet-cook_cost
+                    author_inv_lap = inv_collection.update_one(
+                        {"user": ctx.author.id}, {"$inc": {'cookie': amount}})
+                    author_wallet_watch = collection.update_one(
+                        {"user": ctx.author.id}, {"$set": {"wallet": new_wallet_amt}})
+                    await ctx.send(f"Ohh you have bought Cookie! for {cook_cost}!")
+            else:
+                await ctx.send("**That Item Is Not Even there in the shop!**WHAT AN IDIOT!")
 
 
 
