@@ -18,7 +18,12 @@ class Fun(commands.Cog):
     async def google_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("You have to send what you want to google with the command!")
+    @commands.command()
+    async def simprate(self,ctx):
+        simp = random.randrange(1,100)
+        await ctx.send(f"You are {simp}% simp")
 
 
 def setup(bot):
     bot.add_cog(Fun(bot))
+    
