@@ -1,4 +1,5 @@
 import discord
+from discord import user
 from discord.ext import commands
 import random
 import os
@@ -278,6 +279,46 @@ class Currency(commands.Cog):
             error_time = error.retry_after
             abs_time = round(error_time)
             await ctx.send(f"**Whoa to fast right?!** You have to weight {abs_time} more before you use the command!")
+
+    @commands.command()
+    async def bet(self, ctx, amount:int):
+        bankinfo = collection.find_one({"user":ctx.author.id})
+        if not bankinfo:
+            await ctx.send("Creating your account as it doesn't exist!")
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,"fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+            return
+        else:
+            wallet = bankinfo["wallet"]
+            bot_dice = random.randrange(2, 12)
+            user_dice = random.randrange(2, 12)
+            if amount < 50:
+                await ctx.send("The amount should be more than 50!")
+            elif amount > wallet:
+                await ctx.send("You don't have enough money in your wallet!")
+            else:
+                multiplier = random.randrange(1, 100)
+                loss = multiplier/100*amount
+                won = multiplier/100*amount
+                if bot_dice > user_dice:
+                    NEW_BALANCE = wallet-loss
+                    embed = discord.Embed(title=f"{ctx.author.name}'s Loosing Bet!", description=f"You Lost {loss} coins\n\n**Percent Lost: **{multiplier}%\n**New Balance: **{NEW_BALANCE}", colour=discord.Colour.red())
+                    embed.add_field(name=f"{ctx.author.name} Rolled:", value=f"{user_dice}")
+                    embed.add_field(name=f"{self.bot.user}", value=f"{bot_dice}")
+                    embed.set_image(url=ctx.author.avatar_url)
+                    await ctx.send(embed=embed)
+                    collection.update_one({"user":ctx.author.id}, {"$set":{"wallet":NEW_BALANCE}})
+                elif bot_dice < user_dice:
+                    NEW_BALANCE = wallet+won
+                    embed = discord.Embed(title=f"{ctx.author.name}'s Winning Bet!",description=f"You Won {won} coins\n\n**Percent Lost: **{multiplier}%\n**New Balance: **{NEW_BALANCE}", colour=discord.Colour.green())
+                    embed.add_field(name=f"{ctx.author.name} Rolled:", value=f"{user_dice}")
+                    embed.add_field(name=f"{self.bot.user} Rolled:", value=f"{bot_dice}")
+                    embed.set_image(url=ctx.author.avatar_url)
+                    await ctx.send(embed=embed)
+                    collection.update_one({"user": ctx.author.id}, {"$inc": {"wallet": won}})
+                elif bot_dice == user_dice:
+                    await ctx.send(f"The bot rolled: {bot_dice} and {ctx.author.name} rolled: {user_dice} So its a tie nobody wins!")
+
 
     @commands.command()
     @commands.guild_only()
