@@ -76,6 +76,30 @@ class Fun(commands.Cog):
             await ctx.send(f"{roast}") 
         else:
             await ctx.send(f"{roast}") 
+    @commands.command()
+    @commands.guild_only()
+    async def _8ball(self, ctx, *, question):
+        _8ball = random.choice(["Yes, ","No"])
+        if question :
+            await ctx.send(f"{_8ball}, you noob") 
+        else:
+            await ctx.send("Please state your question") 
+    @commands.command()
+    @commands.guild_only()
+    async def  say(self, ctx, *, sentence):
+        if sentence :
+            await ctx.send(f"{sentence} \n\n -{ctx.author}")
+        else:
+            await ctx.send("Please type a sentence to be said")
+    @commands.command()
+    @commands.guild_only()
+    async def epicgamerrate(self, ctx, member: discord.Member = None):
+        epicgamer = random.randrange(1,100)
+        if member == None:
+            embed = discord.Embed(title = f"Epic Gamer Rate :video_game: \n\n {ctx.author.name} is {epicgamer}% epic gamer", colour = discord.Colour.teal())
+            await ctx.send(embed = embed)
+        else:
+            await ctx.send(embed = embed)
 def setup(bot):
     bot.add_cog(Fun(bot))
     
