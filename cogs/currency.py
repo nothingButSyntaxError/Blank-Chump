@@ -501,27 +501,7 @@ class Currency(commands.Cog):
                     await ctx.send(f"Ohh you have bought Cookie! for {cook_cost}!")
             else:
                 await ctx.send("**That Item Is Not Even there in the shop!**WHAT AN IDIOT!")
-     @commands.command()
-    @commands.guild_only()
-    async def guess(self, ctx, member: discord.Member = None):
-correctanswer = random.randrange(1,10)
-earning = random.randrange(1,1000)
-gamefinished = False:
-            whie gamefinished == false:
-                        playersguess = int(input("guess a number between one to 10")
-            if playersguess == correct answer
-                otheranswer = "Right"
-                   gamefinished = True
-            elif playersguess > correctanswer
-                  otheranswer = "High"
-            elif playersguess < correctanswer
-                  otheranswer = "Low"
-            if otheranswer == "Right"
-                await ctx.send(f'"correct! you guesssed right you get {earning} coins")
-             elif otheranswer == "High"
-                await ctx.send("Guessed too high! guess again")
-             elif otheranswer == "Low"
-                await ctx.send("Guessed too low! guess again")
+     
 
 
 def setup(bot):
