@@ -51,6 +51,7 @@ class Currency(commands.Cog):
         self.bot = bot
 
     @commands.command()
+    @commands.guild_only()
     async def balance(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
@@ -71,6 +72,7 @@ class Currency(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command()
+    @commands.guild_only()
     async def beg(self, ctx):
         bankinfo = collection.find_one({"user": ctx.author.id})
         if not bankinfo:
@@ -88,6 +90,7 @@ class Currency(commands.Cog):
 
 
     @commands.command(aliases=['dep'])
+    @commands.guild_only()
     async def deposit(self, ctx, amount: int=None):
         bankinfo = collection.find_one({"user": ctx.author.id})
         if not bankinfo:
@@ -116,6 +119,7 @@ class Currency(commands.Cog):
 
 
     @commands.command(aliases=['with'])
+    @commands.guild_only()
     async def withdraw(self, ctx, amount: int=None):
         bankinfo = collection.find_one({"user": ctx.author.id})
         if not bankinfo:
@@ -145,6 +149,7 @@ class Currency(commands.Cog):
 
     
     @commands.command()
+    @commands.guild_only()
     async def slots(self, ctx, amount: int=None):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
@@ -179,6 +184,7 @@ class Currency(commands.Cog):
 
 
     @commands.command()
+    @commands.guild_only()
     async def pay(self, ctx, member: discord.Member=None, amount: int=None):
         bankinfo = collection.find_one({"user":ctx.author.id})
         wallet = bankinfo['wallet']
@@ -218,6 +224,7 @@ class Currency(commands.Cog):
 
     @commands.command(aliases=['pm', 'postmemes'])
     @commands.check(pm_check)
+    @commands.guild_only()
     async def postmeme(self, ctx):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
@@ -247,6 +254,7 @@ class Currency(commands.Cog):
     
     @commands.command()
     @commands.check(fish_check)
+    @commands.guild_only()
     @commands.cooldown(1, 60, BucketType.user)
     async def fish(self, ctx):
         bankinfo = collection.find_one({"user":ctx.author.id})
@@ -266,10 +274,45 @@ class Currency(commands.Cog):
     async def fish_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
             await ctx.send("You need to buy a fishing rob for fishing! Buy one from the shop!")
-
-
+        elif isinstance(error, commands.CommandOnCooldown):
+            error_time = error.retry_after
+            abs_time = round(error_time)
+            await ctx.send(f"**Whoa to fast right?!** You have to weight {abs_time} more before you use the command!")
 
     @commands.command()
+    @commands.guild_only()
+    async def inventory(self, ctx, member: discord.Member = None):
+        if member == None:
+            bankinfo = collection.find_one({"user":ctx.author.id})
+            if not bankinfo:
+                await ctx.send("You dont have an account creating one for you!...")
+                collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+                inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,"fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+                return
+            else:
+                inventory = inv_collection.find_one({"user":ctx.author.id})
+                embed = discord.Embed(title=f"{ctx.author.name}'s Inventory!", description="Owned Items", colour=discord.Colour.teal())
+                for item in inventory:
+                    items = inventory[item]
+                    embed.add_field(name=f"{item}", value=f"{items}", inline=False)
+                await ctx.send(embed=embed)
+        else:
+            bankinfo = collection.find_one({"user": member.id})
+            if not bankinfo:
+                await ctx.send(f"{member.name} doesnt have an account creating one for him!...")
+                collection.insert_one({"user": member.id, "wallet": 0, "bank": 0})
+                inv_collection.insert_one({"user": member.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,"fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+                return
+            elif bankinfo:
+                inventory = inv_collection.find_one({"user": member.id})
+                embed = discord.Embed(title=f"{member.name}'s Inventory!", description="Owned Items", colour=discord.Colour.teal())
+                for item in inventory:
+                    items = inventory[item]
+                    embed.add_field(name=f"{item}", value=f"{items}", inline=False)
+                await ctx.send(embed=embed)
+
+    @commands.command()
+    @commands.guild_only()
     async def shop(self, ctx):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
@@ -289,6 +332,7 @@ class Currency(commands.Cog):
 
 
     @commands.command()
+    @commands.guild_only()
     async def buy(self, ctx, item, amount:int=1):
         author_inv = inv_collection.find_one({"user":ctx.author.id})
         author_bank = collection.find_one({"user":ctx.author.id})
