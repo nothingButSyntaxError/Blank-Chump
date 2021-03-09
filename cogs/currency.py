@@ -320,6 +320,7 @@ class Currency(commands.Cog):
                     await ctx.send(f"The bot rolled: {bot_dice} and {ctx.author.name} rolled: {user_dice} So its a tie nobody wins!")
 
 
+
     @commands.command()
     @commands.guild_only()
     async def inventory(self, ctx, member: discord.Member = None):
