@@ -1,5 +1,5 @@
 # Blank-Chump
 ## A discord economy system made for marketing purposes!
-## Credits - Parth, Yash
+## Credits - Parth, Yash, Samar
 ## We will ensure the best service to you
 ## Please join and thank you!
