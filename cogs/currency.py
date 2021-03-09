@@ -229,7 +229,7 @@ class Currency(commands.Cog):
     async def postmeme(self, ctx):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
-            await ctx.send("You dont have an account creating one for you!...")
+            await ctx.send("You don't have an account, creating one for you!...")
             collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
             inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,
                                        "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
@@ -260,7 +260,7 @@ class Currency(commands.Cog):
     async def fish(self, ctx):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
-            await ctx.send("You dont have an account creating one for you!...")
+            await ctx.send("You don't have an account, creating one for you!...")
             collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
             inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0, "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
             return
@@ -274,11 +274,11 @@ class Currency(commands.Cog):
     @fish.error
     async def fish_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            await ctx.send("You need to buy a fishing rob for fishing! Buy one from the shop!")
+            await ctx.send("You need to buy a fishing rod for fishing! Buy one from the shop!")
         elif isinstance(error, commands.CommandOnCooldown):
             error_time = error.retry_after
             abs_time = round(error_time)
-            await ctx.send(f"**Whoa to fast right?!** You have to weight {abs_time} more before you use the command!")
+            await ctx.send(f"**Whoa to fast right?!** You have to weigh {abs_time} more before you use the command!")
 
     @commands.command()
     async def bet(self, ctx, amount:int):
@@ -302,7 +302,7 @@ class Currency(commands.Cog):
                 won = multiplier/100*amount
                 if bot_dice > user_dice:
                     NEW_BALANCE = wallet-loss
-                    embed = discord.Embed(title=f"{ctx.author.name}'s Loosing Bet!", description=f"You Lost {loss} coins\n\n**Percent Lost: **{multiplier}%\n**New Balance: **{NEW_BALANCE}", colour=discord.Colour.red())
+                    embed = discord.Embed(title=f"{ctx.author.name}'s Losing Bet!", description=f"You Lost {loss} coins\n\n**Percent Lost: **{multiplier}%\n**New Balance: **{NEW_BALANCE}", colour=discord.Colour.red())
                     embed.add_field(name=f"{ctx.author.name} Rolled:", value=f"{user_dice}")
                     embed.add_field(name=f"{self.bot.user}", value=f"{bot_dice}")
                     embed.set_image(url=ctx.author.avatar_url)
@@ -326,7 +326,7 @@ class Currency(commands.Cog):
         if member == None:
             bankinfo = collection.find_one({"user":ctx.author.id})
             if not bankinfo:
-                await ctx.send("You dont have an account creating one for you!...")
+                await ctx.send("You don't have an account, creating one for you!...")
                 collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
                 inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,"fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
                 return

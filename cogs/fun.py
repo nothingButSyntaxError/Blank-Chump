@@ -101,10 +101,30 @@ class Fun(commands.Cog):
     async def epicgamerrate(self, ctx, member: discord.Member = None):
         epicgamer = random.randrange(1,100)
         if member == None:
-            embed = discord.Embed(title = f"Epic Gamer Rate machine :video_game: \n\n {ctx.author.name} is {epicgamer}% epic gamer", colour = discord.Colour.purple())
+            embed = discord.Embed(title = f"Epic Gamer Rate machine :video_game: \n\n {ctx.author.name} is {epicgamer}% epic gamer", colour = discord.Colour.gold())
             await ctx.send(embed = embed)
         else:
             await ctx.send(embed = embed)
+    @commands.command()
+    @commands.guild_only()
+    async def waifurate(self, ctx, member: discord.Member = None):
+       waifu = random.randrange(1,100)
+       if member == None:
+            embed = discord.Embed(title = f"Waifu Rate machine \n\n {ctx.author.name} is {waifu}% waifu", colour = discord.Colour.dark_theme())
+            await ctx.send(embed = embed)
+       else:
+            await ctx.send(embed = embed)
+    @commands.command()
+    @commands.guild_only()
+    async def rugay(self, ctx, member):
+        gay = random.randrange(1,100)
+        if member :
+            embed = discord.Embed(title = f"Gay Rate machine :video_game: \n\n {member} is {gay}% gay", colour = discord.Colour.purple())
+            await ctx.send(embed = embed)
+        else:
+            embed = discord.Embed(title = f"Gay Rate machine :video_game: \n\n {ctx.author.name} is {gay}% gay", colour = discord.Colour.purple())
+            await ctx.send(embed = embed)
+
 def setup(bot):
     bot.add_cog(Fun(bot))
     
