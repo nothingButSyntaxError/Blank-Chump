@@ -101,15 +101,16 @@ class Fun(commands.Cog):
     async def epicgamerrate(self, ctx, member: discord.Member = None):
         epicgamer = random.randrange(1,100)
         if member == None:
-            embed = discord.Embed(title = f"Epic Gamer Rate machine :video_game: \n\n {ctx.author.name} is {epicgamer}% epic gamer", colour = discord.Colour.gold())
+            embed = discord.Embed(title = f"Epic Gamer Rate machine :video_game: \n\n {member} is {epicgamer}% epic gamer", colour = discord.Colour.gold())
             await ctx.send(embed = embed)
         else:
-            await ctx.send(embed = embed)
+            embed_1 = discord.Embed(title = f"Epic Gamer Rate machine :video_game: \n\n {ctx.author.name} is {epicgamer}% epic gamer", colour = discord.Colour.gold())
+            await ctx.send(embed_1 = embed_1)
     @commands.command()
     @commands.guild_only()
     async def waifurate(self, ctx, member: discord.Member = None):
        waifu = random.randrange(1,100)
-       if member == None:
+       if member :
             embed = discord.Embed(title = f"Waifu Rate machine \n\n {member} is {waifu}% waifu", colour = discord.Colour.dark_theme())
             await ctx.send(embed = embed)
        else:
