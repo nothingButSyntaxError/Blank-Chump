@@ -27,47 +27,6 @@ class Fun(commands.Cog):
         if letters:
             for letter in term:
                 await ctx.send(f"{letter}:clap:" )
-
-    @commands.command()
-    @commands.guild_only()
-    async def simprate(self, ctx, member: discord.Member = None):
-        simp = random.randrange(1,100)
-        if member == None:
-            await ctx.send(f"{ctx.author.name} is {simp}% simp")
-        else:
-            await ctx.send(f"{ctx.author.name} is {simp}% simp")
-    @commands.command()
-    @commands.guild_only()
-    async def dankrate(self, ctx, member: discord.Member = None):
-        dank = random.randrange(1,100)
-        if member == None:
-            await ctx.send(f"{ctx.author.name} is {dank}% dank")
-        else:
-            await ctx.send(f"{ctx.author.name} is {dank}% dank")
-    @commands.command()
-    @commands.guild_only()
-    async def stankrate(self, ctx, member: discord.Member = None):
-        stank = random.randrange(1,100)
-        if member == None:
-            await ctx.send(f"{ctx.author.name} is {stank}% stank")
-        else:
-            await ctx.send(f"{ctx.author.name} is {stank}% stank")
-    @commands.command()
-    @commands.guild_only()
-    async def coolrate(self, ctx, member: discord.Member = None):
-        cool = random.randrange(1,100)
-        if member == None:
-            await ctx.send(f"{ctx.author.name} is {cool}% cool")
-        else:
-            await ctx.send(f"{ctx.author.name} is {cool}% cool")
-    @commands.command()
-    @commands.guild_only()
-    async def chumprate(self, ctx, member: discord.Member = None):
-        chump = random.randrange(1,100)
-        if member == None:
-            await ctx.send(f"{ctx.author.name} is {chump}% chump")
-        else:
-            await ctx.send(f"{ctx.author.name} is {chump}% chump")
     @commands.command()
     @commands.guild_only()
     async def roast(self, ctx, member: discord.Member = None):
@@ -91,12 +50,58 @@ class Fun(commands.Cog):
             await ctx.send(f"{sentence} \n\n -{ctx.author}")
         else:
             await ctx.send("Please type a sentence to be said")
+
+    @commands.command()
+    @commands.guild_only()
+    async def simprate(self, ctx, member: discord.Member = None):
+        simp = random.randrange(1,100)
+        if member == None:
+            embed = discord.Embed(title = f"Simp Rate machine \n\n {ctx.author.name} is {simp}% simp", colour = discord.Colour.dark_red())
+            await ctx.send(embed = embed)
+        else:
+            await ctx.send(embed = embed)
+    @commands.command()
+    @commands.guild_only()
+    async def dankrate(self, ctx, member: discord.Member = None):
+        dank = random.randrange(1,100)
+        if member == None:
+           embed = discord.Embed(title = f"Dank Rate machine \n\n {ctx.author.name} is {dank}% dank", colour = discord.Colour.gold())
+           await ctx.send(embed = embed)
+        else:
+            await ctx.send(embed = embed)
+    @commands.command()
+    @commands.guild_only()
+    async def stankrate(self, ctx, member: discord.Member = None):
+        stank = random.randrange(1,100)
+        if member == None:
+            embed = discord.Embed(title = f"Stank Rate machine \n\n {ctx.author.name} is {stank}% stank", colour = discord.Colour.teal())
+            await ctx.send(embed = embed)
+        else:
+            await ctx.send(embed = embed)
+    @commands.command()
+    @commands.guild_only()
+    async def coolrate(self, ctx, member: discord.Member = None):
+        cool = random.randrange(1,100)
+        if member == None:
+            embed = discord.Embed(title = f"Cool Rate machine \n\n {ctx.author.name} is {cool}% cool", colour = discord.Colour.blue())
+            await ctx.send(embed = embed)
+        else:
+            await ctx.send(embed = embed)
+    @commands.command()
+    @commands.guild_only()
+    async def chumprate(self, ctx, member: discord.Member = None):
+        chump = random.randrange(1,100)
+        if member == None:
+            embed = discord.Embed(title = f"Chump Rate machine \n\n {ctx.author.name} is {chump}% chump", colour = discord.Colour.green())
+            await ctx.send(embed = embed)
+        else:
+            await ctx.send(embed = embed)
     @commands.command()
     @commands.guild_only()
     async def epicgamerrate(self, ctx, member: discord.Member = None):
         epicgamer = random.randrange(1,100)
         if member == None:
-            embed = discord.Embed(title = f"Epic Gamer Rate :video_game: \n\n {ctx.author.name} is {epicgamer}% epic gamer", colour = discord.Colour.teal())
+            embed = discord.Embed(title = f"Epic Gamer Rate machine :video_game: \n\n {ctx.author.name} is {epicgamer}% epic gamer", colour = discord.Colour.purple())
             await ctx.send(embed = embed)
         else:
             await ctx.send(embed = embed)
