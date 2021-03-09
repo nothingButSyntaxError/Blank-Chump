@@ -1,22 +1,23 @@
 import asyncio
 import discord
+import datetime
 from discord import colour
 from discord.ext import commands
 import os
 import pymongo
 from pymongo import MongoClient
 
-main_cluster = MongoClient('mongodb+srv://Admin-MyName:Parth!7730@my-dbs.xlx4y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
-main_db = main_cluster["discord"]
-main_collection = main_db["guild_data"]
-
+guild_cluster = MongoClient("mongodb+srv://Yash:BlankChump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+guild_db = guild_cluster["discord"]
+collection = guild_db["server_data"]
+def check(ctx):
+    if ctx.author == ctx.guild.owner:
+        return True
+    else:
+        return False
 class Utility(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    @commands.command()
-    async def ping(self, ctx):
-        await ctx.send("Pong!")
 
     @commands.command(aliases=['guildinfo'])
     async def serverinfo(self, ctx):
@@ -36,6 +37,36 @@ class Utility(commands.Cog):
         embed.set_thumbnail(url=guild.icon_url)
         embed.set_footer(text=f"{guild.id}")
         await ctx.send(embed=embed)
+
+    @commands.command()
+    @commands.check(check)
+    async def changeprefix(self, ctx, prefix:str = None):
+        guild = ctx.guild
+        guild_data = collection.find_one({"guild_id":guild.id})
+        if not guild_data:
+            collection.insert_one({"guild_id":guild.id, "prefix":"%"})  
+            await ctx.send("Your guild was added") 
+            return
+        else :
+            collection.update_one({"guild_id":guild.id},{"$set":{"prefix":prefix}}) 
+            await ctx.send(f"Prefix was changed to {prefix}")   
+
+    @commands.Cog.listener()
+    async def on_guild_join(self, guild):
+        act_tim = datetime.datetime.utcnow()
+        embed = discord.Embed(title="Thank You!", description=f"Thank you for adding {self.bot.user} to your server!", colour=discord.Colour.gold())
+        embed.add_field(name="Setup Instructions", value=f"To setup the bot please do look at the `%help` command and also use the `%setup` command to add your guild to the bots data and so you can use its premium features as well!")
+        embed.set_author(name=f"{guild.owner}")
+        embed.set_footer(text=f"{act_tim}")
+        embed.set_thumbnail(url=guild.owner.avatar_url)
+        await guild.owner.send(embed=embed)
+        guild_info = collection.find_one({"guild_id":guild.id})
+        if not guild_info:
+            collection.insert_one({"guild_id":guild.id,"prefix":"%"})
+        else:
+            pass 
+
+ 
 
 
 
