@@ -281,6 +281,102 @@ class Currency(commands.Cog):
             await ctx.send(f"**Whoa to fast right?!** You have to weigh {abs_time} more before you use the command!")
 
     @commands.command()
+    async def highlow(self, ctx):
+        bankinfo = collection.find_one({"user":ctx.author.id})
+        if not bankinfo:
+            await ctx.send("You don't have an account, creating one for you!...")
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,"fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+            return
+        else:
+            correct_no = random.randrange(1, 100)
+            hint_no = random.randrange(1, 100)
+            earning = random.randrange(150, 950)
+            wallet = bankinfo['wallet']
+            embed = discord.Embed(title=f"{ctx.author.name}'s High-Low Game!", description=f"A secret number between 1-100 has been chosen your hint is **{hint_no}**. Respond with **high**, **low** or **jackpot**")
+            embed.set_thumbnail(url=ctx.author.avatar_url)
+            embed.set_footer(text="Think whether the correct no is higher, lower or same as the hint no!")
+            await ctx.send(embed=embed)
+            def check(m):
+                return m.channel == ctx.channel
+            msg = await self.bot.wait_for('message', check=check, timeout=15.0)
+            if msg.content == 'high':
+                if hint_no < correct_no:
+                    embed = discord.Embed(title=f"{ctx.author.name}'s Winning High-Low Game!", description=f"**You won {earning} coins!**", colour=discord.Colour.green())
+                    embed.set_thumbnail(url=ctx.author.avatar_url)
+                    await ctx.send(embed=embed)
+                    collection.update_one({"user":ctx.author.id}, {"$inc":{"wallet":earning}})
+                elif hint_no > correct_no:
+                    embed = discord.Embed(title=f"{ctx.author.name}'s Losing High-Low Game!",description=f"**The correct no was {correct_no} while you told high**", colour=discord.Colour.red())
+                    embed.set_thumbnail(url=ctx.author.avatar_url)
+                    await ctx.send(embed=embed)
+                elif hint_no == correct_no:
+                    embed = discord.Embed(title=f"{ctx.author.name}'s Losing High-Low Game!",description=f"**The correct no was {correct_no} while you told high**", colour=discord.Colour.red())
+                    embed.set_thumbnail(url=ctx.author.avatar_url)
+                    await ctx.send(embed=embed)
+            elif msg.content == 'low':
+                if hint_no > correct_no:
+                    embed = discord.Embed(title=f"{ctx.author.name}'s Winning High-Low Game!",description=f"**You won {earning} coins!**", colour=discord.Colour.green())
+                    embed.set_thumbnail(url=ctx.author.avatar_url)
+                    await ctx.send(embed=embed)
+                    collection.update_one({"user": ctx.author.id}, {
+                                          "$inc": {"wallet": earning}})
+                elif hint_no < correct_no:
+                    embed = discord.Embed(title=f"{ctx.author.name}'s Losing High-Low Game!",description=f"**The correct no was {correct_no} while you told low**", colour=discord.Colour.red())
+                    embed.set_thumbnail(url=ctx.author.avatar_url)
+                    await ctx.send(embed=embed)
+                elif hint_no == correct_no:
+                    embed = discord.Embed(title=f"{ctx.author.name}'s Losing High-Low Game!",description=f"**The correct no was {correct_no} while you told low**", colour=discord.Colour.red())
+                    embed.set_thumbnail(url=ctx.author.avatar_url)
+                    await ctx.send(embed=embed)
+            elif msg.content == 'jackpot':
+                if hint_no == correct_no:
+                    embed = discord.Embed(title=f"{ctx.author.name}'s Winning High-Low Game!",
+                                        description=f"**You won {earning} coins!**", colour=discord.Colour.green())
+                    embed.set_thumbnail(url=ctx.author.avatar_url)
+                    await ctx.send(embed=embed)
+                    collection.update_one({"user": ctx.author.id}, {
+                                          "$inc": {"wallet": earning}})
+                elif hint_no < correct_no:
+                    embed = discord.Embed(title=f"{ctx.author.name}'s Losing High-Low Game!",
+                                        description=f"**The correct no was {correct_no} while you told jackpot**", colour=discord.Colour.red())
+                    embed.set_thumbnail(url=ctx.author.avatar_url)
+                    await ctx.send(embed=embed)
+                elif hint_no > correct_no:
+                    embed = discord.Embed(title=f"{ctx.author.name}'s Losing High-Low Game!",
+                                        description=f"**The correct no was {correct_no} while you told jackpot**", colour=discord.Colour.red())
+                    embed.set_thumbnail(url=ctx.author.avatar_url)
+                    await ctx.send(embed=embed)
+
+    
+    @commands.command(help="Use the command for robbing someone! Be careful sometimes they might have bag locks!", aliases=['steal'])
+    async def rob(self, ctx, member: discord.Member = None):
+        if member == None:
+            await ctx.send("You have to mention someone to rob! Otherwise I will rob you")
+        else:
+            bankinfo = collection.find_one({"user":ctx.author.id})
+            if not bankinfo:
+                await ctx.send("Creating your account as it doesn't exist!")
+                collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+                inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,"fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+                return
+            else:
+                bank = collection.find_one({"user":member.id})
+                if not bank:
+                    await ctx.send("Creating your account as it doesn't exist!")
+                    collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+                    inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,"fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+                    return
+                else:
+                    mem_inv = inv_collection.find_one({"user":member.id})
+                    mem_lock = mem_inv['bag_lock']
+                    if mem_lock > 0:
+                        await ctx.send("Oops you got caught! The member has a bag lock enabled!")
+                    
+
+
+    @commands.command(help="Bet something and try to win Loser!", aliases=['gamble'])
+    @commands.cooldown(1, 40, BucketType.user)
     async def bet(self, ctx, amount:int):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
