@@ -1,3 +1,4 @@
+import asyncio
 import discord
 from discord.ext import commands
 import os
@@ -55,67 +56,72 @@ class Fun(commands.Cog):
     @commands.guild_only()
     async def simprate(self, ctx, member: discord.Member = None):
         simp = random.randrange(1,100)
-        if member == None:
-            embed = discord.Embed(title = f"Simp Rate machine \n\n {ctx.author.name} is {simp}% simp", colour = discord.Colour.dark_red())
+        if member :
+            embed = discord.Embed(title = f"Simp Rate machine \n\n {member} is {simp}% simp", colour = discord.Colour.dark_red())
             await ctx.send(embed = embed)
         else:
-            await ctx.send(embed = embed)
+            embed_1 = discord.Embed(title = f"Simp Rate machine \n\n {ctx.author.name} is {simp}% simp", colour = discord.Colour.dark_red())
+            await ctx.send(embed = embed_1)
     @commands.command()
     @commands.guild_only()
     async def dankrate(self, ctx, member: discord.Member = None):
         dank = random.randrange(1,100)
-        if member == None:
-           embed = discord.Embed(title = f"Dank Rate machine \n\n {ctx.author.name} is {dank}% dank", colour = discord.Colour.gold())
+        if member:
+           embed = discord.Embed(title = f"Dank Rate machine \n\n {member} is {dank}% dank", colour = discord.Colour.gold())
            await ctx.send(embed = embed)
         else:
-            await ctx.send(embed = embed)
+            embed_1 = discord.Embed(title = f"Dank Rate machine \n\n {ctx.author.name} is {dank}% dank", colour = discord.Colour.gold())
+            await ctx.send(embed = embed_1)
     @commands.command()
     @commands.guild_only()
     async def stankrate(self, ctx, member: discord.Member = None):
         stank = random.randrange(1,100)
         if member == None:
-            embed = discord.Embed(title = f"Stank Rate machine \n\n {ctx.author.name} is {stank}% stank", colour = discord.Colour.teal())
+            embed = discord.Embed(title = f"Stank Rate machine \n\n {member} is {stank}% stank", colour = discord.Colour.teal())
             await ctx.send(embed = embed)
         else:
-            await ctx.send(embed = embed)
+            embed_1 = discord.Embed(title = f"Stank Rate machine \n\n {ctx.author.name} is {stank}% stank", colour = discord.Colour.teal())
+            await ctx.send(embed = embed_1)
     @commands.command()
     @commands.guild_only()
     async def coolrate(self, ctx, member: discord.Member = None):
         cool = random.randrange(1,100)
-        if member == None:
-            embed = discord.Embed(title = f"Cool Rate machine \n\n {ctx.author.name} is {cool}% cool", colour = discord.Colour.blue())
+        if member :
+            embed = discord.Embed(title = f"Cool Rate machine \n\n {member} is {cool}% cool", colour = discord.Colour.blue())
             await ctx.send(embed = embed)
         else:
-            await ctx.send(embed = embed)
+            embed_1 = discord.Embed(title = f"Cool Rate machine \n\n {ctx.author.name} is {cool}% cool", colour = discord.Colour.blue())
+            await ctx.send(embed = embed_1)
     @commands.command()
     @commands.guild_only()
     async def chumprate(self, ctx, member: discord.Member = None):
         chump = random.randrange(1,100)
-        if member == None:
-            embed = discord.Embed(title = f"Chump Rate machine \n\n {ctx.author.name} is {chump}% chump", colour = discord.Colour.green())
+        if member :
+            embed = discord.Embed(title = f"Chump Rate machine \n\n {member} is {chump}% chump", colour = discord.Colour.green())
             await ctx.send(embed = embed)
         else:
-            await ctx.send(embed = embed)
+            embed_1 = discord.Embed(title = f"Chump Rate machine \n\n {ctx.author.name} is {chump}% chump", colour = discord.Colour.green())
+            await ctx.send(embed = embed_1)
     @commands.command()
     @commands.guild_only()
     async def epicgamerrate(self, ctx, member: discord.Member = None):
         epicgamer = random.randrange(1,100)
-        if member == None:
+        if member :
             embed = discord.Embed(title = f"Epic Gamer Rate machine :video_game: \n\n {member} is {epicgamer}% epic gamer", colour = discord.Colour.gold())
             await ctx.send(embed = embed)
         else:
             embed_1 = discord.Embed(title = f"Epic Gamer Rate machine :video_game: \n\n {ctx.author.name} is {epicgamer}% epic gamer", colour = discord.Colour.gold())
-            await ctx.send(embed_1 = embed_1)
+            await ctx.send(embed = embed_1)
     @commands.command()
     @commands.guild_only()
     async def waifurate(self, ctx, member: discord.Member = None):
        waifu = random.randrange(1,100)
        if member :
-            embed = discord.Embed(title = f"Waifu Rate machine \n\n {member} is {waifu}% waifu", colour = discord.Colour.dark_theme())
+            embed = discord.Embed(title = f"Waifu Rate machine \n\n {member} is {waifu}% waifu", colour = discord.Colour.dark_magenta())
             await ctx.send(embed = embed)
        else:
-            embed_1 = discord.Embed(title = f"Waifu Rate machine \n\n {ctx.author.name} is {waifu}% waifu", colour = discord.Colour.dark_theme())
-            await ctx.send(embed_1 = embed_1)
+            embed_1 = discord.Embed(title = f"Waifu Rate machine \n\n {ctx.author.name} is {waifu}% waifu", colour = discord.Colour.dark_magenta())
+            await ctx.send(embed = embed_1)
     @commands.command()
     @commands.guild_only()
     async def howgay(self, ctx, member: discord.Member = None):
@@ -125,7 +131,27 @@ class Fun(commands.Cog):
             await ctx.send(embed = embed)
         else:
             embed_1 = discord.Embed(title = f"Gay Rate machine :video_game: \n\n {ctx.author.name} is {gay}% gay", colour = discord.Colour.purple())
-            await ctx.send(embed_1 = embed_1)
+            await ctx.send(embed = embed_1)
+    @commands.command()
+    @commands.guild_only()
+    async def hack(self, ctx, member: discord.Member = None):
+        if member == None:
+            await ctx.send("You need to name someone to hack")
+        else: 
+            msg = await ctx.send(f"Hacking {member.name} now")
+            await asyncio.sleep(2)
+            await msg.edit(content = "Adding all information to database" )
+            await asyncio.sleep(2)
+            await msg.edit(content = "Sending data to government")
+            await asyncio.sleep(2)
+            await msg.edit(content = "Sending all data secrets to you")
+            await asyncio.sleep(2)
+            await msg.edit(content = "Loading virus in the software...")
+            await asyncio.sleep(2)
+            await msg.edit(content = "Spreading data around the internet to see")
+            await asyncio.sleep(2)
+            await msg.edit(content = "The totally real and actually existing hack is complete.")
+
 
 def setup(bot):
     bot.add_cog(Fun(bot))
