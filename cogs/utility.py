@@ -6,6 +6,7 @@ from discord.ext import commands
 import os
 import pymongo
 from pymongo import MongoClient
+import random
 
 guild_cluster = MongoClient("mongodb+srv://Yash:BlankChump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 guild_db = guild_cluster["discord"]
@@ -48,8 +49,11 @@ class Utility(commands.Cog):
             await ctx.send("Your guild was added") 
             return
         else :
-            collection.update_one({"guild_id":guild.id},{"$set":{"prefix":prefix}}) 
-            await ctx.send(f"Prefix was changed to {prefix}")   
+            if prefix == None :
+                await ctx.send("You have to mention the prefix you want to set along with the command")
+            else: 
+                collection.update_one({"guild_id":guild.id},{"$set":{"prefix":prefix}}) 
+                await ctx.send(f"Prefix was changed to {prefix}")   
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
@@ -65,8 +69,24 @@ class Utility(commands.Cog):
             collection.insert_one({"guild_id":guild.id,"prefix":"%"})
         else:
             pass 
+    @commands.command(help = "Chooses 1 object when provided 2 or more objects", aliases = ["choices"])
+    @commands.guild_only()
+    async def choose(self, ctx, *choices):
+        if choices :
+            term = random.choice(choices)
+            await ctx.send(term)
+        else:
+            await ctx.send("You have to give some optuions to choose from")
 
- 
+    @commands.command(help = "Makes a list for you", aliases = ["lm", "dataorganizer"])
+    @commands.guild_only()
+    async def listmaker(self, ctx, *choices):
+        if choices :
+            term = random.choice([choices])
+            await ctx.send(term)
+        else:
+            await ctx.send("Please provide objects for the list")
+            
 
 
 
