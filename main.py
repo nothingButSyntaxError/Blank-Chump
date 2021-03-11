@@ -9,10 +9,9 @@ import random
 from pymongo import results
 from discord.ext.commands.cooldowns import BucketType
 
-<<<<<<< HEAD
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='%', intents=intents)
-=======
+
 guild_cluster = MongoClient("mongodb+srv://Parth:Blank-Chump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 guild_db = guild_cluster["discord"]
 collection = guild_db["server_data"]
