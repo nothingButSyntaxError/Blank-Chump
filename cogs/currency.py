@@ -1,3 +1,4 @@
+from cogs.utility import check
 import discord
 from discord import user
 from discord.ext import commands
@@ -53,6 +54,7 @@ class Currency(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
+    @commands.cooldown(1, 60, BucketType.user)
     async def balance(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
@@ -226,6 +228,7 @@ class Currency(commands.Cog):
     @commands.command(aliases=['pm', 'postmemes'])
     @commands.check(pm_check)
     @commands.guild_only()
+    @commands.cooldown(1, 45, BucketType.user)
     async def postmeme(self, ctx):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
@@ -281,6 +284,8 @@ class Currency(commands.Cog):
             await ctx.send(f"**Whoa to fast right?!** You have to weigh {abs_time} more before you use the command!")
 
     @commands.command()
+    @commands.guild_only()
+    @commands.cooldown(1, 50, BucketType.user)
     async def highlow(self, ctx):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
@@ -350,6 +355,7 @@ class Currency(commands.Cog):
 
     
     @commands.command(help="Use the command for robbing someone! Be careful sometimes they might have bag locks!", aliases=['steal'])
+    @commands.cooldown(1, 70, BucketType.user)
     async def rob(self, ctx, member: discord.Member = None):
         if member == None:
             await ctx.send("You have to mention someone to rob! Otherwise I will rob you")
@@ -368,11 +374,34 @@ class Currency(commands.Cog):
                     inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,"fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
                     return
                 else:
+                    wallet = bankinfo["wallet"]
                     mem_inv = inv_collection.find_one({"user":member.id})
                     mem_lock = mem_inv['bag_lock']
+                    earnings = 1/10*bank["wallet"]
+                    mem_wallet = bank["wallet"]
+                    e = 1/10*wallet
                     if mem_lock > 0:
-                        await ctx.send("Oops you got caught! The member has a bag lock enabled!")
-                    
+                        msg1 = await ctx.send("Oops you got caught! The member has a bag lock enabled!")
+                        await asyncio.sleep(2)
+                        await msg1.edit(content = "Now he will steal money from you! :smile:")
+                        await asyncio.sleep(2)
+                        await msg1.edit(content=f"{member} stole {round(e)} from {ctx.author}!")
+                        collection.update_one({"user":member.id}, {"$inc":{"wallet":round(e)}})
+                        collection.update_one({"user":ctx.author.id}, {"$set":{"wallet":round(wallet-e)}})
+                        inv_collection.update_one({"user":member.id}, {"$set":{"bag_lock":mem_lock-1}})
+                    else:
+                        msg = await ctx.send(f"Hey you got away with {round(earnings)} from {member.name}'s wallet!")
+                        collection.update_one({"user":ctx.author.id}, {"$inc":{"wallet":round(earnings)}})
+                        collection.update_one({"user":member.id}, {"$set":{"wallet":round(mem_wallet-earnings)}})
+
+    @rob.error
+    async def rob_error(self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            e = error.retry_after
+            await ctx.send(f"You can rob someone only after {round(e)} more seconds!")     
+        else:
+            await ctx.send("There was an error executing the command try contacting the devs if you want!")               
+
 
 
     @commands.command(help="Bet something and try to win Loser!", aliases=['gamble'])
@@ -640,6 +669,43 @@ class Currency(commands.Cog):
             else:
                 await ctx.send("**That Item Is Not Even there in the shop!**WHAT AN IDIOT!")
      
+    @commands.command()
+    async def use(self, ctx, thing=None):
+        bankinfo = collection.find_one({"user":ctx.author.id})
+        invinfo = inv_collection.find_one({"user":ctx.author.id})
+        if not bankinfo:
+            await ctx.send("You dont have an account creating one for you!...")
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,"fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+            return
+        else:
+            if thing == None:
+                await ctx.send("Bruh! What do you want to use!")
+            elif thing == 'mobile_phone':
+                mobile_check_user = invinfo["mobile_phone"]
+                if mobile_check_user > 0:
+                    await ctx.send(f"**{ctx.author.mention} What do you want to use the mobile phone for\n`p`-- Call The Police in case of robbery\n`s`--SMS your friend!\n`d`--Call The Devs\n`c`--Check If Someone Has added you as a friend!**")
+                    def check(m):
+                        return m.channel == ctx.channel
+                    msg = await self.bot.wait_for('message', check=check, timeout=15.0)
+                    if asyncio.TimeoutError:
+                        await ctx.send("Ok looks like I should shut the Phone off!")
+                    else:
+                        if msg.content == 'p':
+                            await ctx.send(f"`**With the police on a call!**`\n**{ctx.author.name}** Hello, Officer? There has been a robbery here!")
+                            await asyncio.sleep(2)
+                            await ctx.send(f"**Police Officer** What the hell are you talking bout I had that area checked no robbery took place **what an idiot** And please call us only if there is an actual emergency! Idiot!")
+                            await asyncio.sleep(1)
+                            await ctx.send("`Call disconnected!`")
+                        elif msg.content == 's':
+                            await ctx.reply("Whom do you want to send SMS to reply withing 10 seconds with a valid user!")
+                            def user_check(m):
+                                return m.channel == ctx.channel
+                            msg1 = await self.bot.wait_for('message', check=user_check)
+                else:
+                    await ctx.reply("Hey you idiot you dont have a mobile phone to use it!")
+                        
+
 
 
 def setup(bot):

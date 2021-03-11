@@ -59,7 +59,7 @@ class Utility(commands.Cog):
     async def on_guild_join(self, guild):
         act_tim = datetime.datetime.utcnow()
         embed = discord.Embed(title="Thank You!", description=f"Thank you for adding {self.bot.user} to your server!", colour=discord.Colour.gold())
-        embed.add_field(name="Setup Instructions", value=f"To setup the bot please do look at the `%help` command and also use the `%setup` command to add your guild to the bots data and so you can use its premium features as well!")
+        embed.add_field(name="Setup Instructions", value=f"To setup the bot please do look at the `%help` command to add your guild to the bots data and so you can use its premium features as well!")
         embed.set_author(name=f"{guild.owner}")
         embed.set_footer(text=f"{act_tim}")
         embed.set_thumbnail(url=guild.owner.avatar_url)
