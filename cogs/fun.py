@@ -9,26 +9,30 @@ class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(help = "Searches whatever you want on google", aliases = ["Search"])
     @commands.guild_only()
     async def google(self, ctx, term):
         link = f"http://lmgtfy.com/?q={term}"
         embed = discord.Embed(title="LMGTFY", url=f"https://lmgtfy.com/?q={term}", description="Cant do anything more than this find your query by going on this link lazy idiot!")
         await ctx.send(link, embed=embed)
 
+
     @google.error
     async def google_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("You have to send what you want to google with the command!")
+
      
-    @commands.command()
+    @commands.command(help = "Types your word again with claps")
     @commands.guild_only()
     async def clap(self,ctx,term):
         letters = len(term)
         if letters:
             for letter in term:
                 await ctx.send(f"{letter}:clap:" )
-    @commands.command()
+
+
+    @commands.command(help = "Roasts the person you mention", aliases = ["insult"])
     @commands.guild_only()
     async def roast(self, ctx, member: discord.Member = None):
         roast = random.choice(["You are a pizza burn on the roof of the world's mouth","You losing your virginity is like a summer squash growing in the middle of winter. Never happening","You are dumber than a block of wood and not nearly as useful","You’re the reason God created the middle finger.","You’re a grey sprinkle on a rainbow cupcake.","If your brain was dynamite, there wouldn’t be enough to blow your hat off"," You are more disappointing than an unsalted pretzel.","Light travels faster than sound which is why you seemed bright until you spoke."," You have so many gaps in your teeth it looks like your tongue is in jail.","Your face makes onions cry.","Don’t be ashamed of who you are. That’s your parents’ job."])
@@ -36,15 +40,19 @@ class Fun(commands.Cog):
             await ctx.send(f"{roast}") 
         else:
             await ctx.send(f"{roast}") 
-    @commands.command()
+
+
+    @commands.command(help = "Answers all your questions with either a yes or a no")
     @commands.guild_only()
     async def _8ball(self, ctx, *, question):
-        _8ball = random.choice(["Yes, ","No"])
+        _8ball = random.choice(["Yes, you noob ","No, I guess"])
         if question :
-            await ctx.send(f"{_8ball}, you noob") 
+            await ctx.send(f":8ball: {_8ball}") 
         else:
             await ctx.send("Please state your question") 
-    @commands.command()
+
+
+    @commands.command(help = "Repeats everything that you say", aliases = ["print"])
     @commands.guild_only()
     async def  say(self, ctx, *, sentence):
         if sentence :
@@ -52,7 +60,8 @@ class Fun(commands.Cog):
         else:
             await ctx.send("Please type a sentence to be said")
 
-    @commands.command()
+
+    @commands.command(help = "Rates how simp you are", aliases=["simpr8"])
     @commands.guild_only()
     async def simprate(self, ctx, member: discord.Member = None):
         simp = random.randrange(1,100)
@@ -62,7 +71,9 @@ class Fun(commands.Cog):
         else:
             embed_1 = discord.Embed(title = f"Simp Rate machine \n\n {ctx.author.name} is {simp}% simp", colour = discord.Colour.dark_red())
             await ctx.send(embed = embed_1)
-    @commands.command()
+
+
+    @commands.command(help = "Rates how dank you are", aliases=["dankr8"])
     @commands.guild_only()
     async def dankrate(self, ctx, member: discord.Member = None):
         dank = random.randrange(1,100)
@@ -72,7 +83,9 @@ class Fun(commands.Cog):
         else:
             embed_1 = discord.Embed(title = f"Dank Rate machine \n\n {ctx.author.name} is {dank}% dank", colour = discord.Colour.gold())
             await ctx.send(embed = embed_1)
-    @commands.command()
+
+
+    @commands.command(help = "Rates how stank you are", aliases=["stankr8"])
     @commands.guild_only()
     async def stankrate(self, ctx, member: discord.Member = None):
         stank = random.randrange(1,100)
@@ -82,7 +95,9 @@ class Fun(commands.Cog):
         else:
             embed_1 = discord.Embed(title = f"Stank Rate machine \n\n {ctx.author.name} is {stank}% stank", colour = discord.Colour.teal())
             await ctx.send(embed = embed_1)
-    @commands.command()
+
+
+    @commands.command(help = "Rates how cool you are", aliases=["coolr8"])
     @commands.guild_only()
     async def coolrate(self, ctx, member: discord.Member = None):
         cool = random.randrange(1,100)
@@ -92,7 +107,9 @@ class Fun(commands.Cog):
         else:
             embed_1 = discord.Embed(title = f"Cool Rate machine \n\n {ctx.author.name} is {cool}% cool", colour = discord.Colour.blue())
             await ctx.send(embed = embed_1)
-    @commands.command()
+
+
+    @commands.command(help = "Rates how chump you are", aliases=["chumpr8"])
     @commands.guild_only()
     async def chumprate(self, ctx, member: discord.Member = None):
         chump = random.randrange(1,100)
@@ -102,7 +119,9 @@ class Fun(commands.Cog):
         else:
             embed_1 = discord.Embed(title = f"Chump Rate machine \n\n {ctx.author.name} is {chump}% chump", colour = discord.Colour.green())
             await ctx.send(embed = embed_1)
-    @commands.command()
+
+
+    @commands.command(help = "Rates how epic you are as a gamer", aliases=["egr8"])
     @commands.guild_only()
     async def epicgamerrate(self, ctx, member: discord.Member = None):
         epicgamer = random.randrange(1,100)
@@ -112,7 +131,9 @@ class Fun(commands.Cog):
         else:
             embed_1 = discord.Embed(title = f"Epic Gamer Rate machine :video_game: \n\n {ctx.author.name} is {epicgamer}% epic gamer", colour = discord.Colour.gold())
             await ctx.send(embed = embed_1)
-    @commands.command()
+
+
+    @commands.command(help = "Rates how waifu you are", aliases=["waifur8"])
     @commands.guild_only()
     async def waifurate(self, ctx, member: discord.Member = None):
        waifu = random.randrange(1,100)
@@ -122,7 +143,9 @@ class Fun(commands.Cog):
        else:
             embed_1 = discord.Embed(title = f"Waifu Rate machine \n\n {ctx.author.name} is {waifu}% waifu", colour = discord.Colour.dark_magenta())
             await ctx.send(embed = embed_1)
-    @commands.command()
+
+
+    @commands.command(help = "Rates how gay you are", aliases=["gayr8", "gayrate"])
     @commands.guild_only()
     async def howgay(self, ctx, member: discord.Member = None):
         gay = random.randrange(1,100)
@@ -132,11 +155,13 @@ class Fun(commands.Cog):
         else:
             embed_1 = discord.Embed(title = f"Gay Rate machine :video_game: \n\n {ctx.author.name} is {gay}% gay", colour = discord.Colour.purple())
             await ctx.send(embed = embed_1)
-    @commands.command()
+
+
+    @commands.command(help = "Hacks the person who you mention", aliases = ["datarob"])
     @commands.guild_only()
     async def hack(self, ctx, member: discord.Member = None):
         if member == None:
-            await ctx.send("You need to name someone to hack")
+            await ctx.send("You need to name someone to hack!!!")
         else: 
             msg = await ctx.send(f"Hacking {member.name} now")
             await asyncio.sleep(2)
@@ -151,6 +176,21 @@ class Fun(commands.Cog):
             await msg.edit(content = "Spreading data around the internet to see")
             await asyncio.sleep(2)
             await msg.edit(content = "The totally real and actually existing hack is complete.")
+    
+
+    @commands.command(help = "Redacts any message you send", aliases = ["redactor"] )
+    @commands.guild_only()
+    async def spoiler(self, ctx, *, redacteds = None):
+        if redacteds == None :
+             await ctx.send("You need to send some words to be redacted")
+        else :
+            for redacted in redacteds :
+                await ctx.send(f"||{redacted}||")
+    
+
+           
+
+    
 
 
 def setup(bot):
