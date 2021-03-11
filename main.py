@@ -25,7 +25,7 @@ bot = commands.Bot(command_prefix=get_prefix, intents=intents)
 
 class MyHelp(commands.HelpCommand):
     def get_command_signature(self, command):
-        return '%s%s %s' % (self.clean_prefix, command.qualified_name, command.signature)
+        return '%s%s%s' % (self.clean_prefix, command.qualified_name, command.signature)
 
     async def send_bot_help(self, mapping):
         embed = discord.Embed(title="Help", colour=discord.Colour.dark_blue())
