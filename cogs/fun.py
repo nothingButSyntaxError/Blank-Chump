@@ -188,8 +188,6 @@ class Fun(commands.Cog):
                 await ctx.send(f"||{redacted}||")
     
 
-           
-
     
 
 

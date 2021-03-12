@@ -445,6 +445,31 @@ class Currency(commands.Cog):
                     await ctx.send(f"The bot rolled: {bot_dice} and {ctx.author.name} rolled: {user_dice} So its a tie nobody wins!")
 
 
+    @commands.command()
+    @commands.guild_only()
+    async def lottery(self, ctx):
+        bankinfo = collection.find_one({"user":ctx.author.id})
+        wallet = bankinfo["wallet"]
+        if not bankinfo:
+            await ctx.send("You don't have an account, creating one for you!...")
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,"fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+            return
+        else:
+            await ctx.send("Do you want to actually purchase a lottery ticket for 100 coins. **REPLY WITH `yes` OR `no`!**")
+            def check(m):
+                return m.channel == ctx.channel
+            msg = await self.bot.wait_for('message', check=check, timeout=15)
+            if msg.content == 'yes':
+                if wallet > 100:
+                    embed = discord.Embed(title="You have successfully purchased a lottery ticket!", description="The winners will be announced soon in [this server](https://discord.gg/27RSuxZSvj)")
+                    await ctx.send(embed=embed)
+                    collection.update_one({"user": ctx.author.id}, {"$set": {"wallet": wallet-100}})
+                else:
+                    await ctx.send("You need to have atleast 100 coins in your wallet to buy the ticket idiot!")            
+            else:
+                await ctx.send("Alright bro! Your wish!")
+
 
     @commands.command()
     @commands.guild_only()
@@ -702,8 +727,17 @@ class Currency(commands.Cog):
                             def user_check(m):
                                 return m.channel == ctx.channel
                             msg1 = await self.bot.wait_for('message', check=user_check)
+                            await ctx.send("`Message sent!`")
+                        elif msg.content == 'd':
+                            await ctx.send("`Calling the devs!`")
+                            await ctx.send(f"**{ctx.author}** Is Blank-Chump mad?")
+                            await ctx.send(f"**DEVS**, Not as mad as you!?")
+                        elif msg.content == 'c':
+                            await ctx.send("`Checking if someone has added you as a friend on discord...`")
+                            await ctx.send("**Check Completed**, No one wants you as their friend lol!")
                 else:
                     await ctx.reply("Hey you idiot you dont have a mobile phone to use it!")
+            
                         
 
 
