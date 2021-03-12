@@ -30,6 +30,19 @@ class Fun(commands.Cog):
         if letters:
             for letter in term:
                 await ctx.send(f"{letter}:clap:" )
+        else:
+            await ctx.send("Type something to clap you dumbo:laughing:")   
+                    
+
+    @commands.command(help = "Doots all your words")
+    @commands.guild_only()
+    async def doot(self,ctx,term):
+        letters = len(term)
+        if letters:
+            for letter in term:
+                await ctx.send(f"{letter}💀🎺" )
+        else:
+            await ctx.send("Type something to doot you dumbo:laughing:")   
 
 
     @commands.command(help = "Roasts the person you mention", aliases = ["insult"])
@@ -150,10 +163,22 @@ class Fun(commands.Cog):
     async def howgay(self, ctx, member: discord.Member = None):
         gay = random.randrange(1,100)
         if member :
-            embed = discord.Embed(title = f"Gay Rate machine :video_game: \n\n {member} is {gay}% gay", colour = discord.Colour.purple())
+            embed = discord.Embed(title = f"Gay Rate machine \n\n {member} is {gay}% gay", colour = discord.Colour.purple())
             await ctx.send(embed = embed)
         else:
-            embed_1 = discord.Embed(title = f"Gay Rate machine :video_game: \n\n {ctx.author.name} is {gay}% gay", colour = discord.Colour.purple())
+            embed_1 = discord.Embed(title = f"Gay Rate machine \n\n {ctx.author.name} is {gay}% gay", colour = discord.Colour.purple())
+            await ctx.send(embed = embed_1)
+    
+
+    @commands.command(help = "Ranks how thoughtful you are", aliases = ["thotr8", "thotrate",])
+    @commands.guild_only()
+    async def rankthot(self, ctx, member: discord.Member = None ):
+        thot = random.randrange(1,100)
+        if member :
+            embed = discord.Embed(title = f"Thought Rate machine \n\n {member} is {thot}% thoughtful", colour = discord.Colour.purple())
+            await ctx.send(embed = embed)
+        else:
+            embed_1 = discord.Embed(title = f"Thought Rate machine \n\n {ctx.author.name} is {thot}% thoughtful", colour = discord.Colour.purple())
             await ctx.send(embed = embed_1)
 
 
@@ -185,7 +210,44 @@ class Fun(commands.Cog):
              await ctx.send("You need to send some words to be redacted")
         else :
             for redacted in redacteds :
-                await ctx.send(f"||{redacted}||")
+                blackwords= (f"||{redacted}||")
+            await ctx.send(blackwords)
+
+    
+    @commands.command(help = "It says OwO", aliases = ["OwO"])
+    @commands.guild_only()
+    async def owo(self, ctx):
+        await ctx.send("OwO")
+
+    @commands.command(help = "Vaporwaves your words. Try it out")
+    @commands.guild_only()
+    async def vaporwave(self,ctx, *, term = None):
+        if term!= None:
+            for letter in term:
+                await ctx.send(f"{letter} " )
+        elif term == None:
+            await ctx.send("Type something to vaporwave you dumbo:laughing:")  
+
+
+    @commands.command(help = "Rickrolls any member of discord on your behalf. This command works in the BlankChump private chat also", aliases = ["astley", "prank"])  
+    async def rickroll(self, ctx, member: discord.Member = None):
+        if member != None:
+            
+            try:
+                msg = await member.send(f"{ctx.author.name} has sent this special link for you \n https://youtu.be/dQw4w9WgXcQ")
+                await msg.edit(suppress = True )
+                await ctx.message.delete()
+            except:
+                await ctx.send("The member is not accepting DM's")
+        else:
+            await ctx.send("You have to mention a member to rickroll, or I will rickroll you :smiley: ")
+    
+
+    
+
+
+    
+
     
 
            

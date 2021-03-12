@@ -86,6 +86,20 @@ class Utility(commands.Cog):
             await ctx.send(term)
         else:
             await ctx.send("Please provide objects for the list")
+    
+
+    @commands.command()
+    @commands.guild_only()
+    async def removemydata(self, ctx):
+        await ctx.send("If you respond with yes, all your data including your currency data will be deleted from our database. If you want to continue with this, message yes, else message no. You have 30 seconds to answer")
+        def check (m):
+            return m.channel == ctx.channel
+        msg = await self.bot.wait_for("message", check=check, timeout=30)
+        if msg.content == "yes":
+            await ctx.send("Your data is getting deleted now")
+        elif msg.content == "no":
+            await ctx.send("Your data will not get deleted")
+      
             
 
 
