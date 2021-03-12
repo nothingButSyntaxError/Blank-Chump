@@ -250,8 +250,6 @@ class Fun(commands.Cog):
 
     
 
-           
-
     
 
 

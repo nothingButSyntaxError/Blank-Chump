@@ -43,6 +43,12 @@ class MyHelp(commands.HelpCommand):
         channel = self.get_destination()
         await channel.send(embed=embed)
 
+    async def send_cog_help(self, cog):
+        embed = discord.Embed(title=cog.qualified_name,description="\n".join(self.get_command_signature(c) for c in cog.walk_commands()))
+
+        channel = self.get_destination()
+        await channel.send(embed=embed)
+
     async def send_command_help(self, command):
         embed = discord.Embed(title=self.get_command_signature(command), colour=discord.Colour.orange())
         embed.add_field(name="Description", value=command.help)
