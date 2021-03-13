@@ -474,6 +474,7 @@ class Currency(commands.Cog):
                         user_id INTEGER,
                         ticket_id INTEGER
                     );""")
+                    cursor.execute("INSERT INTO lottery VALUES(?,?,?)",(ctx.author.name,ctx.author.id,ticket))
                     cursor.execute("SELECT * FROM lottery WHERE user_id=?", (ctx.author.id,))
                     chec = cursor.fetchone()
                     if chec:
