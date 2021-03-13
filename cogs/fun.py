@@ -243,12 +243,19 @@ class Fun(commands.Cog):
             await ctx.send("You have to mention a member to rickroll, or I will rickroll you :smiley: ")
     
 
+
+
+    
+    
+
     
 
 
     
 
     
+
+           
 
     
 
