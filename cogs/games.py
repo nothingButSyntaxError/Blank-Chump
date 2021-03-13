@@ -1,13 +1,17 @@
 import discord
+from discord import user
 from discord.ext import commands
-import os
 import random
+import os
 
-
-class Games(commands.Cog):
+class games(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+@commands.command()
+ @commands.guild_only()
+async def rps(self, ctx, member: discord.Member = None):
+
 
 def setup(bot):
-    bot.add_cog(Games(bot))
+    bot.add_cog(games(bot))

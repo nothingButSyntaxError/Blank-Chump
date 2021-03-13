@@ -11,10 +11,16 @@ import asyncio
 import sqlite3
 from sqlite3 import Error
 
+<<<<<<< HEAD
 #SQLITE
 connection = sqlite3.connect("lottery.sqlite")
 cursor = connection.cursor()
 
+=======
+#SQLITE3
+connection = sqlite3.connect("lottery.sqlite")
+cursor = connection.cursor()
+>>>>>>> cbc798cb7b3713676757e5ae78b24532c0974ecc
 
 #MONGODB
 cluster = MongoClient("mongodb+srv://Admin-MyName:Parth!7730@my-dbs.xlx4y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
@@ -469,16 +475,33 @@ class Currency(commands.Cog):
             msg = await self.bot.wait_for('message', check=check, timeout=15)
             if msg.content == 'yes':
                 if wallet > 100:
+<<<<<<< HEAD
                     ticket = random.randrange(1,1000000)
                     embed = discord.Embed(title="You have successfully purchased a lottery ticket!", description="The winners will be announced soon in [this server](https://discord.gg/27RSuxZSvj)")
                     await ctx.send(embed=embed)
                     collection.update_one({"user": ctx.author.id}, {"$set": {"wallet": wallet-100}})
+=======
+>>>>>>> cbc798cb7b3713676757e5ae78b24532c0974ecc
                     cursor.execute("""CREATE TABLE IF NOT EXISTS lottery (
                         name TEXT,
                         user_id INTEGER,
                         ticket_id INTEGER
                     );""")
+<<<<<<< HEAD
                     cursor.execute("INSERT INTO lottery VALUES(?,?,?)",(ctx.author.name,ctx.author.id,ticket))
+=======
+                    cursor.execute("SELECT * FROM lottery WHERE user_id=?", (ctx.author.id,))
+                    chec = cursor.fetchone()
+                    if chec:
+                        await ctx.send("You already have a ticket for this lottery!")
+                    else:
+                        ticket = random.randrange(1, 100000)
+                        embed = discord.Embed(title="You have successfully purchased a lottery ticket!", description="The winners will be announced soon in [this server](https://discord.gg/27RSuxZSvj)")
+                        await ctx.send(embed=embed)
+                        collection.update_one({"user": ctx.author.id}, {"$set": {"wallet": wallet-100}})
+                        cursor.execute("INSERT INTO lottery VALUES(?, ?, ?)", (ctx.author.name, ctx.author.id, ticket))
+                        connection.commit()
+>>>>>>> cbc798cb7b3713676757e5ae78b24532c0974ecc
                 else:
                 
                     await ctx.send("You need to have atleast 100 coins in your wallet to buy the ticket idiot!")            
