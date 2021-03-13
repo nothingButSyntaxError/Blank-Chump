@@ -22,9 +22,6 @@ def get_prefix(self, ctx):
     guild_prefix = guild_data["prefix"]
     return guild_prefix
 
-intents = discord.Intents.all()
-bot = commands.Bot(command_prefix=get_prefix, intents=intents)
-
 
 class MyHelp(commands.HelpCommand):
     def get_command_signature(self, command):

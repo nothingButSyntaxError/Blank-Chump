@@ -1,7 +1,7 @@
 from cogs.utility import check
 import discord
 from discord import user
-from discord.ext import commands
+from discord.ext import commands, tasks
 import random
 import os
 from discord.ext.commands.cooldowns import BucketType
@@ -10,6 +10,7 @@ from pymongo import MongoClient
 import asyncio
 import sqlite3
 from sqlite3 import Error
+from itertools import cycle
 
 #SQLITE3
 connection = sqlite3.connect("lottery.sqlite")
@@ -488,6 +489,8 @@ class Currency(commands.Cog):
                     await ctx.send("You need to have atleast 100 coins in your wallet to buy the ticket idiot!")            
             else:
                 await ctx.send("Alright bro! Your wish!")
+
+    
 
 
     @commands.command()
