@@ -51,8 +51,8 @@ class Fun(commands.Cog):
         roast = random.choice(["You are a pizza burn on the roof of the world's mouth","You losing your virginity is like a summer squash growing in the middle of winter. Never happening","You are dumber than a block of wood and not nearly as useful","You’re the reason God created the middle finger.","You’re a grey sprinkle on a rainbow cupcake.","If your brain was dynamite, there wouldn’t be enough to blow your hat off"," You are more disappointing than an unsalted pretzel.","Light travels faster than sound which is why you seemed bright until you spoke."," You have so many gaps in your teeth it looks like your tongue is in jail.","Your face makes onions cry.","Don’t be ashamed of who you are. That’s your parents’ job."])
         if member == None:
             await ctx.send(f"{roast}") 
-        else:
-            await ctx.send(f"{roast}") 
+        elif member != None:
+            await ctx.send(f"{member.mention}{roast}") 
 
 
     @commands.command(help = "Answers all your questions with either a yes or a no")
@@ -242,6 +242,16 @@ class Fun(commands.Cog):
         else:
             await ctx.send("You have to mention a member to rickroll, or I will rickroll you :smiley: ")
     
+
+    @commands.command(help = "", aliases = ["emojiconvert", "textconvert"])
+    @commands.guild_only()
+    async def emojify(self, ctx, *, term):
+        emojis = {"a":":regional_indicator_a:", 'b':':regional_indicator_b:',"c":":regional_indicator_c:","d":":regional_indicator_d:",'e':':regional_indicator_e:','f':':regional_indicator_f:','g':':regional_indicator_g:','h':':regional_indicator_h:','i':':regional_indicator_i:','j':':regional_indicator_j:','k':':regional_indicator_k:','l':':regional_indicator_l:','m':':regional_indicator_m:','n':':regional_indicator_n:','o':':regional_indicator_o:','p':':regional_indicator_q:','r':':regional_indicator_r:','s':':regional_indicator_s:','t':':regional_indicator_t:','u':':regional_indicator_v:','w':':regional_indicator_w:','x':':regional_indicator_x:','y':':regional_indicator_y:','z':':regional_indicator_z:', '1':':one:', '2':':two:','3':':three:','4':':four:','5':':five:','6':':six:','7':':seven:','8':':eight:','9':':nine:','0':':zero:',}        
+        for letter in term.lower():
+            term_emojis = emojis[letter]
+            await ctx.send(term_emojis)
+    
+
 
 
 
