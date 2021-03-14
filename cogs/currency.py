@@ -79,7 +79,7 @@ class Currency(commands.Cog):
             bank = bankinfo['bank']
             net_worth = wallet + bank
             embed = discord.Embed(title=f"{member.name}'s balance", description=f"\n\n**WALLET:** {wallet}\n**BANK:** {bank}\n**NET WORTH:** {net_worth}", colour=discord.Colour.blue())
-            embed.set_thumbnail(url=ctx.author.avatar_url)
+            embed.set_thumbnail(url=member.avatar_url)
             await ctx.send(embed=embed)
 
     @commands.command()
