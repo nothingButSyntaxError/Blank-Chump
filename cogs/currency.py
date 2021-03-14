@@ -1,3 +1,4 @@
+from discord import channel
 from cogs.utility import check
 import discord
 from discord import user
@@ -38,6 +39,7 @@ mainshop = [{"name": "watch", "price": 2000, "description": "Show off your watch
             {"name":"apple", "price":25, "description":"An apple a day keeps the doctor away. Eat an apple and feel better!"},
             {"name":"cookie", "price":15, "description":"A good mouth blending cookie!"}]
 
+
 #CHECKS
 def pm_check(ctx):
     author_inv = inv_collection.find_one({"user":ctx.author.id})
@@ -61,7 +63,6 @@ class Currency(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    @commands.cooldown(1, 60, BucketType.user)
     async def balance(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
@@ -83,6 +84,7 @@ class Currency(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
+    @commands.cooldown(1, 65, BucketType.user)
     async def beg(self, ctx):
         bankinfo = collection.find_one({"user": ctx.author.id})
         if not bankinfo:
@@ -384,9 +386,9 @@ class Currency(commands.Cog):
                     wallet = bankinfo["wallet"]
                     mem_inv = inv_collection.find_one({"user":member.id})
                     mem_lock = mem_inv['bag_lock']
-                    earnings = 1/10*bank["wallet"]
+                    earnings = 3/10*bank["wallet"]
                     mem_wallet = bank["wallet"]
-                    e = 1/10*wallet
+                    e = 3/10*wallet
                     if mem_lock > 0:
                         msg1 = await ctx.send("Oops you got caught! The member has a bag lock enabled!")
                         await asyncio.sleep(2)
@@ -466,18 +468,18 @@ class Currency(commands.Cog):
             await ctx.send("Do you want to actually purchase a lottery ticket for 100 coins. **REPLY WITH `yes` OR `no`!**")
             def check(m):
                 return m.channel == ctx.channel
-            msg = await self.bot.wait_for('message', check=check, timeout=15)
+            msg = await self.bot.wait_for('message', check=check)
             if msg.content == 'yes':
                 if wallet > 100:
+                    ticket = random.randrange(1, 100000)
                     cursor.execute("""CREATE TABLE IF NOT EXISTS lottery (
                         name TEXT,
                         user_id INTEGER,
                         ticket_id INTEGER
                     );""")
-                    cursor.execute("INSERT INTO lottery VALUES(?,?,?)",(ctx.author.name,ctx.author.id,ticket))
                     cursor.execute("SELECT * FROM lottery WHERE user_id=?", (ctx.author.id,))
                     chec = cursor.fetchone()
-                    if chec:
+                    if chec == True:
                         await ctx.send("You already have a ticket for this lottery!")
                     else:
                         ticket = random.randrange(1, 100000)
@@ -488,10 +490,36 @@ class Currency(commands.Cog):
                         connection.commit()
                 else:
                     await ctx.send("You need to have atleast 100 coins in your wallet to buy the ticket idiot!")            
-            else:
+            elif msg.content == "no":
                 await ctx.send("Alright bro! Your wish!")
 
+
+    @tasks.loop(seconds=3600)
+    async def lotteryloop(self):
+        lottery_channel = self.bot.get_channel(820600849982160907)
+        earnings = random.randrange(100000, 500000)
+        cursor.execute("SELECT * FROM lottery ORDER BY RANDOM() LIMIT 1")
+        fetch = cursor.fetchone()
+        cursor.execute("SELECT * FROM lottery")
+        result = cursor.fetchall()
+        ppl = len(result)
+        name = fetch[0]
+        user_id = fetch[1]
+        userid = self.bot.get_user(user_id)
+        ticket_id = fetch[2]
+        embed = discord.Embed(title=f"WINNER - {name}", description=f"{name}---**{userid.mention}**---**TICKET ID={ticket_id}** won the lottery and walked away with {earnings}", colour=discord.Colour.gold())
+        embed.set_footer(text="To buy your lottery ticket use the command %lottery, winners are announced each hour!")
+        await lottery_channel.send(embed=embed)
+        collection.update_one({"user":user_id}, {"$inc":{"bank":earnings}})
+        cursor.execute("DELETE FROM lottery")
+        connection.commit()
+
     
+    @commands.command()
+    @commands.is_owner()
+    async def lot_starter(self, ctx):
+        self.lotteryloop.start()
+        print("Lottery started!")
 
 
     @commands.command()
