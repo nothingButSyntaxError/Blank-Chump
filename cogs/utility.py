@@ -99,6 +99,9 @@ class Utility(commands.Cog):
             await ctx.send("Your data is getting deleted now")
         elif msg.content == "no":
             await ctx.send("Your data will not get deleted")
+
+    
+    
       
             
 

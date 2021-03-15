@@ -9,6 +9,8 @@ class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+
+#search google command sends link for lmgtfy
     @commands.command(help = "Searches whatever you want on google", aliases = ["Search"])
     @commands.guild_only()
     async def google(self, ctx, term):
@@ -52,7 +54,7 @@ class Fun(commands.Cog):
         if member == None:
             await ctx.send(f"{roast}") 
         elif member != None:
-            await ctx.send(f"{member.mention}{roast}") 
+            await ctx.send(f"{member.mention} {roast}") 
 
 
     @commands.command(help = "Answers all your questions with either a yes or a no")
@@ -229,27 +231,129 @@ class Fun(commands.Cog):
             await ctx.send("Type something to vaporwave you dumbo:laughing:")  
 
 
-    @commands.command(help = "Rickrolls any member of discord on your behalf. This command works in the BlankChump private chat also", aliases = ["astley", "prank"])  
+    @commands.command(help = "Rickrolls any member of discord on your behalf.", aliases = ["astley", "prank"])  
     async def rickroll(self, ctx, member: discord.Member = None):
         if member != None:
-            
-            try:
-                msg = await member.send(f"{ctx.author.name} has sent this special link for you \n https://youtu.be/dQw4w9WgXcQ")
-                await msg.edit(suppress = True )
-                await ctx.message.delete()
-            except:
-                await ctx.send("The member is not accepting DM's")
+            msg = await member.send(f"{ctx.author.name} has sent this special link for you \n https://youtu.be/dQw4w9WgXcQ")
+            await msg.edit(suppress = True )
+            await ctx.message.delete() 
         else:
             await ctx.send("You have to mention a member to rickroll, or I will rickroll you :smiley: ")
     
 
-    @commands.command(help = "", aliases = ["emojiconvert", "textconvert"])
+#Converts to emojis
+    @commands.command(help = "Converts your output into emojis you can send to your friends", aliases = ["emojiconvert", "textconvert"])
     @commands.guild_only()
     async def emojify(self, ctx, *, term):
-        emojis = {"a":":regional_indicator_a:", 'b':':regional_indicator_b:',"c":":regional_indicator_c:","d":":regional_indicator_d:",'e':':regional_indicator_e:','f':':regional_indicator_f:','g':':regional_indicator_g:','h':':regional_indicator_h:','i':':regional_indicator_i:','j':':regional_indicator_j:','k':':regional_indicator_k:','l':':regional_indicator_l:','m':':regional_indicator_m:','n':':regional_indicator_n:','o':':regional_indicator_o:','p':':regional_indicator_q:','r':':regional_indicator_r:','s':':regional_indicator_s:','t':':regional_indicator_t:','u':':regional_indicator_v:','w':':regional_indicator_w:','x':':regional_indicator_x:','y':':regional_indicator_y:','z':':regional_indicator_z:', '1':':one:', '2':':two:','3':':three:','4':':four:','5':':five:','6':':six:','7':':seven:','8':':eight:','9':':nine:','0':':zero:',}        
+        emojis = {"a":":regional_indicator_a:", 'b':':regional_indicator_b:',"c":":regional_indicator_c:","d":":regional_indicator_d:",'e':':regional_indicator_e:','f':':regional_indicator_f:','g':':regional_indicator_g:','h':':regional_indicator_h:','i':':regional_indicator_i:','j':':regional_indicator_j:','k':':regional_indicator_k:','l':':regional_indicator_l:','m':':regional_indicator_m:','n':':regional_indicator_n:','o':':regional_indicator_o:','p':':regional_indicator_q:','r':':regional_indicator_r:','s':':regional_indicator_s:','t':':regional_indicator_t:','u':':regional_indicator_v:','w':':regional_indicator_w:','x':':regional_indicator_x:','y':':regional_indicator_y:','z':':regional_indicator_z:', '1':':one:', '2':':two:','3':':three:','4':':four:','5':':five:','6':':six:','7':':seven:','8':':eight:','9':':nine:','0':':zero:',"`":"`","~":"~","!":":grey_exclamation:","@":"@",'#':":hash:","$":"$","%":"%","^":"^","&":"&","*":":asterisk:","(":"(",")":")","_":"_","-":"-","+":"+","=":"=","{":"{","}":"}","[":"[","]":"]",'|':"|",":":":",";":";",'"':'"',"'":"'","<":"<",",":",",">":">",".":".","?":":grey_question:","/":"/"}        
         for letter in term.lower():
             term_emojis = emojis[letter]
             await ctx.send(term_emojis)
+    
+#compliments similar code to roasts
+    @commands.command(help = "Compliment the person you mention", aliases = ["comp","appreciate"])
+    @commands.guild_only()
+    async def compliment(self, ctx, member: discord.Member = None):
+        comp = random.choice(["Your smile is contagious.",
+        "I bet you make babies smile.", 
+        "You have the best laugh.",
+        "You light up the room.",
+        "You have a great sense of humor.",
+        "If cartoon bluebirds were real, a couple of 'em would be sitting on your shoulders singing right now.",
+        "You're like sunshine on a rainy day.",
+        "You bring out the best in other people.",
+        "I bet you sweat glitter.",
+        "Colors seem brighter when you're around.",
+        "You're more fun than a ball pit filled with candy.",
+        "Jokes are funnier when you tell them.",
+        "You always know how to find that silver lining.",
+        "You're a candle in the darkness.",
+        "Being around you is like a happy little vacation.",
+        "You're more fun than bubble wrap.",
+        "You're like a breath of fresh air.",
+        "You're someone's reason to smile.",
+        "How do you keep being so funny and making everyone laugh?",
+        "You have impeccable manners.",
+        "I like your style.",
+        "You're strong.",
+        'Is that your picture next to "charming" in the dictionary?',
+        'Your kindness is a balm to all who encounter it.',
+        'You are brave.',
+        'Your insides are even more beautiful than your outside.',
+        'You have the courage of your convictions.',
+        "You're a great listener.",
+        'You were cool way before hipsters were cool.',
+        "That thing you don't like about yourself is what makes you really interesting.",
+        "You're inspiring.",
+        "You're so thoughtful.",
+        "When you make up your mind, nothing stands in your way.",
+        'You seem to really know who you are.',
+        "You're a smart cookie.",
+        'Your perspective is refreshing.',
+        'Your ability to recall random factoids at just the right times is impressive.',
+        'When you say, "I meant to do that," I totally believe you.',
+        'You have the best ideas.',
+        "You're always learning new things and trying to better yourself. That's awesome.",
+        'If someone based an Internet meme on you, it would have impeccable grammar.',
+        'You could survive a zombie apocalypse.',
+        'When you make a mistake, you fix it.',
+        "You're great at figuring stuff out.",
+        'Your creative potential seems limitless.',
+        'I bet you do crossword puzzles in ink.',
+        'You have a good head on your shoulders.',
+        'Everyone gets knocked down sometimes; only people like you get back up again and keep going.',
+        'You should be proud of yourself.',
+        'You are making a difference.',
+        'You deserve a hug right now.',
+        "You're a great example to others.",
+        'Actions speak louder than words, and yours tell an incredible story.',
+        "You're an awesome friend.",
+        "You're more helpful than you realize.",
+        'Hanging out with you is always fun.',
+        "That thing where you know when someone needs something? That's amazing.",
+        'Being around you makes everything better.',
+        'You should be thanked more often. Thank you.',
+        "Our community is better because you're in it."
+        "Someone is getting through something hard right now because you've got their back. Nice work.",
+        'You always know just what to say.',
+        'The people you love are lucky to have you in their lives.',
+        'Any team would be lucky to have you on it.',
+        'Defenseless animals are drawn to you.',
+        'The way you treasure your loved ones is incredible.',
+        "You're a gift to those around you.",
+        'I appreciate you.',
+        'You are the most perfect you there is.',
+        'You are enough.',
+        "You're all that and a super-size bag of chips.",
+        "On a scale from 1 to 10, you're an 11.",
+        "You've got all the right moves.",
+        'Everything would be better if more people were like you.',
+        "When you're not afraid to be yourself, that's when you're incredible.",
+        "You're wonderful.",
+        "You're better than a triple-scoop ice cream cone. With sprinkles.",
+        "You're one of a kind.",
+        "If you were a box of crayons, you'd be the big industrial name-brand one with a built-in sharpener.",
+        "Who raised you? They deserve a medal for a job well done.",
+        "Somehow you make time stop and fly all at the same time.",
+        'In high school, I bet you were voted "most likely to continue being awesome."',
+        "If you were a scented candle they'd have to call it Perfectly Imperfect (and it would smell like summer).",
+        "There's ordinary, and then there's you.",
+        "You're even better than a unicorn because you're real.",
+        "You're really something special."])
+        if member == None:
+            await ctx.send(f"{ctx.author.name} {comp}") 
+        elif member != None:
+            await ctx.send(f"{member.mention} {comp}")
+    
+
+
+
+
+
+
+
+
+
     
 
 
