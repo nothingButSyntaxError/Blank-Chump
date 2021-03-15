@@ -9,14 +9,13 @@ import random
 from pymongo import results
 from discord.ext.commands.cooldowns import BucketType
 
-
-guild_cluster = MongoClient("mongodb+srv://Yash:Blank-Chump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+guild_cluster = MongoClient("mongodb+srv://Yash:BlankChump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 guild_db = guild_cluster["discord"]
 collection = guild_db["server_data"]
 
 def get_prefix(self, ctx):
     guild = ctx.guild
-    guild_data = collection.find_one({"guild_id":guild.id})
+    guild_data = collection.find_one({"guild_id": guild.id})
     guild_prefix = guild_data["prefix"]
     return guild_prefix
 
@@ -68,7 +67,7 @@ bot.load_extension(f"cogs.currency")
 bot.load_extension(f"cogs.utility")
 bot.load_extension(f"cogs.reddit")
 bot.load_extension(f"cogs.fun")
-
+bot.load_extension(f"cogs.moderation")
 
 
 

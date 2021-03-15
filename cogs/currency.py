@@ -57,6 +57,14 @@ def fish_check(ctx):
     else:
         return False
 
+def hunt_check(ctx):
+    author_inv = inv_collection.find_one({"user":ctx.author.id})
+    rifle_amt = author_inv['hunting_rifle']
+    if rifle_amt > 0:
+        return True
+    else:
+        return False
+
 class Currency(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -453,6 +461,8 @@ class Currency(commands.Cog):
                 elif bot_dice == user_dice:
                     await ctx.send(f"The bot rolled: {bot_dice} and {ctx.author.name} rolled: {user_dice} So its a tie nobody wins!")
 
+    
+
 
     @commands.command()
     @commands.guild_only()
@@ -520,6 +530,23 @@ class Currency(commands.Cog):
     async def lot_starter(self, ctx):
         self.lotteryloop.start()
         print("Lottery started!")
+
+    @commands.command()
+    @commands.check(hunt_check)
+    @commands.cooldown(1, 120, BucketType.user)
+    async def hunt(self, ctx):
+        animal_type = random.choices(['deer', 'bear', 'rabbit', 'ruccoons', 'leapord', 'snake'], weights=[25, 10, 20, 30, 2, 13])
+        animal_quantity = random.randrange(0, 8)
+        await ctx.send(f"Hey you went hunting and got {animal_quantity} {animal_type}!")
+        inv_collection.update_one({"user":ctx.author.id}, {"$inc":{animal_type:animal_quantity}})
+
+    @hunt.error
+    async def hunt_error(self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            error_type = error.retry_after
+            await ctx.send(f"Hey hey! You can go for hunting only after {round(error_type)} more seconds!")
+        elif isinstance(error, commands.CheckFailure):
+            await ctx.send("Hey you gotta have atleast one hunting rifle in your inventory for this!")
 
 
     @commands.command()
