@@ -346,6 +346,127 @@ class Fun(commands.Cog):
             await ctx.send(f"{member.mention} {comp}")
     
 
+    @commands.command()
+    @commands.guild_only()
+    async def uselessweb(self, ctx):
+        uselessweb = random.choice(["http://corndog.io/",
+        "https://mondrianandme.com/",
+        "https://thatsthefinger.com/",
+        "https://puginarug.com/",
+        "https://heeeeeeeey.com/",
+        "https://longdogechallenge.com/",
+        "http://burymewithmymoney.com/",
+        "https://trypap.com/",
+        "http://endless.horse/",
+        "http://www.movenowthinklater.com/",
+        "http://www.partridgegetslucky.com/",
+        "http://eelslap.com/",
+        "https://smashthewalls.com/",
+        "http://www.republiquedesmangues.fr/",
+        "http://www.everydayim.com/",
+        "https://cat-bounce.com/",
+        "http://beesbeesbees.com/",
+        "http://www.staggeringbeauty.com/ Shake Vigorously",
+        "https://chrismckenzie.com/",
+        "http://www.koalastothemax.com/",
+        'https://thezen.zone/games',
+        'http://ihasabucket.com/',
+        'http://randomcolour.com/',
+        'http://www.rrrgggbbb.com/',
+        'https://www.hackertyper.com/',
+        'http://ninjaflex.com/',
+        'http://hasthelargehadroncolliderdestroyedtheworldyet.com/',
+        'http://www.muchbetterthanthis.com/'
+        'http://www.yesnoif.com/',
+        'https://pointerpointer.com/',
+        'http://lacquerlacquer.com/',
+        'https://iamawesome.com/',
+        'https://jacksonpollock.org/',
+        'https://potatoortomato.com/',
+        'http://drawing.garden/',
+        'http://drawing.garden/',
+        'https://corgiorgy.com/'])
+        
+        await ctx.send(uselessweb)
+
+
+    @commands.command()
+    @commands.guild_only()
+    async def greentext(self,ctx,*green):
+        for gtext in green:
+            await ctx.send(f"```{gtext}```")
+    
+
+    @commands.command()
+    @commands.guild_only()
+    async def black_bground(self,ctx,*black_background):
+        for bground in black_background:
+            await ctx.send(f"`{bground}`")
+    
+
+    @commands.command()
+    @commands.guild_only()
+    async def italicize(self,ctx,*italy):
+        for icize in italy:
+            await ctx.send(f"*{icize}*")
+    
+
+    @commands.command()
+    @commands.guild_only()
+    async def bold(self,ctx,*bolden):
+        for bden in bolden:
+            await ctx.send(f"**{bden}**")
+    
+
+    @commands.command()
+    @commands.guild_only()
+    async def underline(self,ctx,*line):
+        for uline in line:
+            await ctx.send(f"__{uline}__")
+    
+
+    @commands.command()
+    @commands.guild_only()
+    async def strike(self,ctx,*strikethru):
+        for sthru in strikethru:
+            await ctx.send(f"~~{sthru}~~")
+
+
+    @commands.command()
+    @commands.guild_only()
+    async def redtext(self,ctx,*redtext):
+        for rtext in redtext:
+            await ctx.send(f"```diff -{rtext}```")
+            
+
+    @commands.command()
+    @commands.guild_only()
+    async def orangetext(self,ctx,orangetext):
+        await ctx.send(f"```css [{orangetext}]```")
+
+    
+
+
+    
+
+
+    
+    
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
 
 
 
