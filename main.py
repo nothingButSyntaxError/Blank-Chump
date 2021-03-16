@@ -9,10 +9,10 @@ import random
 from pymongo import results
 from discord.ext.commands.cooldowns import BucketType
 
-<<<<<<< HEAD
+
+
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='%', intents=intents)
-=======
 guild_cluster = MongoClient("mongodb+srv://Parth:Blank-Chump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 guild_db = guild_cluster["discord"]
 collection = guild_db["server_data"]
@@ -60,7 +60,6 @@ class MyHelp(commands.HelpCommand):
 
 bot.help_command = MyHelp()
 
->>>>>>> 87d0450ba247dc030afe8dd2fbddf4af54d63db5
 
 bot.load_extension(f"cogs.functions")
 bot.load_extension(f"cogs.currency")
