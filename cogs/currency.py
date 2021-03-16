@@ -22,9 +22,9 @@ cluster = MongoClient("mongodb+srv://Admin-MyName:Parth!7730@my-dbs.xlx4y.mongod
 db = cluster["discord"]
 collection = db["user_data"]
 inv_db = cluster["discord"]
-inv_collection = db["inventory"] 
+inv_collection = db["inventory"]
 
-#SHOP
+#MAIN SHOP
 mainshop = [{"name": "watch", "price": 2000, "description": "Show off your watch to all!, However its just useless"},
             {"name": "fishing_rod", "price": 10000,
              "description": "Helps you in fishing you can use the #fish command if you have a fishing rod!"},
@@ -170,6 +170,7 @@ class Currency(commands.Cog):
     
     @commands.command()
     @commands.guild_only()
+    @commands.cooldown(1, 30, BucketType.user)
     async def slots(self, ctx, amount: int=None):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
@@ -201,6 +202,12 @@ class Currency(commands.Cog):
                     current = wallet-loss
                     new_wallet_loss = collection.update_one({"user":ctx.author.id}, {"$set":{"wallet":current}})
                     await ctx.send("You lost!")
+
+    @slots.error
+    async def slots_error(self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            err = error.retry_after
+            await ctx.send(f"Hey how much slots will you play, Please try the command only after {round(err)} more seconds!")
 
 
     @commands.command()
@@ -271,6 +278,8 @@ class Currency(commands.Cog):
     async def postmeme_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
             await ctx.send("You need to buy a laptop for posting memes on the internet! Buy it using `%buy second_hand_laptop`")
+        elif isinstance(error, commands.CheckFailure):
+            await ctx.send("Hey you should have a laptop for posting memes. Buy one from the shop!")
 
     
     @commands.command()
@@ -298,7 +307,7 @@ class Currency(commands.Cog):
         elif isinstance(error, commands.CommandOnCooldown):
             error_time = error.retry_after
             abs_time = round(error_time)
-            await ctx.send(f"**Whoa to fast right?!** You have to weigh {abs_time} more before you use the command!")
+            await ctx.send(f"**Whoa to fast right?!** You have to wait {abs_time} more before you use the command!")
 
     @commands.command()
     @commands.guild_only()
@@ -369,6 +378,12 @@ class Currency(commands.Cog):
                                         description=f"**The correct no was {correct_no} while you told jackpot**", colour=discord.Colour.red())
                     embed.set_thumbnail(url=ctx.author.avatar_url)
                     await ctx.send(embed=embed)
+
+    @highlow.error
+    async def highlow_error(self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            err = error.retry_after
+            await ctx.send(f"If you play so much highlow, you will get high yourself. Please use the command only after {round(err)} more seconds!")
 
     
     @commands.command(help="Use the command for robbing someone! Be careful sometimes they might have bag locks!", aliases=['steal'])
@@ -461,8 +476,11 @@ class Currency(commands.Cog):
                 elif bot_dice == user_dice:
                     await ctx.send(f"The bot rolled: {bot_dice} and {ctx.author.name} rolled: {user_dice} So its a tie nobody wins!")
 
-    
-
+    @bet.error
+    async def bet_error(Self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            err = error.retry_after
+            await ctx.send(f"Please dont bet so much or else i will make you lose on purpose. Please try the command only after {round(err)} more seconds!")
 
     @commands.command()
     @commands.guild_only()
@@ -539,6 +557,7 @@ class Currency(commands.Cog):
         animal_quantity = random.randrange(0, 8)
         await ctx.send(f"Hey you went hunting and got {animal_quantity} {animal_type}!")
         inv_collection.update_one({"user":ctx.author.id}, {"$inc":{animal_type:animal_quantity}})
+
 
     @hunt.error
     async def hunt_error(self, ctx, error):
@@ -815,8 +834,16 @@ class Currency(commands.Cog):
                             await ctx.send("**Check Completed**, No one wants you as their friend lol!")
                 else:
                     await ctx.reply("Hey you idiot you dont have a mobile phone to use it!")
+            elif thing == 'apple':
+                apple_check_user = invinfo["apple"]
+                if apple_check_user > 0:
+                    mon = random.randrange(50, 100)
+                    await ctx.send(f"You ate an apple and your energy increased! you also got {mon}")
+                    collection.update_one({"user":ctx.author.id}, {"$inc":{"wallet":mon}})
+                    inv_collection.update_one({"user":ctx.author.id}, {"$set":{"apple":apple_check_user-1}})
+                else:
+                    await ctx.send("You dont have an apple to use it!")
             
-                        
 
 
 

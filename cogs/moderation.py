@@ -1,4 +1,5 @@
 import discord
+from discord.enums import try_enum
 from discord.ext import commands
 import os
 
@@ -48,6 +49,28 @@ class Moderation(commands.Cog):
     async def ban_error(self, ctx, error):
         if isinstance(error, MissingPermissions):
             await ctx.send("You don't have that permission")
+
+    @commands.command()
+    @commands.has_permissions(ban_members=True)
+    async def unban(self, ctx, *, member):
+        banned_users = await ctx.guild.bans()
+        member_name, member_discriminator = member.split('#')
+        for ban_entry in banned_users:
+            user = ban_entry.user
+            if(user.name, user.discriminator) == (member_name, member_discriminator):
+                await ctx.guild.unban(user)
+                await ctx.send(f'unbanned {user.mention}, he may join in anytime.')
+                return
+
+    @commands.command()
+    async def mute(self, ctx, member: discord.Member = None):
+        guild = ctx.guild
+        role = guild.get_role()
+        if member == None:
+            await ctx.send("You have to mention someone to mute them!")
+        elif member != None:
+            await member.add_roles()
+
 
 
 
