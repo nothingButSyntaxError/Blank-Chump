@@ -1,3 +1,5 @@
+from cogs.images import Images
+from cogs.games import games
 from discord.ext.commands.core import check
 from discord.flags import Intents
 import pymongo 
@@ -65,9 +67,10 @@ bot.help_command = MyHelp()
 bot.load_extension(f"cogs.functions")
 bot.load_extension(f"cogs.currency")
 bot.load_extension(f"cogs.utility")
-bot.load_extension(f"cogs.reddit")
 bot.load_extension(f"cogs.fun")
 bot.load_extension(f"cogs.moderation")
+bot.load_extension(f"cogs.games")
+bot.load_extension(f"cogs.images")
 
 
 

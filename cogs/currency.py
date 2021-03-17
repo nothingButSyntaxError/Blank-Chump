@@ -567,6 +567,42 @@ class Currency(commands.Cog):
         elif isinstance(error, commands.CheckFailure):
             await ctx.send("Hey you gotta have atleast one hunting rifle in your inventory for this!")
 
+    @commands.command()
+    @commands.guild_only()
+    @commands.cooldown(1, 400, BucketType.user)
+    async def bankrob(self, ctx, member: discord.Member = None):
+        if member == None:
+            await ctx.reply("Please mention someone with the command so as to rob them")
+        elif member != None:
+            bankinfo = collection.find_one({"user":ctx.author.id})
+            if not bankinfo:
+                await ctx.send("You don't have an account, creating one for you!...")
+                collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+                inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,"fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+                return
+            else:
+                mem_bank = collection.find_one({"user":member.id})
+                if not mem_bank:
+                    await ctx.send("You don't have an account, creating one for you!...")
+                    collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+                    inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,"fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+                    return
+                else:
+                    bank = mem_bank['bank']
+                    if bank > 2000:
+                        earning = round(4/10*bank)
+                        collection.update_one({"user":ctx.author.id}, {"$inc":{"bank":earning}})
+                        collection.update_one({"user":member.id}, {"$set":{"bank":bank-earning}})
+                        await ctx.reply(f"You stole a good amount. Your payout was {earning}")
+                    else:
+                        await ctx.reply("He doesn't even have 2000 coins. Why bankrob him?!")
+
+    @bankrob.error
+    async def bankrob_error(self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            err = round(error.retry_after)
+            await ctx.send("Why do you wanna rob everyone. Just stop you can rob someone only after {err} more seconds!")
+
 
     @commands.command()
     @commands.guild_only()
@@ -843,7 +879,8 @@ class Currency(commands.Cog):
                     inv_collection.update_one({"user":ctx.author.id}, {"$set":{"apple":apple_check_user-1}})
                 else:
                     await ctx.send("You dont have an apple to use it!")
-            
+    
+
 
 
 

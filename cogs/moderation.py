@@ -62,14 +62,6 @@ class Moderation(commands.Cog):
                 await ctx.send(f'unbanned {user.mention}, he may join in anytime.')
                 return
 
-    @commands.command()
-    async def mute(self, ctx, member: discord.Member = None):
-        guild = ctx.guild
-        role = guild.get_role()
-        if member == None:
-            await ctx.send("You have to mention someone to mute them!")
-        elif member != None:
-            await member.add_roles()
 
 
 
