@@ -1,22 +1,30 @@
+from discord import channel
 from cogs.utility import check
 import discord
 from discord import user
-from discord.ext import commands
+from discord.ext import commands, tasks
 import random
 import os
 from discord.ext.commands.cooldowns import BucketType
 import pymongo
 from pymongo import MongoClient
 import asyncio
+import sqlite3
+from sqlite3 import Error
+from itertools import cycle
+
+#SQLITE3
+connection = sqlite3.connect("lottery.sqlite")
+cursor = connection.cursor()
 
 #MONGODB
 cluster = MongoClient("mongodb+srv://Admin-MyName:Parth!7730@my-dbs.xlx4y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 db = cluster["discord"]
 collection = db["user_data"]
 inv_db = cluster["discord"]
-inv_collection = db["inventory"] 
+inv_collection = db["inventory"]
 
-#SHOP
+#MAIN SHOP
 mainshop = [{"name": "watch", "price": 2000, "description": "Show off your watch to all!, However its just useless"},
             {"name": "fishing_rod", "price": 10000,
              "description": "Helps you in fishing you can use the #fish command if you have a fishing rod!"},
@@ -30,6 +38,7 @@ mainshop = [{"name": "watch", "price": 2000, "description": "Show off your watch
             {"name":"hunting_rifle", "price":9000, "description":"Use it to show off and also for the `%hunt` command!"},
             {"name":"apple", "price":25, "description":"An apple a day keeps the doctor away. Eat an apple and feel better!"},
             {"name":"cookie", "price":15, "description":"A good mouth blending cookie!"}]
+
 
 #CHECKS
 def pm_check(ctx):
@@ -48,13 +57,20 @@ def fish_check(ctx):
     else:
         return False
 
+def hunt_check(ctx):
+    author_inv = inv_collection.find_one({"user":ctx.author.id})
+    rifle_amt = author_inv['hunting_rifle']
+    if rifle_amt > 0:
+        return True
+    else:
+        return False
+
 class Currency(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
     @commands.guild_only()
-    @commands.cooldown(1, 60, BucketType.user)
     async def balance(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
@@ -71,11 +87,12 @@ class Currency(commands.Cog):
             bank = bankinfo['bank']
             net_worth = wallet + bank
             embed = discord.Embed(title=f"{member.name}'s balance", description=f"\n\n**WALLET:** {wallet}\n**BANK:** {bank}\n**NET WORTH:** {net_worth}", colour=discord.Colour.blue())
-            embed.set_thumbnail(url=ctx.author.avatar_url)
+            embed.set_thumbnail(url=member.avatar_url)
             await ctx.send(embed=embed)
 
     @commands.command()
     @commands.guild_only()
+    @commands.cooldown(1, 65, BucketType.user)
     async def beg(self, ctx):
         bankinfo = collection.find_one({"user": ctx.author.id})
         if not bankinfo:
@@ -153,6 +170,7 @@ class Currency(commands.Cog):
     
     @commands.command()
     @commands.guild_only()
+    @commands.cooldown(1, 30, BucketType.user)
     async def slots(self, ctx, amount: int=None):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
@@ -184,6 +202,12 @@ class Currency(commands.Cog):
                     current = wallet-loss
                     new_wallet_loss = collection.update_one({"user":ctx.author.id}, {"$set":{"wallet":current}})
                     await ctx.send("You lost!")
+
+    @slots.error
+    async def slots_error(self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            err = error.retry_after
+            await ctx.send(f"Hey how much slots will you play, Please try the command only after {round(err)} more seconds!")
 
 
     @commands.command()
@@ -254,6 +278,8 @@ class Currency(commands.Cog):
     async def postmeme_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
             await ctx.send("You need to buy a laptop for posting memes on the internet! Buy it using `%buy second_hand_laptop`")
+        elif isinstance(error, commands.CheckFailure):
+            await ctx.send("Hey you should have a laptop for posting memes. Buy one from the shop!")
 
     
     @commands.command()
@@ -281,7 +307,7 @@ class Currency(commands.Cog):
         elif isinstance(error, commands.CommandOnCooldown):
             error_time = error.retry_after
             abs_time = round(error_time)
-            await ctx.send(f"**Whoa to fast right?!** You have to weigh {abs_time} more before you use the command!")
+            await ctx.send(f"**Whoa to fast right?!** You have to wait {abs_time} more before you use the command!")
 
     @commands.command()
     @commands.guild_only()
@@ -353,6 +379,12 @@ class Currency(commands.Cog):
                     embed.set_thumbnail(url=ctx.author.avatar_url)
                     await ctx.send(embed=embed)
 
+    @highlow.error
+    async def highlow_error(self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            err = error.retry_after
+            await ctx.send(f"If you play so much highlow, you will get high yourself. Please use the command only after {round(err)} more seconds!")
+
     
     @commands.command(help="Use the command for robbing someone! Be careful sometimes they might have bag locks!", aliases=['steal'])
     @commands.cooldown(1, 70, BucketType.user)
@@ -377,9 +409,9 @@ class Currency(commands.Cog):
                     wallet = bankinfo["wallet"]
                     mem_inv = inv_collection.find_one({"user":member.id})
                     mem_lock = mem_inv['bag_lock']
-                    earnings = 1/10*bank["wallet"]
+                    earnings = 3/10*bank["wallet"]
                     mem_wallet = bank["wallet"]
-                    e = 1/10*wallet
+                    e = 3/10*wallet
                     if mem_lock > 0:
                         msg1 = await ctx.send("Oops you got caught! The member has a bag lock enabled!")
                         await asyncio.sleep(2)
@@ -444,6 +476,132 @@ class Currency(commands.Cog):
                 elif bot_dice == user_dice:
                     await ctx.send(f"The bot rolled: {bot_dice} and {ctx.author.name} rolled: {user_dice} So its a tie nobody wins!")
 
+    @bet.error
+    async def bet_error(Self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            err = error.retry_after
+            await ctx.send(f"Please dont bet so much or else i will make you lose on purpose. Please try the command only after {round(err)} more seconds!")
+
+    @commands.command()
+    @commands.guild_only()
+    async def lottery(self, ctx):
+        bankinfo = collection.find_one({"user":ctx.author.id})
+        wallet = bankinfo["wallet"]
+        if not bankinfo:
+            await ctx.send("You don't have an account, creating one for you!...")
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,"fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+            return
+        else:
+            await ctx.send("Do you want to actually purchase a lottery ticket for 100 coins. **REPLY WITH `yes` OR `no`!**")
+            def check(m):
+                return m.channel == ctx.channel
+            msg = await self.bot.wait_for('message', check=check)
+            if msg.content == 'yes':
+                if wallet > 100:
+                    ticket = random.randrange(1, 100000)
+                    cursor.execute("""CREATE TABLE IF NOT EXISTS lottery (
+                        name TEXT,
+                        user_id INTEGER,
+                        ticket_id INTEGER
+                    );""")
+                    cursor.execute("SELECT * FROM lottery WHERE user_id=?", (ctx.author.id,))
+                    chec = cursor.fetchone()
+                    if chec == True:
+                        await ctx.send("You already have a ticket for this lottery!")
+                    else:
+                        ticket = random.randrange(1, 100000)
+                        embed = discord.Embed(title="You have successfully purchased a lottery ticket!", description="The winners will be announced soon in [this server](https://discord.gg/27RSuxZSvj)")
+                        await ctx.send(embed=embed)
+                        collection.update_one({"user": ctx.author.id}, {"$set": {"wallet": wallet-100}})
+                        cursor.execute("INSERT INTO lottery VALUES(?, ?, ?)", (ctx.author.name, ctx.author.id, ticket))
+                        connection.commit()
+                else:
+                    await ctx.send("You need to have atleast 100 coins in your wallet to buy the ticket idiot!")            
+            elif msg.content == "no":
+                await ctx.send("Alright bro! Your wish!")
+
+
+    @tasks.loop(seconds=3600)
+    async def lotteryloop(self):
+        lottery_channel = self.bot.get_channel(820600849982160907)
+        earnings = random.randrange(100000, 500000)
+        cursor.execute("SELECT * FROM lottery ORDER BY RANDOM() LIMIT 1")
+        fetch = cursor.fetchone()
+        cursor.execute("SELECT * FROM lottery")
+        result = cursor.fetchall()
+        ppl = len(result)
+        name = fetch[0]
+        user_id = fetch[1]
+        userid = self.bot.get_user(user_id)
+        ticket_id = fetch[2]
+        embed = discord.Embed(title=f"WINNER - {name}", description=f"{name}---**{userid.mention}**---**TICKET ID={ticket_id}** won the lottery and walked away with {earnings}", colour=discord.Colour.gold())
+        embed.set_footer(text="To buy your lottery ticket use the command %lottery, winners are announced each hour!")
+        await lottery_channel.send(embed=embed)
+        collection.update_one({"user":user_id}, {"$inc":{"bank":earnings}})
+        cursor.execute("DELETE FROM lottery")
+        connection.commit()
+
+    
+    @commands.command()
+    @commands.is_owner()
+    async def lot_starter(self, ctx):
+        self.lotteryloop.start()
+        print("Lottery started!")
+
+    @commands.command()
+    @commands.check(hunt_check)
+    @commands.cooldown(1, 120, BucketType.user)
+    async def hunt(self, ctx):
+        animal_type = random.choices(['deer', 'bear', 'rabbit', 'ruccoons', 'leapord', 'snake'], weights=[25, 10, 20, 30, 2, 13])
+        animal_quantity = random.randrange(0, 8)
+        await ctx.send(f"Hey you went hunting and got {animal_quantity} {animal_type}!")
+        inv_collection.update_one({"user":ctx.author.id}, {"$inc":{animal_type:animal_quantity}})
+
+
+    @hunt.error
+    async def hunt_error(self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            error_type = error.retry_after
+            await ctx.send(f"Hey hey! You can go for hunting only after {round(error_type)} more seconds!")
+        elif isinstance(error, commands.CheckFailure):
+            await ctx.send("Hey you gotta have atleast one hunting rifle in your inventory for this!")
+
+    @commands.command()
+    @commands.guild_only()
+    @commands.cooldown(1, 400, BucketType.user)
+    async def bankrob(self, ctx, member: discord.Member = None):
+        if member == None:
+            await ctx.reply("Please mention someone with the command so as to rob them")
+        elif member != None:
+            bankinfo = collection.find_one({"user":ctx.author.id})
+            if not bankinfo:
+                await ctx.send("You don't have an account, creating one for you!...")
+                collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+                inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,"fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+                return
+            else:
+                mem_bank = collection.find_one({"user":member.id})
+                if not mem_bank:
+                    await ctx.send("You don't have an account, creating one for you!...")
+                    collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+                    inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,"fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+                    return
+                else:
+                    bank = mem_bank['bank']
+                    if bank > 2000:
+                        earning = round(4/10*bank)
+                        collection.update_one({"user":ctx.author.id}, {"$inc":{"bank":earning}})
+                        collection.update_one({"user":member.id}, {"$set":{"bank":bank-earning}})
+                        await ctx.reply(f"You stole a good amount. Your payout was {earning}")
+                    else:
+                        await ctx.reply("He doesn't even have 2000 coins. Why bankrob him?!")
+
+    @bankrob.error
+    async def bankrob_error(self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            err = round(error.retry_after)
+            await ctx.send("Why do you wanna rob everyone. Just stop you can rob someone only after {err} more seconds!")
 
 
     @commands.command()
@@ -702,9 +860,27 @@ class Currency(commands.Cog):
                             def user_check(m):
                                 return m.channel == ctx.channel
                             msg1 = await self.bot.wait_for('message', check=user_check)
+                            await ctx.send("`Message sent!`")
+                        elif msg.content == 'd':
+                            await ctx.send("`Calling the devs!`")
+                            await ctx.send(f"**{ctx.author}** Is Blank-Chump mad?")
+                            await ctx.send(f"**DEVS**, Not as mad as you!?")
+                        elif msg.content == 'c':
+                            await ctx.send("`Checking if someone has added you as a friend on discord...`")
+                            await ctx.send("**Check Completed**, No one wants you as their friend lol!")
                 else:
                     await ctx.reply("Hey you idiot you dont have a mobile phone to use it!")
-                        
+            elif thing == 'apple':
+                apple_check_user = invinfo["apple"]
+                if apple_check_user > 0:
+                    mon = random.randrange(50, 100)
+                    await ctx.send(f"You ate an apple and your energy increased! you also got {mon}")
+                    collection.update_one({"user":ctx.author.id}, {"$inc":{"wallet":mon}})
+                    inv_collection.update_one({"user":ctx.author.id}, {"$set":{"apple":apple_check_user-1}})
+                else:
+                    await ctx.send("You dont have an apple to use it!")
+    
+
 
 
 

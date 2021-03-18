@@ -1,3 +1,5 @@
+from cogs.images import Images
+from cogs.games import games
 from discord.ext.commands.core import check
 from discord.flags import Intents
 import pymongo 
@@ -9,23 +11,27 @@ import random
 from pymongo import results
 from discord.ext.commands.cooldowns import BucketType
 
+<<<<<<< HEAD
 
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='%', intents=intents)
 guild_cluster = MongoClient("mongodb+srv://Parth:Blank-Chump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+=======
+guild_cluster = MongoClient("mongodb+srv://Yash:BlankChump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+>>>>>>> cc2d7343dd193fd95cd2229cac3ef635ea73e511
 guild_db = guild_cluster["discord"]
 collection = guild_db["server_data"]
 
 def get_prefix(self, ctx):
     guild = ctx.guild
-    guild_data = collection.find_one({"guild_id":guild.id})
+    guild_data = collection.find_one({"guild_id": guild.id})
     guild_prefix = guild_data["prefix"]
     return guild_prefix
 
-intents = discord.Intents.all()
-bot = commands.Bot(command_prefix=get_prefix, intents=intents)
 
+intents = discord.Intents.all()
+bot = commands.Bot(command_prefix="%", intents=intents)
 
 class MyHelp(commands.HelpCommand):
     def get_command_signature(self, command):
@@ -40,6 +46,12 @@ class MyHelp(commands.HelpCommand):
            if command_signatures:
                cog_name = getattr(cog, "qualified_name", "No Category")
                embed.add_field(name=cog_name, value="\n".join(command_signatures), inline=False)
+
+        channel = self.get_destination()
+        await channel.send(embed=embed)
+
+    async def send_cog_help(self, cog):
+        embed = discord.Embed(title=cog.qualified_name,description="\n".join(self.get_command_signature(c) for c in cog.walk_commands()))
 
         channel = self.get_destination()
         await channel.send(embed=embed)
@@ -60,12 +72,17 @@ class MyHelp(commands.HelpCommand):
 
 bot.help_command = MyHelp()
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> cc2d7343dd193fd95cd2229cac3ef635ea73e511
 bot.load_extension(f"cogs.functions")
 bot.load_extension(f"cogs.currency")
 bot.load_extension(f"cogs.utility")
-bot.load_extension(f"cogs.reddit")
-
+bot.load_extension(f"cogs.fun")
+bot.load_extension(f"cogs.moderation")
+bot.load_extension(f"cogs.games")
+bot.load_extension(f"cogs.images")
 
 
 

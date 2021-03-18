@@ -69,6 +69,7 @@ class Utility(commands.Cog):
             collection.insert_one({"guild_id":guild.id,"prefix":"%"})
         else:
             pass 
+
     @commands.command(help = "Chooses 1 object when provided 2 or more objects", aliases = ["choices"])
     @commands.guild_only()
     async def choose(self, ctx, *choices):
@@ -86,8 +87,40 @@ class Utility(commands.Cog):
             await ctx.send(term)
         else:
             await ctx.send("Please provide objects for the list")
-            
+    
 
+    @commands.command()
+    @commands.guild_only()
+    async def removemydata(self, ctx):
+        await ctx.send("If you respond with yes, all your data including your currency data will be deleted from our database. If you want to continue with this, message yes, else message no. You have 30 seconds to answer")
+        def check (m):
+            return m.channel == ctx.channel
+        msg = await self.bot.wait_for("message", check=check, timeout=30)
+        if msg.content == "yes":
+            await ctx.send("Your data is getting deleted now")
+        elif msg.content == "no":
+            await ctx.send("Your data will not get deleted")
+
+    
+    
+      
+    @commands.command(aliases=["whois"])
+    async def userinfo(self, ctx, member: discord.Member = None):
+        if not member:
+            member = ctx.message.author 
+        else:
+            roles = [role for role in member.roles]
+            embed = discord.Embed(colour=discord.Colour.blue(), timestamp=ctx.message.created_at,title=f"User Info - {member}")
+            embed.set_thumbnail(url=member.avatar_url)
+            embed.set_footer(text=f"Requested by {ctx.author}")
+            embed.add_field(name="ID:", value=member.id)
+            embed.add_field(name="Display Name:", value=member.display_name)
+            embed.add_field(name="Created Account On:", value=member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"))
+            embed.add_field(name="Joined Server On:", value=member.joined_at.strftime)
+            embed.add_field(name="Roles:", value="".join([role.mention for role in roles]))
+            embed.add_field(name="Highest Role:", value=member.top_role.mention)
+            print(member.top_role.mention)
+            await ctx.send(embed=embed)
 
 
 
