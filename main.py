@@ -11,15 +11,11 @@ import random
 from pymongo import results
 from discord.ext.commands.cooldowns import BucketType
 
-<<<<<<< HEAD
-
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='%', intents=intents)
 guild_cluster = MongoClient("mongodb+srv://Parth:Blank-Chump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
-=======
-guild_cluster = MongoClient("mongodb+srv://Yash:BlankChump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
->>>>>>> cc2d7343dd193fd95cd2229cac3ef635ea73e511
+guild_cluster = MongoClient("mongodb+srv://Yash:BlankChump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 guild_db = guild_cluster["discord"]
 collection = guild_db["server_data"]
 
@@ -71,11 +67,6 @@ class MyHelp(commands.HelpCommand):
 
 
 bot.help_command = MyHelp()
-
-<<<<<<< HEAD
-
-=======
->>>>>>> cc2d7343dd193fd95cd2229cac3ef635ea73e511
 bot.load_extension(f"cogs.functions")
 bot.load_extension(f"cogs.currency")
 bot.load_extension(f"cogs.utility")
@@ -83,7 +74,7 @@ bot.load_extension(f"cogs.fun")
 bot.load_extension(f"cogs.moderation")
 bot.load_extension(f"cogs.games")
 bot.load_extension(f"cogs.images")
-
+bot.load_extension(f"cogs.admin")
 
 
 bot.run('ODA5NzM1NDgzNzEwMTExNzY0.YCZa7w.4qz1St9r9ktva6AANexlBNtEeeA')
