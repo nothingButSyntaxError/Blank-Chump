@@ -87,6 +87,18 @@ class Images(commands.Cog):
         ipad.save("ipad_pfp.jpg")
         await ctx.send(file=discord.File("ipad_pfp.jpg"))
 
+    @commands.command()
+    async def captain_marvel(self, ctx, member: discord.Member = None):
+        if member == None:
+            member = ctx.author
+        cap = Image.open("./cogs/img_src/captain_marvel.jpg")
+        asset = member.avatar_url_as(size=128)
+        data = BytesIO(await asset.read())
+        pfp = Image.open(data)
+        pfp = pfp.resize((138, 166))
+        cap.paste(pfp, (320, 129))
+        cap.save("captain_marvel_pfp.jpg")
+        await ctx.send(file=discord.File("captain_marvel_pfp.jpg"))
     
 
 
