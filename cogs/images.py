@@ -1,8 +1,9 @@
 import discord
 from discord.ext import commands
 import random
-from PIL import Image
+from PIL import Image, ImageFont, ImageDraw
 from io import BytesIO
+import textwrap
 
 
 class Images(commands.Cog):
@@ -87,7 +88,62 @@ class Images(commands.Cog):
         ipad.save("ipad_pfp.jpg")
         await ctx.send(file=discord.File("ipad_pfp.jpg"))
 
-    
+    @commands.command()
+    async def uglier(self, ctx, member: discord.Member = None):
+        if member == None:
+            member = ctx.author
+        ugly = Image.open("./cogs/img_src/ugly.png")
+        asset = member.avatar_url_as(size=128)
+        data = BytesIO(await asset.read())
+        pfp = Image.open(data)
+        pfp = pfp.resize((176, 172))
+        ugly.paste(pfp, (120, 56))
+        ugly.save("ugly_pfp.png")
+        await ctx.send(file=discord.File("ugly_pfp.png"))
+
+    @commands.command()
+    async def dog(self, ctx, member: discord.Member = None):
+        if member == None:
+            member = ctx.author
+        dog = Image.open("./cogs/img_src/dog.jfif")
+        asset = member.avatar_url_as(size=128)
+        data = BytesIO(await asset.read())
+        pfp = Image.open(data)
+        pfp = pfp.resize((142, 170))
+        dog.paste(pfp, (277, 62))
+        dog.save("dog_pfp.png")
+        await ctx.send(file=discord.File("dog_pfp.png"))
+
+    @commands.command()
+    async def whiteboard(self, ctx, *, text):
+        if len(text) > 30:
+            await ctx.send("The words shld be less than 10")
+        elif len(text) < 30:
+            wrapper = textwrap.TextWrapper(width=22)
+            word_list = wrapper.wrap(text=str(text))
+            board = Image.open("./cogs/img_src/blankboard.jpg")
+            draw = ImageDraw.Draw(board)
+            font = ImageFont.truetype("believe_font.ttf", 30)
+            draw.text((159, 118), word_list, (0,0,0), font=font)
+            board.save("board_pfp.jpg")
+            await ctx.send(file=discord.File("board_pfp.jpg"))
+
+    @commands.command()
+    async def cat(self, ctx, member: discord.Member = None):
+        if member == None:
+            member = ctx.author
+        cat = Image.open("./cogs/img_src/cat.jpg")
+        asset = member.avatar_url_as(size=128)
+        data = BytesIO(await asset.read())
+        pfp = Image.open(data)
+        pfp = pfp.resize((889, 807))
+        cat.paste(pfp, (219, 649))
+        cat.save("cat_pfp.png")
+        await ctx.send(file=discord.File("cat_pfp.png"))
+
+
+
+
 
 
 def setup(bot):

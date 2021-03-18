@@ -15,7 +15,7 @@ from discord.ext.commands.cooldowns import BucketType
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='%', intents=intents)
 guild_cluster = MongoClient("mongodb+srv://Parth:Blank-Chump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
-guild_cluster = MongoClient("mongodb+srv://Yash:BlankChump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+guild_cluster = MongoClient("mongodb+srv://Yash:BlankChump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 guild_db = guild_cluster["discord"]
 collection = guild_db["server_data"]
 
@@ -67,6 +67,7 @@ class MyHelp(commands.HelpCommand):
 
 
 bot.help_command = MyHelp()
+
 bot.load_extension(f"cogs.functions")
 bot.load_extension(f"cogs.currency")
 bot.load_extension(f"cogs.utility")
