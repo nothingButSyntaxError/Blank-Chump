@@ -346,7 +346,7 @@ class Fun(commands.Cog):
             await ctx.send(f"{member.mention} {comp}")
     
 
-    @commands.command()
+    @commands.command(help = "Provides random, funny links", aliases = ["uweb","passtime"])
     @commands.guild_only()
     async def uselessweb(self, ctx):
         uselessweb = random.choice(["http://corndog.io/",
@@ -393,58 +393,135 @@ class Fun(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def greentext(self,ctx,*green):
-        for gtext in green:
-            await ctx.send(f"```{gtext}```")
+        if green :
+            for gtext in green:
+                await ctx.send(f"```{gtext}```")
+        else :
+            await ctx.send("You have to send something to greentext, coz I can't greentext nothing, right?")
+
     
 
     @commands.command()
     @commands.guild_only()
     async def black_bground(self,ctx,*black_background):
-        for bground in black_background:
-            await ctx.send(f"`{bground}`")
+        if black_background:
+            for bground in black_background:
+                await ctx.send(f"`{bground}`")
+                await ctx.send("You have to send some text to change background")
+        else:
+            await ctx.send("You have to send something to blackbackground, coz I can't blackbackground nothing, right?")
     
 
     @commands.command()
     @commands.guild_only()
     async def italicize(self,ctx,*italy):
-        for icize in italy:
-            await ctx.send(f"*{icize}*")
+        if italy:
+            for icize in italy:
+                await ctx.send(f"*{icize}*")
+        else:
+            await ctx.send("You have to send something to italicize, coz I can't italicize nothing, right?")
+            
+    
     
 
     @commands.command()
     @commands.guild_only()
     async def bold(self,ctx,*bolden):
-        for bden in bolden:
-            await ctx.send(f"**{bden}**")
+        if bolden :
+            for bden in bolden:
+                await ctx.send(f"**{bden}**")
+        else:
+            await ctx.send("You have to send something to bolden, coz I can't bolden nothing, right?")
     
 
     @commands.command()
     @commands.guild_only()
     async def underline(self,ctx,*line):
-        for uline in line:
-            await ctx.send(f"__{uline}__")
+        if line:
+            for uline in line:
+                await ctx.send(f"__{uline}__")
+        else:
+            await ctx.send("You have to send something to underline, coz I can't underline nothing, right???")
     
 
     @commands.command()
     @commands.guild_only()
     async def strike(self,ctx,*strikethru):
-        for sthru in strikethru:
-            await ctx.send(f"~~{sthru}~~")
+        if strikethru :
+            for sthru in strikethru:
+                await ctx.send(f"~~{sthru}~~")
+        else:
+            await ctx.send("You have to send something to strike, coz I can't strike nothing, right?")
 
 
     @commands.command()
     @commands.guild_only()
-    async def redtext(self,ctx,*redtext):
-        for rtext in redtext:
-            await ctx.send(f"```diff -{rtext}```")
+    async def redtext(self,ctx,*rtext):
+        if rtext :
+            for redt in rtext :
+                await ctx.send(f"```diff\n-{redt}```")
+        else:
+            await ctx.send("You have to send something to redtext, coz I can't redtext nothing, right?")
+
+    
+    @commands.command()
+    @commands.guild_only()
+    async def orangetext(self,ctx,*otext):
+        if otext :
+            for oranget in otext :
+                await ctx.send(f"```css\n[{oranget}]```")
+        else:
+            await ctx.send("You have to send something to orangetext, coz I can't orangetext nothing, right?")
+
+
+    @commands.command()
+    @commands.guild_only()
+    async def lightgreentext(self,ctx,*lgtext):
+        if lgtext:
+            for lgreent in lgtext :
+                await ctx.send(f"```fix\n{lgreent}")
+        else:
+            await ctx.send("You have to send something to lightgreentext, coz I can't lightgreentext nothing, right?")
+
+
+    @commands.command()
+    @commands.guild_only()
+    async def bluetext(self,ctx,*bluetext):
+        if bluetext:
+            for bluet in bluetext :
+                await ctx.send(f'```ini\n[{bluet}]```')
+        else:
+            await ctx.send("You have to send something to bluetext, coz I can't bluetext nothing, right?")
             
 
     @commands.command()
     @commands.guild_only()
-    async def orangetext(self,ctx,orangetext):
-        await ctx.send(f"```css [{orangetext}]```")
+    async def turquoisetext(self,ctx,*tqtext):
+        if tqtext:
+            for turqt in tqtext :
+                await ctx.send(f'```bash\n"{turqt}"```')
+        else:
+            await ctx.send("You have to send something to turquoisetext, coz I can't turquoisetext nothing, right?")
+    
+
+    @commands.command()
+    @commands.guild_only()
+    async def yellowtext(self,ctx,*yellowtext):
+        if yellowtext:
+            for yelt in yellowtext :
+                await ctx.send(f'```fix\n{yelt}```')
+        else:
+            await ctx.send("You have to send something to yellowtext, coz I can't yellowtext nothing, right?")
 
     
+
+
+    
+    
+
+
+    
+
 
 
     
