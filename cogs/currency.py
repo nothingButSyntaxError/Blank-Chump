@@ -648,7 +648,7 @@ class Currency(commands.Cog):
         else:
             embed = discord.Embed(title=f"**{self.bot.user}'s shop**", colour=discord.Colour.red())
             for item in mainshop:
-                name = item["name"]
+                name = item["name"] 
                 price = item["price"]
                 description = item["description"]
                 embed.add_field(name=f'**{name}--${price}**',value=f'description: {description}', inline=False)

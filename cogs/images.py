@@ -89,7 +89,6 @@ class Images(commands.Cog):
         await ctx.send(file=discord.File("ipad_pfp.jpg"))
 
     @commands.command()
-<<<<<<< HEAD
     async def captain_marvel(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
@@ -102,7 +101,7 @@ class Images(commands.Cog):
         cap.save("captain_marvel_pfp.jpg")
         await ctx.send(file=discord.File("captain_marvel_pfp.jpg"))
     
-=======
+    @commands.command()
     async def uglier(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
@@ -155,10 +154,8 @@ class Images(commands.Cog):
         cat.save("cat_pfp.png")
         await ctx.send(file=discord.File("cat_pfp.png"))
 
+    
 
-
-
->>>>>>> 57cdea4e508fc28c8bbce0f0ff9cc2d5824957bb
 
 
 def setup(bot):
