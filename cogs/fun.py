@@ -69,7 +69,7 @@ class Fun(commands.Cog):
 
     @commands.command(help = "Repeats everything that you say", aliases = ["print"])
     @commands.guild_only()
-    async def  say(self, ctx, *, sentence):
+    async def say(self, ctx, *, sentence):
         if sentence :
             await ctx.send(f"{sentence} \n\n -{ctx.author}")
         else:
@@ -245,10 +245,13 @@ class Fun(commands.Cog):
     @commands.command(help = "Converts your output into emojis you can send to your friends", aliases = ["emojiconvert", "textconvert"])
     @commands.guild_only()
     async def emojify(self, ctx, *, term):
-        emojis = {"a":":regional_indicator_a:", 'b':':regional_indicator_b:',"c":":regional_indicator_c:","d":":regional_indicator_d:",'e':':regional_indicator_e:','f':':regional_indicator_f:','g':':regional_indicator_g:','h':':regional_indicator_h:','i':':regional_indicator_i:','j':':regional_indicator_j:','k':':regional_indicator_k:','l':':regional_indicator_l:','m':':regional_indicator_m:','n':':regional_indicator_n:','o':':regional_indicator_o:','p':':regional_indicator_q:','r':':regional_indicator_r:','s':':regional_indicator_s:','t':':regional_indicator_t:','u':':regional_indicator_v:','w':':regional_indicator_w:','x':':regional_indicator_x:','y':':regional_indicator_y:','z':':regional_indicator_z:', '1':':one:', '2':':two:','3':':three:','4':':four:','5':':five:','6':':six:','7':':seven:','8':':eight:','9':':nine:','0':':zero:',"`":"`","~":"~","!":":grey_exclamation:","@":"@",'#':":hash:","$":"$","%":"%","^":"^","&":"&","*":":asterisk:","(":"(",")":")","_":"_","-":"-","+":"+","=":"=","{":"{","}":"}","[":"[","]":"]",'|':"|",":":":",";":";",'"':'"',"'":"'","<":"<",",":",",">":">",".":".","?":":grey_question:","/":"/"}        
-        for letter in term.lower():
-            term_emojis = emojis[letter]
-            await ctx.send(term_emojis)
+        if term :
+            emojis = {"a":":regional_indicator_a:", 'b':':regional_indicator_b:',"c":":regional_indicator_c:","d":":regional_indicator_d:",'e':':regional_indicator_e:','f':':regional_indicator_f:','g':':regional_indicator_g:','h':':regional_indicator_h:','i':':regional_indicator_i:','j':':regional_indicator_j:','k':':regional_indicator_k:','l':':regional_indicator_l:','m':':regional_indicator_m:','n':':regional_indicator_n:','o':':regional_indicator_o:','p':':regional_indicator_q:','r':':regional_indicator_r:','s':':regional_indicator_s:','t':':regional_indicator_t:','u':':regional_indicator_v:','w':':regional_indicator_w:','x':':regional_indicator_x:','y':':regional_indicator_y:','z':':regional_indicator_z:', '1':':one:', '2':':two:','3':':three:','4':':four:','5':':five:','6':':six:','7':':seven:','8':':eight:','9':':nine:','0':':zero:',"`":"`","~":"~","!":":grey_exclamation:","@":"@",'#':":hash:","$":"$","%":"%","^":"^","&":"&","*":":asterisk:","(":"(",")":")","_":"_","-":"-","+":"+","=":"=","{":"{","}":"}","[":"[","]":"]",'|':"|",":":":",";":";",'"':'"',"'":"'","<":"<",",":",",">":">",".":".","?":":grey_question:","/":"/"}        
+            for letter in term.lower():
+                term_emojis = emojis[letter]
+                await ctx.send(term_emojis)
+        else:
+            await ctx.send("You have to send text to emojify")
     
 #compliments similar code to roasts
     @commands.command(help = "Compliment the person you mention", aliases = ["comp","appreciate"])
@@ -390,18 +393,18 @@ class Fun(commands.Cog):
         await ctx.send(uselessweb)
 
 
-    @commands.command()
+    @commands.command(help = "Resends your text with a complete black line as background.", aliases = ["gtext"])
     @commands.guild_only()
     async def greentext(self,ctx,*green):
         if green :
             for gtext in green:
                 await ctx.send(f"```{gtext}```")
         else :
-            await ctx.send("You have to send something to greentext, coz I can't greentext nothing, right?")
+            await ctx.send("You have to send something to greentext, coz I can't greentext nothing, right???")
 
     
 
-    @commands.command()
+    @commands.command(help = "Resends your text with black background.", aliases = ["black_background"])
     @commands.guild_only()
     async def black_bground(self,ctx,*black_background):
         if black_background:
@@ -409,32 +412,32 @@ class Fun(commands.Cog):
                 await ctx.send(f"`{bground}`")
                 await ctx.send("You have to send some text to change background")
         else:
-            await ctx.send("You have to send something to blackbackground, coz I can't blackbackground nothing, right?")
+            await ctx.send("You have to send something to blackbackground, coz I can't blackbackground nothing, right???")
     
 
-    @commands.command()
+    @commands.command(help = "Italicizes your text.", aliases = ["icize"])
     @commands.guild_only()
     async def italicize(self,ctx,*italy):
         if italy:
             for icize in italy:
                 await ctx.send(f"*{icize}*")
         else:
-            await ctx.send("You have to send something to italicize, coz I can't italicize nothing, right?")
+            await ctx.send("You have to send something to italicize, coz I can't italicize nothing, right???")
             
     
     
 
-    @commands.command()
+    @commands.command(help = "Boldens your text.", aliases=["bolden"] )
     @commands.guild_only()
     async def bold(self,ctx,*bolden):
         if bolden :
             for bden in bolden:
                 await ctx.send(f"**{bden}**")
         else:
-            await ctx.send("You have to send something to bolden, coz I can't bolden nothing, right?")
+            await ctx.send("You have to send something to bolden, coz I can't bolden nothing, right???")
     
 
-    @commands.command()
+    @commands.command(help = "Underlines your text.")
     @commands.guild_only()
     async def underline(self,ctx,*line):
         if line:
@@ -444,17 +447,17 @@ class Fun(commands.Cog):
             await ctx.send("You have to send something to underline, coz I can't underline nothing, right???")
     
 
-    @commands.command()
+    @commands.command(help = "Strikes through text", aliases = ["strikethru","strikethrough"])
     @commands.guild_only()
     async def strike(self,ctx,*strikethru):
         if strikethru :
             for sthru in strikethru:
                 await ctx.send(f"~~{sthru}~~")
         else:
-            await ctx.send("You have to send something to strike, coz I can't strike nothing, right?")
+            await ctx.send("You have to send something to strike, coz I can't strike nothing, right???")
 
 
-    @commands.command()
+    @commands.command(help = "Colours text in red.", aliases = ["rtext"])
     @commands.guild_only()
     async def redtext(self,ctx,*rtext):
         if rtext :
@@ -464,7 +467,7 @@ class Fun(commands.Cog):
             await ctx.send("You have to send something to redtext, coz I can't redtext nothing, right?")
 
     
-    @commands.command()
+    @commands.command(help = "Colours text in orange", aliases=["otext"])
     @commands.guild_only()
     async def orangetext(self,ctx,*otext):
         if otext :
@@ -474,7 +477,7 @@ class Fun(commands.Cog):
             await ctx.send("You have to send something to orangetext, coz I can't orangetext nothing, right?")
 
 
-    @commands.command()
+    @commands.command(help = "Colours text in red.", aliases = ["lgtext"])
     @commands.guild_only()
     async def lightgreentext(self,ctx,*lgtext):
         if lgtext:
@@ -484,7 +487,7 @@ class Fun(commands.Cog):
             await ctx.send("You have to send something to lightgreentext, coz I can't lightgreentext nothing, right?")
 
 
-    @commands.command()
+    @commands.command(help = "Colours text in blue.", aliases=["btext"])
     @commands.guild_only()
     async def bluetext(self,ctx,*bluetext):
         if bluetext:
@@ -494,7 +497,7 @@ class Fun(commands.Cog):
             await ctx.send("You have to send something to bluetext, coz I can't bluetext nothing, right?")
             
 
-    @commands.command()
+    @commands.command(help = "Colours text in turquoise.", aliases=["turqtext"])
     @commands.guild_only()
     async def turquoisetext(self,ctx,*tqtext):
         if tqtext:
@@ -504,7 +507,7 @@ class Fun(commands.Cog):
             await ctx.send("You have to send something to turquoisetext, coz I can't turquoisetext nothing, right?")
     
 
-    @commands.command()
+    @commands.command(help = "Colours text in yellow.", aliases=["ytext"])
     @commands.guild_only()
     async def yellowtext(self,ctx,*yellowtext):
         if yellowtext:
