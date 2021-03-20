@@ -521,6 +521,13 @@ class Currency(commands.Cog):
             elif msg.content == "no":
                 await ctx.send("Alright bro! Your wish!")
 
+    @commands.command()
+    async def mylotterytickets(self, ctx):
+        lt = cursor.execute("SELECT * FROM lottery WHERE user_id=?", (ctx.author.id, )).fetchall()
+        for tup in lt:
+            no = len(lt)
+        await ctx.send(f"You currently have {no} tickets for this up coming lottery!") 
+
 
     @tasks.loop(seconds=3600)
     async def lotteryloop(self):
