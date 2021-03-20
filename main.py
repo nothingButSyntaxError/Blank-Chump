@@ -77,5 +77,9 @@ bot.load_extension(f"cogs.games")
 bot.load_extension(f"cogs.images")
 bot.load_extension(f"cogs.admin")
 bot.load_extension(f"cogs.animals")
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4cca2a78b599e871752de2c9ec3ad785299a4ed8
 
 bot.run('ODA5NzM1NDgzNzEwMTExNzY0.YCZa7w.4qz1St9r9ktva6AANexlBNtEeeA')
