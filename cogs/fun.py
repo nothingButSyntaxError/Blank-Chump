@@ -516,12 +516,6 @@ class Fun(commands.Cog):
         else:
             await ctx.send("You have to send something to yellowtext, coz I can't yellowtext nothing, right?")
 
-    
-
-
-    
-    
-
 
     
 
