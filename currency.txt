@@ -69,7 +69,7 @@ class Currency(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(help="Use the command to check your balance or mention someone to check theirs(maybe check for robbing them):smile:", aliases=['bal'])
+    @commands.command()
     @commands.guild_only()
     async def balance(self, ctx, member: discord.Member = None):
         if member == None:
@@ -90,7 +90,7 @@ class Currency(commands.Cog):
             embed.set_thumbnail(url=member.avatar_url)
             await ctx.send(embed=embed)
 
-    @commands.command(help="Use the command to beg. Exactly like a begger :laughing:")
+    @commands.command()
     @commands.guild_only()
     @commands.cooldown(1, 65, BucketType.user)
     async def beg(self, ctx):
@@ -108,14 +108,8 @@ class Currency(commands.Cog):
             update = collection.update_one({"user": ctx.author.id}, {"$inc": {"wallet": earning}})
             await ctx.send(f"You got {earning} coins from {payer}")
 
-    @beg.error
-    async def beg_error(self, ctx, error):
-        if isinstance(error, commands.CommandOnCooldown):
-            err = error.retry_after
-            await ctx.send(f"Please try begging only after {round(err)} more seconds!")
 
-
-    @commands.command(aliases=['dep'], help="Use the command to deposit some money from your wallet to your bank account!")
+    @commands.command(aliases=['dep'])
     @commands.guild_only()
     async def deposit(self, ctx, amount: int=None):
         bankinfo = collection.find_one({"user": ctx.author.id})
@@ -144,7 +138,7 @@ class Currency(commands.Cog):
                     await ctx.send("Amount deposited to your bank account!")
 
 
-    @commands.command(aliases=['with'], help="Use the command for withdrawing some money from your bank account to your wallet!")
+    @commands.command(aliases=['with'])
     @commands.guild_only()
     async def withdraw(self, ctx, amount: int=None):
         bankinfo = collection.find_one({"user": ctx.author.id})
@@ -174,7 +168,7 @@ class Currency(commands.Cog):
                     await ctx.send("Withdrawed the amount from your bank account to your wallet!")
 
     
-    @commands.command(help="Use the command to play slots with the bot! Intresting isn't it?!")
+    @commands.command()
     @commands.guild_only()
     @commands.cooldown(1, 30, BucketType.user)
     async def slots(self, ctx, amount: int=None):
@@ -216,7 +210,7 @@ class Currency(commands.Cog):
             await ctx.send(f"Hey how much slots will you play, Please try the command only after {round(err)} more seconds!")
 
 
-    @commands.command(help="Use the command to pay some money to somebody! Maybe your friend by mentioning them!", aliases=['gift'])
+    @commands.command()
     @commands.guild_only()
     async def pay(self, ctx, member: discord.Member=None, amount: int=None):
         bankinfo = collection.find_one({"user":ctx.author.id})
@@ -255,7 +249,7 @@ class Currency(commands.Cog):
 
 
 
-    @commands.command(aliases=['pm', 'postmemes'], help="Use your laptop(if you have) to post some memes on the internet you might earn some money!")
+    @commands.command(aliases=['pm', 'postmemes'])
     @commands.check(pm_check)
     @commands.guild_only()
     @commands.cooldown(1, 45, BucketType.user)
@@ -288,7 +282,7 @@ class Currency(commands.Cog):
             await ctx.send("Hey you should have a laptop for posting memes. Buy one from the shop!")
 
     
-    @commands.command(aliases=['cast'], help="Its time to use your fishing rod for fishing. Interesting but please do buy a fishing rod first!")
+    @commands.command()
     @commands.check(fish_check)
     @commands.guild_only()
     @commands.cooldown(1, 60, BucketType.user)
@@ -315,7 +309,7 @@ class Currency(commands.Cog):
             abs_time = round(error_time)
             await ctx.send(f"**Whoa to fast right?!** You have to wait {abs_time} more before you use the command!")
 
-    @commands.command(aliases=['hl', 'bigsmall'], help="Use the command to play a highlow game with the bot and earn some money!")
+    @commands.command()
     @commands.guild_only()
     @commands.cooldown(1, 50, BucketType.user)
     async def highlow(self, ctx):
@@ -488,7 +482,7 @@ class Currency(commands.Cog):
             err = error.retry_after
             await ctx.send(f"Please dont bet so much or else i will make you lose on purpose. Please try the command only after {round(err)} more seconds!")
 
-    @commands.command(help="Use the command to buy a lottery ticket! Winners are announced every hour!")
+    @commands.command()
     @commands.guild_only()
     async def lottery(self, ctx):
         bankinfo = collection.find_one({"user":ctx.author.id})
@@ -562,7 +556,7 @@ class Currency(commands.Cog):
         self.lotteryloop.start()
         print("Lottery started!")
 
-    @commands.command(help="Its time to use your hunting rifle if you have one to go and hunt animals! Cool", aliases=['hunting'])
+    @commands.command()
     @commands.check(hunt_check)
     @commands.cooldown(1, 120, BucketType.user)
     async def hunt(self, ctx):
@@ -580,7 +574,7 @@ class Currency(commands.Cog):
         elif isinstance(error, commands.CheckFailure):
             await ctx.send("Hey you gotta have atleast one hunting rifle in your inventory for this!")
 
-    @commands.command(help="Mention someone while using this command to rob their bank! Its tricky!")
+    @commands.command()
     @commands.guild_only()
     @commands.cooldown(1, 400, BucketType.user)
     async def bankrob(self, ctx, member: discord.Member = None):
@@ -617,7 +611,7 @@ class Currency(commands.Cog):
             await ctx.send("Why do you wanna rob everyone. Just stop you can rob someone only after {err} more seconds!")
 
 
-    @commands.command(help="Use the command to check your inventory and check how much of a begger are you!!", aliases=['bag'])
+    @commands.command()
     @commands.guild_only()
     async def inventory(self, ctx, member: discord.Member = None):
         if member == None:
@@ -649,7 +643,7 @@ class Currency(commands.Cog):
                     embed.add_field(name=f"{item}", value=f"{items}", inline=False)
                 await ctx.send(embed=embed)
 
-    @commands.command(help="Use this command to check out Blank-Chump's shop and maybe buy some items from there if you have the money!")
+    @commands.command()
     @commands.guild_only()
     async def shop(self, ctx):
         bankinfo = collection.find_one({"user":ctx.author.id})
@@ -669,7 +663,7 @@ class Currency(commands.Cog):
             await ctx.send(embed=embed)
 
 
-    @commands.command(help="Use the command to buy some stuff from the shop! Anything if you can :thinking:")
+    @commands.command()
     @commands.guild_only()
     async def buy(self, ctx, item, amount:int=1):
         author_inv = inv_collection.find_one({"user":ctx.author.id})
@@ -840,7 +834,7 @@ class Currency(commands.Cog):
             else:
                 await ctx.send("**That Item Is Not Even there in the shop!**WHAT AN IDIOT!")
      
-    @commands.command(help="Use the command for using things in your inventory such as an apple or a mobile phone if you have!?")
+    @commands.command()
     async def use(self, ctx, thing=None):
         bankinfo = collection.find_one({"user":ctx.author.id})
         invinfo = inv_collection.find_one({"user":ctx.author.id})

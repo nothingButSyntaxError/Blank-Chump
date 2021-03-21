@@ -7,6 +7,8 @@ import os
 import pymongo
 from pymongo import MongoClient
 import random
+from PIL import ImageFont, Image, ImageDraw
+from io import BytesIO
 
 guild_cluster = MongoClient("mongodb+srv://Yash:BlankChump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 guild_db = guild_cluster["discord"]
@@ -77,7 +79,7 @@ class Utility(commands.Cog):
             term = random.choice(choices)
             await ctx.send(term)
         else:
-            await ctx.send("You have to give some optuions to choose from")
+            await ctx.send("You have to give some options to choose from")
 
     @commands.command(help = "Makes a list for you", aliases = ["lm", "dataorganizer"])
     @commands.guild_only()
@@ -121,6 +123,17 @@ class Utility(commands.Cog):
             embed.add_field(name="Highest Role:", value=member.top_role.mention)
             print(member.top_role.mention)
             await ctx.send(embed=embed)
+
+    @commands.command()
+    async def ping(self, ctx):
+        cping = round(self.bot.latency * 1000)
+        img = Image.open("./cogs/img_src/ping.jpg")
+        draw = ImageDraw.Draw(img)
+        font = ImageFont.truetype("believe_font.ttf", 30)
+        draw.text((88, 39), "**OUR PING**", (0, 0, 0), font=font)
+        draw.text((115, 108), str(cping), (10, 10, 10), font=font)
+        img.save("pinger.jpg")
+        await ctx.send(file=discord.File("pinger.jpg"))
 
 
 

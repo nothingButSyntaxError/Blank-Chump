@@ -250,13 +250,24 @@ class Animals(commands.Cog):
         cursor.execute("UPDATE pets SET health=?", (newhealth,))
 
     @commands.command()
-    @commands.is_owner()
-    async def petloopstarter(self, ctx):
-        try:
-            self.petloop.start()
-            await ctx.send("Loop!")
-        except:
-            print("Error!")    
+    async def feedpet(self, ctx):
+        bankinfo = collection.find_one({"user":ctx.author.id})
+        petinfo = cursor.execute("SELECT * FROM pets WHERE id=?", (ctx.author.id,)).fetchone()
+        if not petinfo:
+            await ctx.send("Hey you should own a pet for this. Consider buying one from the `%petlist` command!")
+        else:
+            etinfo = cursor.execute("SELECT name FROM pets WHERE id=?", (ctx.author.id,)).fetchone()
+            expense = random.randrange(10, 30)
+            wallet = bankinfo["wallet"]
+            healthinfo = cursor.execute("SELECT health FROM pets WHERE id=?", (ctx.author.id,)).fetchone()
+            newhealth = healthinfo + 1
+            if expense > wallet:
+                await ctx.send(f"You don't have enough money in your wallet to buy some food for {etinfo}! So sad!")
+            else:
+                await ctx.send(f"You bought food and water for {etinfo} and it cost you {expense} coins!")
+                collection.update_one({"user":ctx.author.id}, {"$set":{"wallet":wallet-expense}})
+                cursor.execute("UPDATE pets SET health=?", (newhealth,))
+            
 
 
 

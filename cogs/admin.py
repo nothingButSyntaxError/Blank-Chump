@@ -29,5 +29,14 @@ class Admin(commands.Cog):
         except:
             await ctx.send("could not load the module")
 
+    @commands.command()
+    @commands.is_owner()
+    async def stc(self, ctx, cog):
+        if cog == 'currency':
+            await ctx.send("Here is your file:-")
+            await ctx.send(file=discord.File("currency.txt"))
+
+
+
 def setup(bot):
     bot.add_cog(Admin(bot))

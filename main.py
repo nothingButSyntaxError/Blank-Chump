@@ -12,8 +12,6 @@ from pymongo import results
 from discord.ext.commands.cooldowns import BucketType
 
 
-intents = discord.Intents.all()
-bot = commands.Bot(command_prefix='%', intents=intents)
 guild_cluster = MongoClient("mongodb+srv://Parth:Blank-Chump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 guild_cluster = MongoClient("mongodb+srv://Yash:BlankChump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 guild_db = guild_cluster["discord"]
@@ -34,14 +32,11 @@ class MyHelp(commands.HelpCommand):
         return '%s%s%s' % (self.clean_prefix, command.qualified_name, command.signature)
 
     async def send_bot_help(self, mapping):
-        embed = discord.Embed(title="Help", colour=discord.Colour.dark_blue())
+        embed = discord.Embed(title="Blank Chump Help", colour=discord.Colour.gold())
         for cog, commands in mapping.items():
-           filtered = await self.filter_commands(commands, sort=True)
-           command_signatures = [
-               self.get_command_signature(c) for c in filtered]
-           if command_signatures:
-               cog_name = getattr(cog, "qualified_name", "No Category")
-               embed.add_field(name=cog_name, value="\n".join(command_signatures), inline=False)
+            filtered = await self.filter_commands(commands, sort=True)
+            cog_name = getattr(cog, "qualified_name", "No Category")
+            embed.add_field(name=cog_name, value=f"`%help {cog_name}`", inline=True)
 
         channel = self.get_destination()
         await channel.send(embed=embed)
@@ -68,6 +63,7 @@ class MyHelp(commands.HelpCommand):
 
 bot.help_command = MyHelp()
 
+
 bot.load_extension(f"cogs.functions")
 bot.load_extension(f"cogs.currency")
 bot.load_extension(f"cogs.utility")
@@ -77,9 +73,6 @@ bot.load_extension(f"cogs.games")
 bot.load_extension(f"cogs.images")
 bot.load_extension(f"cogs.admin")
 bot.load_extension(f"cogs.animals")
-<<<<<<< HEAD
-=======
 
->>>>>>> 4cca2a78b599e871752de2c9ec3ad785299a4ed8
 
 bot.run('ODA5NzM1NDgzNzEwMTExNzY0.YCZa7w.4qz1St9r9ktva6AANexlBNtEeeA')
