@@ -7,6 +7,25 @@ import random
 import os
 import datetime
 
+#TICTACTOE
+
+player1 = ""
+player2 = ""
+turn = ""
+gameover = True
+
+board = []
+winningconditions = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+]
+
 class games(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -53,24 +72,7 @@ class games(commands.Cog):
                 embed.set_footer(text=f"{datetime.datetime.utcnow()} UTC")
                 await ctx.send(embed=embed)
 
-    #TICTACTOE 
-
-    player1 = ""
-    player2 = ""
-    turn = ""
-    gameover = True
-
-    board = []
-    winningconditions = [
-        [0,1,2],
-        [3,4,5],
-        [6,7,8],
-        [0,3,6],
-        [1,4,7],
-        [2,5,8],
-        [0,4,8],
-        [2,4,6]
-    ]
+    
     @commands.command()
     @commands.guild_only()
     async def tictactoe(self, ctx, member1: discord.Member, member2: discord.Member):
@@ -110,6 +112,7 @@ class games(commands.Cog):
 
         else:
             await ctx.send("A game is already in progress. Finish it before starting a new one")
+    
     @commands.command()
     @commands.guild_only()
     async def place(self, ctx, pos : int):

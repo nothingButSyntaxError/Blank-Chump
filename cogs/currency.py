@@ -614,7 +614,7 @@ class Currency(commands.Cog):
     async def bankrob_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
             err = round(error.retry_after)
-            await ctx.send("Why do you wanna rob everyone. Just stop you can rob someone only after {err} more seconds!")
+            await ctx.send(f"Why do you wanna rob everyone. Just stop you can rob someone only after {err} more seconds!")
 
 
     @commands.command(help="Use the command to check your inventory and check how much of a begger are you!!", aliases=['bag'])
