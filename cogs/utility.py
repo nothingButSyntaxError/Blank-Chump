@@ -126,15 +126,7 @@ class Utility(commands.Cog):
 
     @commands.command()
     async def ping(self, ctx):
-        cping = round(self.bot.latency * 1000)
-        img = Image.open("./cogs/img_src/ping.jpg")
-        draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype("believe_font.ttf", 30)
-        draw.text((88, 39), "**OUR PING**", (0, 0, 0), font=font)
-        draw.text((115, 108), str(cping), (10, 10, 10), font=font)
-        img.save("pinger.jpg")
-        await ctx.send(file=discord.File("pinger.jpg"))
-
+        await ctx.send(f"The ping I am currently recieving is **{round(self.bot.latency*1000)}ms**")
 
 
 def setup(bot):

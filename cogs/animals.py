@@ -54,6 +54,7 @@ class Animals(commands.Cog):
     @commands.command()
     async def buypet(self, ctx, pet, amount=1):
         bankinfo = collection.find_one({"user":ctx.author.id})
+        petexists = cursor.execute("SELECT * FROM pets WHERE id=?", (ctx.author.id))
         wallet = bankinfo["wallet"]
         bank = bankinfo["bank"]
         cursor.execute("""CREATE TABLE IF NOT EXISTS pets (
@@ -69,149 +70,153 @@ class Animals(commands.Cog):
             level INTEGER
         );""")
         connection.commit()
-        if pet == 'cat':
-            if bank > 7999:
-                a100 = 100
-                a1 = 1
-                await ctx.send("What do you want to name your cat? Please type the name out!")
-                def cat_check(m):
-                    return m.channel == ctx.channel
-                msg = await self.bot.wait_for('message', check=cat_check)
-                cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",(ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
-                connection.commit()
-                collection.update_one({"user":ctx.author.id}, {"$set":{"bank":bank-8000}})
-                await ctx.send("You successfuly bought a cat for 8000 coins!")
+        if not petexists:
+            if pet == 'cat':
+                if bank > 7999:
+                    a100 = 100
+                    a1 = 1
+                    await ctx.send("What do you want to name your cat? Please type the name out!")
+                    def cat_check(m):
+                        return m.channel == ctx.channel
+                    msg = await self.bot.wait_for('message', check=cat_check)
+                    cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",(ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
+                    connection.commit()
+                    collection.update_one({"user":ctx.author.id}, {"$set":{"bank":bank-8000}})
+                    await ctx.send("You successfuly bought a cat for 8000 coins!")
+                else:
+                    await ctx.send("You don't have enough money in your bank account to buy a cat")
+            elif pet == 'mongoose':
+                if bank > 39999:
+                    a100 = 100
+                    a1 = 1
+                    await ctx.send("What do you want to name your mongoose? Please type the name out!")
+                    def mong_check(m):
+                        return m.channel == ctx.channel
+                    msg = await self.bot.wait_for('message', check=mong_check)
+                    cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
+                    connection.commit()
+                    collection.update_one({"user": ctx.author.id}, {"$set": {"bank": bank-40000}})
+                    await ctx.send("You successfuly bought a mongoose for 40000 coins!")
+                else:
+                    await ctx.send("You don't have enough money in your bank account to buy a mongoose")
+            elif pet == 'heron':
+                if bank > 29999:
+                    a100 = 100
+                    a1 = 1
+                    await ctx.send("What do you want to name your heron? Please type the name out!")
+                    def hero_check(m):
+                        return m.channel == ctx.channel
+                    msg = await self.bot.wait_for('message', check=hero_check)
+                    cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
+                    connection.commit()
+                    collection.update_one({"user": ctx.author.id}, {"$set": {"bank": bank-30000}})
+                    await ctx.send("You successfuly bought a heron for 30000 coins!")
+                else:
+                    await ctx.send("You don't have enough money in your bank account to buy a heron")
+            elif pet == 'parrot':
+                if bank > 14999:
+                    a100 = 100
+                    a1 = 1
+                    await ctx.send("What do you want to name your parrot? Please type the name out!")
+                    def parrot_check(m):
+                        return m.channel == ctx.channel
+                    msg = await self.bot.wait_for('message', check=parrot_check)
+                    cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
+                    connection.commit()
+                    collection.update_one({"user": ctx.author.id}, {"$set": {"bank": bank-15000}})
+                    await ctx.send("You successfuly bought a cat for 15000 coins!")
+                else:
+                    await ctx.send("You don't have enough money in your bank account to buy a parrot")
+            elif pet == 'dog':
+                if bank > 17999:
+                    a100 = 100
+                    a1 = 1
+                    await ctx.send("What do you want to name your dog? Please type the name out!")
+                    def dog_check(m):
+                        return m.channel == ctx.channel
+                    msg = await self.bot.wait_for('message', check=dog_check)
+                    cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
+                    connection.commit()
+                    collection.update_one({"user": ctx.author.id}, {"$set": {"bank": bank-18000}})
+                    await ctx.send("You successfuly bought a dog for 18000 coins!")
+                else:
+                    await ctx.send("You don't have enough money in your bank account to buy a dog!")
+            elif pet == 'fox':
+                if bank > 44999:
+                    a100 = 100
+                    a1 = 1
+                    await ctx.send("What do you want to name your foxxy? Please type the name out!")
+                    def fox_check(m):
+                        return m.channel == ctx.channel
+                    msg = await self.bot.wait_for('message', check=fox_check)
+                    cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
+                    connection.commit()
+                    collection.update_one({"user": ctx.author.id}, {"$set": {"bank": bank-45000}})
+                    await ctx.send("You successfuly bought a fox for 45000 coins!")
+                else:
+                    await ctx.send("You don't have enough money in your bank account to buy a fox")
+            elif pet == 'wolf':
+                if bank > 24999:
+                    a100 = 100
+                    a1 = 1
+                    await ctx.send("What do you want to name your wolf? Please type the name out!")
+                    def howl_check(m):
+                        return m.channel == ctx.channel
+                    msg = await self.bot.wait_for('message', check=howl_check)
+                    cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
+                    connection.commit()
+                    collection.update_one({"user": ctx.author.id}, {"$set": {"bank": bank-25000}})
+                    await ctx.send("You successfuly bought a wolf for 25000 coins!")
+                else:
+                    await ctx.send("You don't have enough money in your bank account to buy a wolf")
+            elif pet == 'snake':
+                if bank > 27999:
+                    a100 = 100
+                    a1 = 1
+                    await ctx.send("What do you want to name your pet snake? Please type the name out!")
+                    def cat_check(m):
+                        return m.channel == ctx.channel
+                    msg = await self.bot.wait_for('message', check=cat_check)
+                    cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
+                    connection.commit()
+                    collection.update_one({"user": ctx.author.id}, {"$set": {"bank": bank-28000}})
+                    await ctx.send("You successfuly bought a snake for 28000 coins!")
+                else:
+                    await ctx.send("You don't have enough money in your bank account to buy a snake.")
+            elif pet == 'owl':
+                if bank > 9999:
+                    a100 = 100
+                    a1 = 1
+                    await ctx.send("What do you want to name your owl? Please type the name out!")
+                    def cat_check(m):
+                        return m.channel == ctx.channel
+                    msg = await self.bot.wait_for('message', check=cat_check)
+                    cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
+                    connection.commit()
+                    collection.update_one({"user": ctx.author.id}, {"$set": {"bank": bank-10000}})
+                    await ctx.send("You successfuly bought a owl for 10000 coins!")
+                else:
+                    await ctx.send("You don't have enough money in your bank account to buy a owl")
+            elif pet == 'eagle':
+                if bank > 42999:
+                    a100 = 100
+                    a1 = 1
+                    await ctx.send("What do you want to name your pet eagle? Please type the name out!")
+                    def cat_check(m):
+                        return m.channel == ctx.channel
+                    msg = await self.bot.wait_for('message', check=cat_check)
+                    cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
+                    connection.commit()
+                    collection.update_one({"user": ctx.author.id}, {"$set": {"bank": bank-43000}})
+                    await ctx.send("You successfuly bought a cat for 43000 coins!")
+                else:
+                    await ctx.send("You don't have enough money in your bank account to buy a eagle!")
             else:
-                await ctx.send("You don't have enough money in your bank account to buy a cat")
-        elif pet == 'mongoose':
-            if bank > 39999:
-                a100 = 100
-                a1 = 1
-                await ctx.send("What do you want to name your mongoose? Please type the name out!")
-                def mong_check(m):
-                    return m.channel == ctx.channel
-                msg = await self.bot.wait_for('message', check=mong_check)
-                cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
-                connection.commit()
-                collection.update_one({"user": ctx.author.id}, {"$set": {"bank": bank-40000}})
-                await ctx.send("You successfuly bought a mongoose for 40000 coins!")
-            else:
-                await ctx.send("You don't have enough money in your bank account to buy a mongoose")
-        elif pet == 'heron':
-            if bank > 29999:
-                a100 = 100
-                a1 = 1
-                await ctx.send("What do you want to name your heron? Please type the name out!")
-                def hero_check(m):
-                    return m.channel == ctx.channel
-                msg = await self.bot.wait_for('message', check=hero_check)
-                cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
-                connection.commit()
-                collection.update_one({"user": ctx.author.id}, {"$set": {"bank": bank-30000}})
-                await ctx.send("You successfuly bought a heron for 30000 coins!")
-            else:
-                await ctx.send("You don't have enough money in your bank account to buy a heron")
-        elif pet == 'parrot':
-            if bank > 14999:
-                a100 = 100
-                a1 = 1
-                await ctx.send("What do you want to name your parrot? Please type the name out!")
-                def parrot_check(m):
-                    return m.channel == ctx.channel
-                msg = await self.bot.wait_for('message', check=parrot_check)
-                cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
-                connection.commit()
-                collection.update_one({"user": ctx.author.id}, {"$set": {"bank": bank-15000}})
-                await ctx.send("You successfuly bought a cat for 15000 coins!")
-            else:
-                await ctx.send("You don't have enough money in your bank account to buy a parrot")
-        elif pet == 'dog':
-            if bank > 17999:
-                a100 = 100
-                a1 = 1
-                await ctx.send("What do you want to name your dog? Please type the name out!")
-                def dog_check(m):
-                    return m.channel == ctx.channel
-                msg = await self.bot.wait_for('message', check=dog_check)
-                cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
-                connection.commit()
-                collection.update_one({"user": ctx.author.id}, {"$set": {"bank": bank-18000}})
-                await ctx.send("You successfuly bought a dog for 18000 coins!")
-            else:
-                await ctx.send("You don't have enough money in your bank account to buy a dog!")
-        elif pet == 'fox':
-            if bank > 44999:
-                a100 = 100
-                a1 = 1
-                await ctx.send("What do you want to name your foxxy? Please type the name out!")
-                def fox_check(m):
-                    return m.channel == ctx.channel
-                msg = await self.bot.wait_for('message', check=fox_check)
-                cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
-                connection.commit()
-                collection.update_one({"user": ctx.author.id}, {"$set": {"bank": bank-45000}})
-                await ctx.send("You successfuly bought a fox for 45000 coins!")
-            else:
-                await ctx.send("You don't have enough money in your bank account to buy a fox")
-        elif pet == 'wolf':
-            if bank > 24999:
-                a100 = 100
-                a1 = 1
-                await ctx.send("What do you want to name your wolf? Please type the name out!")
-                def howl_check(m):
-                    return m.channel == ctx.channel
-                msg = await self.bot.wait_for('message', check=howl_check)
-                cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
-                connection.commit()
-                collection.update_one({"user": ctx.author.id}, {"$set": {"bank": bank-25000}})
-                await ctx.send("You successfuly bought a wolf for 25000 coins!")
-            else:
-                await ctx.send("You don't have enough money in your bank account to buy a wolf")
-        elif pet == 'snake':
-            if bank > 27999:
-                a100 = 100
-                a1 = 1
-                await ctx.send("What do you want to name your pet snake? Please type the name out!")
-                def cat_check(m):
-                    return m.channel == ctx.channel
-                msg = await self.bot.wait_for('message', check=cat_check)
-                cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
-                connection.commit()
-                collection.update_one({"user": ctx.author.id}, {"$set": {"bank": bank-28000}})
-                await ctx.send("You successfuly bought a snake for 28000 coins!")
-            else:
-                await ctx.send("You don't have enough money in your bank account to buy a snake.")
-        elif pet == 'owl':
-            if bank > 9999:
-                a100 = 100
-                a1 = 1
-                await ctx.send("What do you want to name your owl? Please type the name out!")
-                def cat_check(m):
-                    return m.channel == ctx.channel
-                msg = await self.bot.wait_for('message', check=cat_check)
-                cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
-                connection.commit()
-                collection.update_one({"user": ctx.author.id}, {"$set": {"bank": bank-10000}})
-                await ctx.send("You successfuly bought a owl for 10000 coins!")
-            else:
-                await ctx.send("You don't have enough money in your bank account to buy a owl")
-        elif pet == 'eagle':
-            if bank > 42999:
-                a100 = 100
-                a1 = 1
-                await ctx.send("What do you want to name your pet eagle? Please type the name out!")
-                def cat_check(m):
-                    return m.channel == ctx.channel
-                msg = await self.bot.wait_for('message', check=cat_check)
-                cursor.execute("INSERT INTO pets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ctx.author.id, ctx.author.name, pet, msg.content, a100, a100, a100, a100, a1, a1))
-                connection.commit()
-                collection.update_one({"user": ctx.author.id}, {"$set": {"bank": bank-43000}})
-                await ctx.send("You successfuly bought a cat for 43000 coins!")
-            else:
-                await ctx.send("You don't have enough money in your bank account to buy a eagle!")
+                await ctx.send("Hey there is no such thing in the pet list you idiot! Use the command petlist to see all the pets available!")
         else:
-            await ctx.send("Hey there is no such thing in the pet list you idiot! Use the command petlist to see all the pets available!")
-        
+            await ctx.send("Hey you already own a pet dont ya. Leave that pet if you want another one!")    
+
+
 
     @commands.command()
     async def petactions(self, ctx):
@@ -241,13 +246,17 @@ class Animals(commands.Cog):
                 cursor.execute("UPDATE pets SET name=? WHERE id=?", (newname, ctx.author.id))
                 await ctx.send(f"Your pet's name was changed to {newname}!")
 
-    @tasks.loop(seconds=10)
+    @tasks.loop(seconds=3600)
     async def petloop(self):
-        health = cursor.execute("SELECT health FROM pets").fetchall()
-        for row in health:
-            x = row[0]
-        newhealth = x-1
-        cursor.execute("UPDATE pets SET health=?", (newhealth,))
+        newhealth = cursor.execute("UPDATE pets SET health=health-1")
+        newlove = cursor.execute("UPDATE pets SET love=love-1")
+        newhunger = cursor.execute("UPDATE pets SET hunger=hunger-1")
+        fun = cursor.execute("UPDATE pets SET fun=fun-1")
+        connection.commit()
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        self.petloop.start()
 
     @commands.command()
     async def feedpet(self, ctx):
@@ -259,17 +268,33 @@ class Animals(commands.Cog):
             etinfo = cursor.execute("SELECT name FROM pets WHERE id=?", (ctx.author.id,)).fetchone()
             expense = random.randrange(10, 30)
             wallet = bankinfo["wallet"]
-            healthinfo = cursor.execute("SELECT health FROM pets WHERE id=?", (ctx.author.id,)).fetchone()
-            newhealth = healthinfo + 1
             if expense > wallet:
                 await ctx.send(f"You don't have enough money in your wallet to buy some food for {etinfo}! So sad!")
             else:
-                await ctx.send(f"You bought food and water for {etinfo} and it cost you {expense} coins!")
+                await ctx.send(f"You bought food and water for {etinfo} and it cost you {expense} coins but increased {etinfo}'s health by 5 points! cool!")
                 collection.update_one({"user":ctx.author.id}, {"$set":{"wallet":wallet-expense}})
-                cursor.execute("UPDATE pets SET health=?", (newhealth,))
+                cursor.execute("UPDATE pets SET health=health+5")
+                cursor.execute("UPDATE pets SET exp=exp+5")
+
+    @commands.command()
+    async def petleave(self, ctx):
+        petinfo = cursor.execute("SELECT * FROM pets WHERE id=?", (ctx.author.id,))
+        if not petinfo:
+            await ctx.send("What the hell dont troll me. You don't even have a pet!")
+        else:
+            await ctx.send("Do you really want to leave your pet alone and move on?! **REPLY WITH `yes` OR  `no`**")
+            def check(m):
+                return m.author == ctx.author
+            msg = await self.bot.wait_for('message', check=check)
+            if msg.content == 'yes':
+                await ctx.send("So shameful you left your pet!")
+                cursor.execute("DELETE FROM pets WHERE id=?", (ctx.author.id,))
+            elif msg.content == 'no':
+                await ctx.send("Good so you are keeping your pet. But can;t you be firm with your decisions.")
+            else:
+                await ctx.send("I told you to respond with yes or no forget it now!")
+            connection.commit()
             
-
-
 
 
 
