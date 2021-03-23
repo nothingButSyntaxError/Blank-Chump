@@ -1,4 +1,5 @@
 from sqlite3.dbapi2 import connect
+from typing import ValuesView
 import discord
 from discord import user
 from discord import colour
@@ -54,7 +55,7 @@ class Animals(commands.Cog):
     @commands.command()
     async def buypet(self, ctx, pet, amount=1):
         bankinfo = collection.find_one({"user":ctx.author.id})
-        petexists = cursor.execute("SELECT * FROM pets WHERE id=?", (ctx.author.id))
+        petexists = cursor.execute("SELECT * FROM pets WHERE id=?", (ctx.author.id, )).fetchone()
         wallet = bankinfo["wallet"]
         bank = bankinfo["bank"]
         cursor.execute("""CREATE TABLE IF NOT EXISTS pets (
@@ -297,11 +298,26 @@ class Animals(commands.Cog):
 
     @commands.command()
     async def mypet(self, ctx):
-        petcheck = cursor.execute("SELECT name FROM pets WHERE id=?", (ctx.author.id,))
+        petcheck = cursor.execute("SELECT name FROM pets WHERE id=?", (ctx.author.id,)).fetchone()
         if not petcheck:
             await ctx.send("Buy a pet and then return!")
         else:
-            pass
+            pethealth = cursor.execute("SELECT health FROM pets WHERE id=?", (ctx.author.id,)).fetchone()
+            petfun = cursor.execute("SELECT fun FROM pets WHERE id=?", (ctx.author.id,)).fetchone()
+            petlove = cursor.execute("SELECT love FROM pets WHERE id=?", (ctx.author.id, )).fetchone()
+            petexp = cursor.execute("SELECT experince FROM pets WHERE id=?", (ctx.author.id,)).fetchone()
+            pethunger = cursor.execute("SELECT hunger FROM pets WHERE id=?", (ctx.author.id,)).fetchone()
+            petlevel = cursor.execute("SELECT level FROM pets WHERE id=?", (ctx.author.id,)).fetchone()
+            embed = discord.Embed(title=f"{petcheck[0]}'s Current Stats!", colour=discord.Colour.dark_green())
+            embed.add_field(name=f"Hunger", value=f"{pethunger[0]}%")
+            embed.add_field(name=f"Fun", value=f"{petfun[0]}%")
+            embed.add_field(name="Love", value=f"{petlove[0]}%")
+            embed.add_field(name="Health", value=f"{pethealth[0]}%")
+            embed.add_field(name="Level", value=f"{petlevel[0]}")
+            embed.add_field(name="Exp", value=f"{petexp[0]}")
+            await ctx.send(embed=embed)
+            updates = cursor.execute("UPDATE pets SET experince=experince+8 WHERE id=?", (ctx.author.id,))
+            
 
 
 
