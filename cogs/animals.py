@@ -294,8 +294,14 @@ class Animals(commands.Cog):
             else:
                 await ctx.send("I told you to respond with yes or no forget it now!")
             connection.commit()
-            
 
+    @commands.command()
+    async def mypet(self, ctx):
+        petcheck = cursor.execute("SELECT name FROM pets WHERE id=?", (ctx.author.id,))
+        if not petcheck:
+            await ctx.send("Buy a pet and then return!")
+        else:
+            pass
 
 
 
