@@ -130,7 +130,7 @@ class Images(commands.Cog):
     @commands.command()
     async def whiteboard(self, ctx, *, text):
         if len(text) > 30:
-            await ctx.send("The words shld be less than 10")
+            await ctx.send("The words should be less than 10")
         elif len(text) < 30:
             wrapper = textwrap.TextWrapper(width=22)
             word_list = wrapper.wrap(text=str(text))

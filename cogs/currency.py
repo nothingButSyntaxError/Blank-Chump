@@ -287,6 +287,27 @@ class Currency(commands.Cog):
         elif isinstance(error, commands.CheckFailure):
             await ctx.send("Hey you should have a laptop for posting memes. Buy one from the shop!")
 
+    @commands.command()
+    @commands.cooldown(1, 86400, BucketType.user)
+    @commands.guild_only()
+    async def daily(self, ctx):
+        bankinfo = collection.find_one({"user": ctx.author.id})
+        if not bankinfo:
+            await ctx.send("You don't have an account, creating one for you!...")
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,"fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+            return
+        else:
+            earning = random.randrange(7500, 10000)
+            await ctx.send(f"Hey {ctx.author.mention}, here is your daily money you got {earning} coins!")
+            collection.update_one({"user":ctx.author.id}, {"$inc":{"wallet":earning}})
+
+    @daily.error
+    async def daily_error(self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            err = error.retry_after
+            await ctx.send(f"Hey Hey you will get more money after {round(err)} more seconds! You got that right?")
+
     
     @commands.command(aliases=['cast'], help="Its time to use your fishing rod for fishing. Interesting but please do buy a fishing rod first!")
     @commands.check(fish_check)
@@ -556,11 +577,10 @@ class Currency(commands.Cog):
         connection.commit()
 
     
-    @commands.command()
-    @commands.is_owner()
-    async def lot_starter(self, ctx):
+    @commands.Cog.listener()
+    async def on_ready(self):
         self.lotteryloop.start()
-        print("Lottery started!")
+        print("Lottery loop started!")
 
     @commands.command(help="Its time to use your hunting rifle if you have one to go and hunt animals! Cool", aliases=['hunting'])
     @commands.check(hunt_check)

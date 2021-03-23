@@ -14,7 +14,6 @@ class Admin(commands.Cog):
     @commands.command()
     @commands.is_owner()
     async def load(self, ctx, *, module):
-        """Loads a module."""
         try: 
             self.bot.load_extension(f"cogs.{module}")
         except:

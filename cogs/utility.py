@@ -128,6 +128,10 @@ class Utility(commands.Cog):
     async def ping(self, ctx):
         await ctx.send(f"The ping I am currently recieving is **{round(self.bot.latency*1000)}ms**")
 
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print("Bot is Ready")
+
 
 def setup(bot):
     bot.add_cog(Utility(bot))

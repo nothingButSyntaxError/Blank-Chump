@@ -258,6 +258,7 @@ class Animals(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         self.petloop.start()
+        print("Animal Loop started!")
 
     @commands.command()
     async def feedpet(self, ctx):
@@ -317,7 +318,8 @@ class Animals(commands.Cog):
             embed.add_field(name="Exp", value=f"{petexp[0]}")
             await ctx.send(embed=embed)
             updates = cursor.execute("UPDATE pets SET experince=experince+8 WHERE id=?", (ctx.author.id,))
-            
+            connection.commit()
+
 
 
 
