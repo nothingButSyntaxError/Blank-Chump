@@ -1,5 +1,6 @@
 import discord
-from discord.ext import commands
+from discord import user
+from discord.ext import commands, tasks
 import random
 from PIL import Image, ImageFont, ImageDraw
 from io import BytesIO
@@ -154,6 +155,10 @@ class Images(commands.Cog):
         cat.save("cat_pfp.png")
         await ctx.send(file=discord.File("cat_pfp.png"))
 
+
+    
+
+    
     
 
 

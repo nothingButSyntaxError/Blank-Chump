@@ -914,6 +914,20 @@ class Currency(commands.Cog):
                 else:
                     await ctx.send("You dont have an apple to use it!")
     
+    @commands.command()
+    @commands.is_owner()
+    async def sell(self, ctx, item, amount=1):
+        bankinfo = collection.find_one({"user":ctx.author.id})
+        if not bankinfo:
+            await ctx.send("You dont have an account creating one for you!...")
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0, "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+            return
+        else:
+            inventory = inv_collection.find_one({"user":ctx.author.id})
+            for item in inventory:
+                if inventory[item] > 0:
+                    return
 
 
 

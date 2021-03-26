@@ -18,6 +18,7 @@ def check(ctx):
         return True
     else:
         return False
+
 class Utility(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -80,15 +81,6 @@ class Utility(commands.Cog):
             await ctx.send(term)
         else:
             await ctx.send("You have to give some options to choose from")
-
-    @commands.command(help = "Makes a list for you", aliases = ["lm", "dataorganizer"])
-    @commands.guild_only()
-    async def listmaker(self, ctx, *choices):
-        if choices :
-            term = random.choice([choices])
-            await ctx.send(term)
-        else:
-            await ctx.send("Please provide objects for the list")
     
 
     @commands.command()

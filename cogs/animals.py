@@ -320,6 +320,20 @@ class Animals(commands.Cog):
             updates = cursor.execute("UPDATE pets SET experince=experince+8 WHERE id=?", (ctx.author.id,))
             connection.commit()
 
+    @tasks.loop(seconds=700)
+    async def expchecker(self, ctx):
+        exp = 0
+        check = cursor.execute("SELECT experince, name FROM pets WHERE experince>=100").fetchone()
+        if not check:
+            return
+        elif check:
+            await ctx.send(f"Hey {check[1]} is now on level 2. Hooray! Looks like you have taken good care of it.")
+            cursor.execute("UPDATE pets SET experince=? WHERE id=?", (exp, ctx.author.id))
+            cursor.execute("UPDATE pets SET level=level+1 WHERE id=?", (ctx.author.id,))
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        self.expchecker.start()
 
 
 

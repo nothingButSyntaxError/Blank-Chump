@@ -64,7 +64,6 @@ class MyHelp(commands.HelpCommand):
 bot.help_command = MyHelp()
 
 
-bot.load_extension(f"cogs.functions")
 bot.load_extension(f"cogs.currency")
 bot.load_extension(f"cogs.utility")
 bot.load_extension(f"cogs.fun")
