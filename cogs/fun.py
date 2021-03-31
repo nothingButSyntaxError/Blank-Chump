@@ -11,7 +11,7 @@ class Fun(commands.Cog):
 
 
 #search google command sends link for lmgtfy
-    @commands.command(help = "Searches whatever you want on google", aliases = ["Search"])
+    @commands.command(help = "Searches whatever you want on google", aliases = ["lmgtfy"])
     @commands.guild_only()
     async def google(self, ctx, term):
         link = f"http://lmgtfy.com/?q={term}"
@@ -516,60 +516,10 @@ class Fun(commands.Cog):
         else:
             await ctx.send("You have to send something to yellowtext, coz I can't yellowtext nothing, right?")
 
-            
-
-
-    
-
-
-
     
 
 
     
-    
-
-
-
-
-
-
-
-
-    
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-    
-    
-
-    
-
-
-    
-
-    
-
-           
-
-    
-
 
 def setup(bot):
     bot.add_cog(Fun(bot))

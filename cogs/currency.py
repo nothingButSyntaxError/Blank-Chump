@@ -336,6 +336,7 @@ class Currency(commands.Cog):
             abs_time = round(error_time)
             await ctx.send(f"**Whoa to fast right?!** You have to wait {abs_time} more before you use the command!")
 
+
     @commands.command(aliases=['hl', 'bigsmall'], help="Use the command to play a highlow game with the bot and earn some money!")
     @commands.guild_only()
     @commands.cooldown(1, 50, BucketType.user)
@@ -928,6 +929,21 @@ class Currency(commands.Cog):
             for item in inventory:
                 if inventory[item] > 0:
                     return
+
+    @commands.command()
+    async def search(self, ctx):
+        l1 = random.choice(['discord', 'world wide web', 'cupboard', 'desk'])
+        l2 = random.choice(['your pant', 'your bag', 'coffin', 'coat'])
+        l3 = random.choice(['washroom', 'attic', 'neighbours house'])
+        await ctx.send(f'Hey {ctx.author.mention} **Where do you want to search?**\n*Pick from the options below and send in the chat*\n`{l1}`, `{l2}`, `{l3}`')
+        def check(m):
+            return m.author == ctx.author and m.channel == ctx.channel
+        msg = await self.bot.wait_for('message', check=check)
+        if msg.content == l1 or l2 or l3:
+            earning = random.randrange(300, 1500)
+            await ctx.send(f"You searched {msg.content} and earned {earning} coins!")
+            collection.update_one({"user":ctx.author.id}, {"$inc":{"wallet":earning}})
+
 
 
 
