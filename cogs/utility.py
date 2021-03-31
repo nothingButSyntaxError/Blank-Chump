@@ -117,6 +117,10 @@ class Utility(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command()
+    async def quicksearch(self, ctx, *, term):
+        pywhatkit.search(term)
+
+    @commands.command()
     async def ping(self, ctx):
         await ctx.send(f"The ping I am currently recieving is **{round(self.bot.latency*1000)}ms**")
 

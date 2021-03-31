@@ -587,10 +587,10 @@ class Currency(commands.Cog):
     @commands.check(hunt_check)
     @commands.cooldown(1, 120, BucketType.user)
     async def hunt(self, ctx):
-        animal_type = random.choices(['deer', 'bear', 'rabbit', 'ruccoons', 'leapord', 'snake'], weights=[25, 10, 20, 30, 2, 13])
+        animal_type = random.choices(['deer', 'bear', 'rabbit', 'raccoons', 'leapord', 'snake'], weights=[25, 10, 20, 30, 2, 13])
         animal_quantity = random.randrange(0, 8)
-        await ctx.send(f"Hey you went hunting and got {animal_quantity} {animal_type}!")
-        inv_collection.update_one({"user":ctx.author.id}, {"$inc":{animal_type:animal_quantity}})
+        await ctx.send(f"Hey you went hunting and got {animal_quantity} {animal_type[0]}!")
+        inv_collection.update_one({"user":ctx.author.id}, {"$inc":{animal_type[0]:animal_quantity}})
 
 
     @hunt.error
@@ -943,6 +943,8 @@ class Currency(commands.Cog):
             earning = random.randrange(300, 1500)
             await ctx.send(f"You searched {msg.content} and earned {earning} coins!")
             collection.update_one({"user":ctx.author.id}, {"$inc":{"wallet":earning}})
+        else:
+            await ctx.send(f"Hey {ctx.author.mention} thats not a valid option!")
 
 
 

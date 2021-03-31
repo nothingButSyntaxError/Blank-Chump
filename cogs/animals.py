@@ -11,11 +11,15 @@ import sqlite3
 from sqlite3 import Error
 import pymongo
 from pymongo import MongoClient
+from discord.ext.commands.cooldowns import BucketType
+
 
 #MONGODB
 cluster = MongoClient("mongodb+srv://Admin-MyName:Parth!7730@my-dbs.xlx4y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 db = cluster["discord"]
 collection = db["user_data"]
+inv_db = cluster["discord"]
+inv_collection = db["inventory"]
 
 #SQLITE
 try:
@@ -331,9 +335,32 @@ class Animals(commands.Cog):
             cursor.execute("UPDATE pets SET experince=? WHERE id=?", (exp, ctx.author.id))
             cursor.execute("UPDATE pets SET level=level+1 WHERE id=?", (ctx.author.id,))
 
+    @commands.command()
+    @commands.cooldown(1, 3600, BucketType.user)
+    async def pethunt(self, ctx):
+        check = cursor.execute("SELECT pet_type, level, name FROM pets WHERE id=?", (ctx.author.id,)).fetchone()
+        pet = check[0]
+        level = check[1]
+        name = check[2]
+        if pet == 'cat':
+            if level < 11:
+                prey = random.choice(['rats', 'lizzards', 'moles'])
+                n = random.randrange(2, 3)
+                await ctx.send(f"You went hunting with {name} and fought with {n} {prey} and caught them, they are in your inventory now!")
+                inv_collection.update_one({"user":ctx.author.id}, {"$inc":{prey:n}})
+            elif level > 10 and level < 21:
+                prey = random.choice(['rats', 'lizzards', 'moles'])
+                n = random.randrange(4, 5)
+                await ctx.send(f"You went hunting with {name} and fought with {n} {prey} and caught them, they are in your inventory now!")
+                inv_collection.update_one({"user":ctx.author.id}, {"$inc":{prey:n}})
+        
+
+
+
     @commands.Cog.listener()
     async def on_ready(self):
         self.expchecker.start()
+        print("Checking for exp now...")
 
 
 
