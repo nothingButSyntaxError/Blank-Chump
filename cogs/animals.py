@@ -336,24 +336,28 @@ class Animals(commands.Cog):
             cursor.execute("UPDATE pets SET level=level+1 WHERE id=?", (ctx.author.id,))
 
     @commands.command()
+    @commands.has_permissions(administrator=True)
     @commands.cooldown(1, 3600, BucketType.user)
     async def pethunt(self, ctx):
         check = cursor.execute("SELECT pet_type, level, name FROM pets WHERE id=?", (ctx.author.id,)).fetchone()
-        pet = check[0]
-        level = check[1]
-        name = check[2]
-        if pet == 'cat':
-            if level < 11:
-                prey = random.choice(['rats', 'lizzards', 'moles'])
-                n = random.randrange(2, 3)
-                await ctx.send(f"You went hunting with {name} and fought with {n} {prey} and caught them, they are in your inventory now!")
-                inv_collection.update_one({"user":ctx.author.id}, {"$inc":{prey:n}})
-            elif level > 10 and level < 21:
-                prey = random.choice(['rats', 'lizzards', 'moles'])
-                n = random.randrange(4, 5)
-                await ctx.send(f"You went hunting with {name} and fought with {n} {prey} and caught them, they are in your inventory now!")
-                inv_collection.update_one({"user":ctx.author.id}, {"$inc":{prey:n}})
-        
+        if not check:
+            await ctx.send("If you dont have a pet, how can you go hunting with it??!")
+        else:
+            pet = check[0]
+            level = check[1]
+            name = check[2]
+            if pet == 'cat':
+                if level < 11:
+                    prey = random.choice(['rats', 'lizzards', 'moles'])
+                    n = random.randrange(2, 3)
+                    await ctx.send(f"You went hunting with {name} and fought with {n} {prey} and caught them, they are in your inventory now!")
+                    inv_collection.update_one({"user":ctx.author.id}, {"$inc":{prey:n}})
+                elif level > 10 and level < 21:
+                    prey = random.choice(['rats', 'lizzards', 'moles'])
+                    n = random.randrange(4, 5)
+                    await ctx.send(f"You went hunting with {name} and fought with {n} {prey} and caught them, they are in your inventory now!")
+                    inv_collection.update_one({"user":ctx.author.id}, {"$inc":{prey:n}})
+            
 
 
 

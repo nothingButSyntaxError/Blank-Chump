@@ -8,11 +8,20 @@ import pymongo
 from pymongo import MongoClient
 import random
 from PIL import ImageFont, Image, ImageDraw
+import sqlite3
 from io import BytesIO
 
 guild_cluster = MongoClient("mongodb+srv://Yash:BlankChump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 guild_db = guild_cluster["discord"]
 collection = guild_db["server_data"]
+
+#sqlite
+try:
+    conn = sqlite3.connect('prefixes.sqlite')
+    cur = conn.cursor()
+except:
+    pass
+
 def check(ctx):
     if ctx.author == ctx.guild.owner:
         return True
@@ -69,9 +78,11 @@ class Utility(commands.Cog):
         await guild.owner.send(embed=embed)
         guild_info = collection.find_one({"guild_id":guild.id})
         if not guild_info:
-            collection.insert_one({"guild_id":guild.id,"prefix":"%"})
+            prefix = '%'
+            cur.execute("INSERT INTO prefixes VALUES (?, ?, ?)", (guild.id, prefix, guild.owner.id))
         else:
             pass 
+        conn.commit()
 
     @commands.command(help = "Chooses 1 object when provided 2 or more objects", aliases = ["choices"])
     @commands.guild_only()

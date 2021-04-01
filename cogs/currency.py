@@ -601,6 +601,18 @@ class Currency(commands.Cog):
         elif isinstance(error, commands.CheckFailure):
             await ctx.send("Hey you gotta have atleast one hunting rifle in your inventory for this!")
 
+    @commands.command()
+    @commands.cooldown(1, 60, BucketType.user)
+    async def babysit(self, ctx):
+        chance = random.choices(['1', '0'], weights=[70, 5])
+        if chance[0] == '1':
+            earning = random.randrange(100, 1000)
+            await ctx.send(f"{ctx.author.mention}, was called for babysitting and did a good job, earned {earning}!")
+            collection.update_one({"user":ctx.author.id}, {"$inc":{"wallet":earning}})
+        elif chance[0] == '0':
+            await ctx.send(f"{ctx.author.mention} went for babysitting and the baby started irritating you and you threw it out of the window, your entire bank account is now empty!")
+            collection.update_one({"user":ctx.author.id}, {"$set":{"bank":0}})
+
     @commands.command(help="Mention someone while using this command to rob their bank! Its tricky!")
     @commands.guild_only()
     @commands.cooldown(1, 400, BucketType.user)
