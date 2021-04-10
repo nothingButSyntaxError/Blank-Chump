@@ -10,6 +10,8 @@ import random
 from PIL import ImageFont, Image, ImageDraw
 import sqlite3
 from io import BytesIO
+import pywhatkit
+import wikipedia
 
 guild_cluster = MongoClient("mongodb+srv://Yash:BlankChump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 guild_db = guild_cluster["discord"]
@@ -127,9 +129,13 @@ class Utility(commands.Cog):
             print(member.top_role.mention)
             await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases=['qs', 'qsearch', 'wikisearch'])
     async def quicksearch(self, ctx, *, term):
-        pywhatkit.search(term)
+        info = wikipedia.summary(term, 1)
+        try:
+            await ctx.send(info)
+        except:
+            await ctx.send("I searched the whole internet for you, did not find anything for you! ||DONT SEND WEIRD STUFF THAT NOBODY KNOWS!||")
 
     @commands.command()
     async def ping(self, ctx):

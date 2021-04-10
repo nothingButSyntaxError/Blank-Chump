@@ -12,8 +12,8 @@ class games(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    @commands.guild_only()
+    #@commands.command()
+    #@commands.guild_only()
     async def rps(self, ctx, mem_choice):
         bot_choice = random.choice(['rock', 'paper', 'scizzor'])
         if mem_choice == 'ROCK'.lower():
@@ -53,8 +53,7 @@ class games(commands.Cog):
                 embed.set_thumbnail(url=ctx.author.avatar_url)
                 embed.set_footer(text=f"{datetime.datetime.utcnow()} UTC")
                 await ctx.send(embed=embed)
-            
-    
+        
     
 
 

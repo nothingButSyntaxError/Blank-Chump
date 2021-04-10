@@ -40,7 +40,7 @@ pets = [{"name":"cat", "price":8000},
         {"name":"owl", "price":10000},
         {"name":"eagle", "price":43000}]
 
-class Animals(commands.Cog):
+class Pets(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -331,7 +331,7 @@ class Animals(commands.Cog):
         if not check:
             return
         elif check:
-            await ctx.send(f"Hey {check[1]} is now on level 2. Hooray! Looks like you have taken good care of it.")
+            await ctx.send(f"Hey {check[1]} is now on next level. Hooray! Looks like you have taken good care of it.")
             cursor.execute("UPDATE pets SET experince=? WHERE id=?", (exp, ctx.author.id))
             cursor.execute("UPDATE pets SET level=level+1 WHERE id=?", (ctx.author.id,))
 
@@ -359,8 +359,6 @@ class Animals(commands.Cog):
                     inv_collection.update_one({"user":ctx.author.id}, {"$inc":{prey:n}})
             
 
-
-
     @commands.Cog.listener()
     async def on_ready(self):
         self.expchecker.start()
@@ -370,4 +368,4 @@ class Animals(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Animals(bot))
+    bot.add_cog(Pets(bot))

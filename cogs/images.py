@@ -1,8 +1,9 @@
 import discord
 from discord import user
+from discord import file
 from discord.ext import commands, tasks
 import random
-from PIL import Image, ImageFont, ImageDraw
+from PIL import Image, ImageFont, ImageDraw, ImageFilter
 from io import BytesIO
 import textwrap
 
@@ -156,8 +157,29 @@ class Images(commands.Cog):
         await ctx.send(file=discord.File("cat_pfp.png"))
 
 
-    
+    @commands.command(aliases=['trash'])
+    async def garbage(self, ctx, member: discord.Member = None):
+        if member == None:
+            member = ctx.author
+        garbage = Image.open("./cogs/img_src/garbage.jpg")
+        asset = member.avatar_url_as(size=128)
+        data = BytesIO(await asset.read())
+        pfp = Image.open(data)
+        pfp = pfp.resize((910, 870))
+        garbage.paste(pfp, (860, 517))
+        garbage.save("garbage_pfp.jpg")
+        await ctx.send(file=discord.File("garbage_pfp.jpg"))
 
+    @commands.command()
+    async def blurme(self, ctx, member: discord.Member = None):
+        if member == None:
+            member = ctx.author
+        asset = member.avatar_url_as(size=128)
+        data = BytesIO(await asset.read())
+        pfp = Image.open(data)
+        blurred_image = pfp.filter(ImageFilter.BLUR)
+        blurred_image.save("blurme_pfp.rgba")
+        await ctx.send(file=discord.File("blurme_pfp.rgba"))
     
     
 
