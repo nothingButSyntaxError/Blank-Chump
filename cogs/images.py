@@ -170,19 +170,6 @@ class Images(commands.Cog):
         garbage.save("garbage_pfp.jpg")
         await ctx.send(file=discord.File("garbage_pfp.jpg"))
 
-    @commands.command()
-    async def blurme(self, ctx, member: discord.Member = None):
-        if member == None:
-            member = ctx.author
-        asset = member.avatar_url_as(size=128)
-        data = BytesIO(await asset.read())
-        pfp = Image.open(data)
-        blurred_image = pfp.filter(ImageFilter.BLUR)
-        blurred_image.save("blurme_pfp.rgba")
-        await ctx.send(file=discord.File("blurme_pfp.rgba"))
-    
-    
-
 
 
 def setup(bot):

@@ -53,7 +53,7 @@ class games(commands.Cog):
                 embed.set_thumbnail(url=ctx.author.avatar_url)
                 embed.set_footer(text=f"{datetime.datetime.utcnow()} UTC")
                 await ctx.send(embed=embed)
-        
+            
     
 
 

@@ -39,6 +39,7 @@ mainshop = [{"name": "watch", "price": 2000, "description": "Show off your watch
             {"name":"apple", "price":25, "description":"An apple a day keeps the doctor away. Eat an apple and feel better!"},
             {"name":"cookie", "price":15, "description":"A good mouth blending cookie!"}]
 
+prices = {"watch":200, "fishing_rod":1500, "second_hand_laptop":3000, "fidget_spinner":300, "mobile_phone":1000, "bag_lock":7000, "hunting_rifle":3000, "apple":0, "cookie":0}
 
 #CHECKS
 def pm_check(ctx):
@@ -938,9 +939,14 @@ class Currency(commands.Cog):
             return
         else:
             inventory = inv_collection.find_one({"user":ctx.author.id})
-            for item in inventory:
-                if inventory[item] > 0:
-                    return
+            price = prices[item]
+            if price == 0:
+                await ctx.send(f"This item is not sellable, instead use it using the `%use` command!")
+            else:
+                theitem = inventory[item]
+                await ctx.send(f"You sold {amount} {item} for {price * amount}!")
+                inv_collection.update_one({"user":ctx.author.id}, {"$set":{item: theitem - amount}})
+                collection.update_one({"user":ctx.author.id}, {"$inc":{"wallet":price*amount}})
 
     @commands.command()
     async def search(self, ctx):

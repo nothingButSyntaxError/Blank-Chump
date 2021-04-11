@@ -141,6 +141,18 @@ class Utility(commands.Cog):
     async def ping(self, ctx):
         await ctx.send(f"The ping I am currently recieving is **{round(self.bot.latency*1000)}ms**")
 
+    @commands.command()
+    async def add(self, ctx, num1, num2):
+        n1 = int(num1)
+        n2 = int(num2)
+        await ctx.send(f"Here is your answer {ctx.author.mention} `{n1 + n2}`")
+    
+    @commands.command()
+    async def subtract(self, ctx, num1, num2):
+        n1 = int(num1)
+        n2 = int(num2)
+        await ctx.send(f"Here is your answer {ctx.author.mention} `{n1 - n2}`")
+
     @commands.Cog.listener()
     async def on_ready(self):
         print("Bot is Ready")
