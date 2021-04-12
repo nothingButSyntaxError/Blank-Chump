@@ -929,7 +929,6 @@ class Currency(commands.Cog):
                     await ctx.send("You dont have an apple to use it!")
     
     @commands.command()
-    @commands.is_owner()
     async def sell(self, ctx, item, amount=1):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
