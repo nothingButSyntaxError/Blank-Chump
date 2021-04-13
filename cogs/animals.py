@@ -357,6 +357,49 @@ class Pets(commands.Cog):
                     n = random.randrange(4, 5)
                     await ctx.send(f"You went hunting with {name} and fought with {n} {prey} and caught them, they are in your inventory now!")
                     inv_collection.update_one({"user":ctx.author.id}, {"$inc":{prey:n}})
+                elif level > 20 and level < 31:
+                    prey = random.choice(['rats', 'lizzards', 'moles'])
+                    n = random.randrange(6, 7)
+                    await ctx.send(f"You went hunting with {name} and fought with {n} {prey} and caught them, they are in your inventory now!")
+                    inv_collection.update_one({"user":ctx.author.id}, {"$inc":{prey:n}})
+                elif level > 30 and level < 41:
+                    prey = random.choice(['rats', 'lizzards', 'moles'])
+                    n = random.randrange(8, 9)
+                    await ctx.send(f"You went hunting with {name} and fought with {n} {prey} and caught them, they are in your inventory now!")
+                    inv_collection.update_one({"user":ctx.author.id}, {"$inc":{prey:n}})
+                elif level > 40 and level < 51:
+                    prey = random.choice(['rats', 'lizzards', 'moles', 'rabbits'])
+                    n = random.randrange(10, 11)
+                    await ctx.send(f"You went hunting with {name} and fought with {n} {prey} and caught them, they are in your inventory now!")
+                    inv_collection.update_one({"user":ctx.author.id}, {"$inc":{prey:n}})
+                elif level > 50 and level < 61:
+                    prey = random.choice(['rats', 'lizzards', 'moles', 'rabbits'])
+                    n = random.randrange(12, 13)
+                    await ctx.send(f"You went hunting with {name} and fought with {n} {prey} and caught them, they are in your inventory now!")
+                    inv_collection.update_one({"user":ctx.author.id}, {"$inc":{prey:n}})
+                elif level > 60 and level < 71:
+                    prey = random.choice(['rats', 'lizzards', 'moles', 'rabbits'])
+                    n = random.randrange(14, 15)
+                    await ctx.send(f"You went hunting with {name} and fought with {n} {prey} and caught them, they are in your inventory now!")
+                    inv_collection.update_one({"user":ctx.author.id}, {"$inc":{prey:n}})
+                elif level > 70 and level < 81:
+                    prey = random.choice(['rats', 'lizzards', 'moles', 'rabbits', 'fish'])
+                    n = random.randrange(16, 17)
+                    await ctx.send(f"You went hunting with {name} and fought with {n} {prey} and caught them, they are in your inventory now!")
+                    inv_collection.update_one({"user":ctx.author.id}, {"$inc":{prey:n}})
+                elif level > 80 and level < 91:
+                    prey = random.choice(['rats', 'lizzards', 'moles', 'rabbits', 'fish'])
+                    n = random.randrange(16, 17)
+                    await ctx.send(f"You went hunting with {name} and fought with {n} {prey} and caught them, they are in your inventory now!")
+                    inv_collection.update_one({"user":ctx.author.id}, {"$inc":{prey:n}})
+                elif level > 90 and level < 101:
+                    prey = random.choice(['rats', 'lizzards', 'moles', 'rabbits', 'fish'])
+                    n = random.randrange(16, 17)
+                    await ctx.send(f"You went hunting with {name} and fought with {n} {prey} and caught them, they are in your inventory now!")
+                    inv_collection.update_one({"user":ctx.author.id}, {"$inc":{prey:n}})
+                
+
+
             
 
     @commands.Cog.listener()
