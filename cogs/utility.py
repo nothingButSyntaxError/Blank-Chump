@@ -153,6 +153,10 @@ class Utility(commands.Cog):
         n2 = int(num2)
         await ctx.send(f"Here is your answer {ctx.author.mention} `{n1 - n2}`")
 
+    @commands.command()
+    async def multiply(self, ctx, num1:int, num2:int):
+        await ctx.send(f"Here is your answer {ctx.author.mention}, `{num1*num2}`")
+
     @commands.Cog.listener()
     async def on_ready(self):
         print("Bot is Ready")

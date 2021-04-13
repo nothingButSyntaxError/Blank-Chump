@@ -121,10 +121,8 @@ class Currency(commands.Cog):
     async def deposit(self, ctx, amount: int=None):
         bankinfo = collection.find_one({"user": ctx.author.id})
         if not bankinfo:
-            #make new entry
             collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
-            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,
-                                       "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0,"fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
             await ctx.send(f'{ctx.author.name} opening new bank account for you as you dont have one yet! Actually I am thinking what were you depositing if you had no account nor money?!')
             return
         else:
@@ -139,9 +137,9 @@ class Currency(commands.Cog):
                 elif amount < 0:
                     await ctx.reply("This is too much! **I ain't depositing negative values!**")
                 else:
-                    new_wall_money = wallet-amount
+                    new_wall_money = wallet-(amount)
                     new_wallet = collection.update_one({"user":ctx.author.id}, {"$set": {"wallet": new_wall_money}})
-                    new_bank = collection.update_one({"user": ctx.author.id}, {"$inc": {"bank": amount}})
+                    new_bank = collection.update_one({"user": ctx.author.id}, {"$inc": {"bank": (amount)}})
                     await ctx.send("Amount deposited to your bank account!")
 
 
@@ -252,7 +250,7 @@ class Currency(commands.Cog):
                     collection.update_one({"user":ctx.author.id}, {"$set": {"wallet":new_wallet}})
                     collection.update_one({"user":member.id}, {"$inc":{"bank":amount}})
                     await asyncio.sleep(2)
-                    await ctx.send(f"Payed the amount from your wallet to {member.mention}'s bank account!")
+                    await ctx.send(f"Paid the amount from your wallet to {member.mention}'s bank account!")
 
 
 
@@ -943,9 +941,10 @@ class Currency(commands.Cog):
                 await ctx.send(f"This item is not sellable, instead use it using the `%use` command!")
             else:
                 theitem = inventory[item]
-                await ctx.send(f"You sold {amount} {item} for {price * amount}!")
-                inv_collection.update_one({"user":ctx.author.id}, {"$set":{item: theitem - amount}})
-                collection.update_one({"user":ctx.author.id}, {"$inc":{"wallet":price*amount}})
+                if theitem > 0:
+                    await ctx.send(f"You sold {amount} {item} for {price * amount}!")
+                    inv_collection.update_one({"user":ctx.author.id}, {"$set":{item: theitem - amount}})
+                    collection.update_one({"user":ctx.author.id}, {"$inc":{"wallet":price*amount}})
 
     @commands.command()
     async def search(self, ctx):
