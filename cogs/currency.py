@@ -1,4 +1,4 @@
-from discord import channel
+from discord import channel, colour
 from cogs.utility import check
 import discord
 from discord import user
@@ -40,6 +40,21 @@ mainshop = [{"name": "watch", "price": 2000, "description": "Show off your watch
             {"name":"cookie", "price":15, "description":"A good mouth blending cookie!"}]
 
 prices = {"watch":200, "fishing_rod":1500, "second_hand_laptop":3000, "fidget_spinner":300, "mobile_phone":1000, "bag_lock":7000, "hunting_rifle":3000, "apple":0, "cookie":0}
+
+
+#Work Places!
+workstations = [
+    {"name":"youtuber", "salary":3000},
+    {"name":"housewife", "salary":1000},
+    {"name":"mechanic", "salary":4000},
+    {"name":"mathematician", "salary":8000},
+    {"name":"computer engineer", "salary":11000},
+    {"name":"pilot", "salary":13000},
+    {"name":"chef", "salary":5000},
+    {"name":"doctor", "salary":10000},
+    {"name":"house cleaning service", "salary":1500},
+    {"name":"soccer player", "salary":13500}
+]
 
 #CHECKS
 def pm_check(ctx):
@@ -961,6 +976,23 @@ class Currency(commands.Cog):
             collection.update_one({"user":ctx.author.id}, {"$inc":{"wallet":earning}})
         else:
             await ctx.send(f"Hey {ctx.author.mention} thats not a valid option!")
+
+    @commands.command()
+    async def worklist(self, ctx):
+        bankinfo = collection.find_one({"user":ctx.author.id})
+        if not bankinfo:
+            await ctx.send("You dont have an account creating one for you!...")
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0, "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+            return
+        else:
+            embed = discord.Embed(title="Available Jobs!", colour=discord.Colour.red())
+            for job in workstations:
+                name = job["name"] 
+                salary = job["salary"]
+                embed.add_field(name=f'**{name}**', value=f"Salary = **{salary}**", inline=False)
+                embed.set_footer(text="To work somewhere use %work 'job name'")
+            await ctx.send(embed=embed)
 
 
 
