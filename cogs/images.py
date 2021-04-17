@@ -174,6 +174,8 @@ class Images(commands.Cog):
         mando.save("mando_pfp.jpeg")
         await ctx.send(file=discord.File("mando_pfp.jpeg"))
 
+    
+    
    
     
 

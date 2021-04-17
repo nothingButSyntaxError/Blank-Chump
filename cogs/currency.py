@@ -60,7 +60,9 @@ workstations = [
     {"name":"chef", "salary":5000},
     {"name":"doctor", "salary":10000},
     {"name":"house cleaning service", "salary":1500},
-    {"name":"soccer player", "salary":13500}
+    {"name":"soccer player", "salary":13500},
+    {"name":"teacher", "salary":3700},
+    {"name":"gamer", "salary":8700}
 ]
 
 #CHECKS
@@ -1002,7 +1004,7 @@ class Currency(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command()
-    async def startworking(self, ctx, job):
+    async def startworking(self, ctx, *, job):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
             await ctx.send("You dont have an account creating one for you!...")
@@ -1050,14 +1052,22 @@ class Currency(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 4, BucketType.user)
-    async def work(self, ctx, job=None):
+    async def work(self, ctx):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
             await ctx.send("You dont have an account creating one for you!...")
             collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
             inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0, "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
             return
-    
+        else:
+            checkjob = cursor.execute("SELECT * FROM jobs WHERE user=?", (ctx.author.id,))
+            if not checkjob:
+                await ctx.send("Go to hell. You dont have a job! Unempolyed Brats!")
+            else:
+                if checkjob[1] == 'youtuber':
+                    youtuber = random.choice(['mr.beast', 'pewdiepie', 'dude perfect'])
+                    if youtuber == 'mr.beast':
+                        pass
             
 
 
