@@ -994,6 +994,14 @@ class Currency(commands.Cog):
                 embed.set_footer(text="To work somewhere use %work 'job name'")
             await ctx.send(embed=embed)
 
+    #@commands.command()
+    async def work(self, ctx, job=None):
+        bankinfo = collection.find_one({"user":ctx.author.id})
+        if not bankinfo:
+            await ctx.send("You dont have an account creating one for you!...")
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0, "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+            return
 
 
 

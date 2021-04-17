@@ -7,6 +7,8 @@ from PIL import Image, ImageFont, ImageDraw, ImageFilter
 from io import BytesIO
 import textwrap
 
+from discord.team import TeamMember
+
 
 class Images(commands.Cog):
     def __init__(self, bot):
@@ -51,18 +53,6 @@ class Images(commands.Cog):
         thanos.save("thanos_pfp.jpg")
         await ctx.send(file=discord.File("thanos_pfp.jpg"))
 
-    @commands.command()
-    async def thanos(self, ctx, member: discord.Member = None):
-        if member == None:
-            member = ctx.author
-        thanos = Image.open("./cogs/img_src/thanos.jpg")
-        asset = member.avatar_url_as(size=128)
-        data = BytesIO(await asset.read())
-        pfp = Image.open(data)
-        pfp = pfp.resize((215, 275))
-        thanos.paste(pfp, (347, 81))
-        thanos.save("thanos_pfp.jpg")
-        await ctx.send(file=discord.File("thanos_pfp.jpg"))
 
     @commands.command(aliases=['wdt'])
     async def whodidthis(self, ctx, member: discord.Member = None):
@@ -165,11 +155,27 @@ class Images(commands.Cog):
         asset = member.avatar_url_as(size=128)
         data = BytesIO(await asset.read())
         pfp = Image.open(data)
-        pfp = pfp.resize((910, 870))
-        garbage.paste(pfp, (860, 517))
+        pfp = pfp.resize((255, 246))
+        og_pfp = pfp.filter(ImageFilter.GaussianBlur(4))
+        garbage.paste(og_pfp, (216, 0))
         garbage.save("garbage_pfp.jpg")
         await ctx.send(file=discord.File("garbage_pfp.jpg"))
 
+    @commands.command()
+    async def mandalorian(self, ctx, member: discord.Member = None):
+        if member == None:
+            member = ctx.author
+        mando = Image.open("./cogs/img_src/mando.jpeg")
+        asset = member.avatar_url_as(size=128)
+        data = BytesIO(await asset.read())
+        pfp = Image.open(data)
+        pfp = pfp.resize((324, 349))
+        mando.paste(pfp, (507, 21))
+        mando.save("mando_pfp.jpeg")
+        await ctx.send(file=discord.File("mando_pfp.jpeg"))
+
+   
+    
 
 
 def setup(bot):
