@@ -16,6 +16,13 @@ from itertools import cycle
 #SQLITE3
 connection = sqlite3.connect("lottery.sqlite")
 cursor = connection.cursor()
+try:
+    cursor.execute("""CREATE TABLE IF NOT EXISTS jobs (
+        user INTEGER,
+        job TEXT
+    );""")
+except:
+    pass
 
 #MONGODB
 cluster = MongoClient("mongodb+srv://Admin-MyName:Parth!7730@my-dbs.xlx4y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
@@ -994,7 +1001,55 @@ class Currency(commands.Cog):
                 embed.set_footer(text="To work somewhere use %work 'job name'")
             await ctx.send(embed=embed)
 
-    #@commands.command()
+    @commands.command()
+    async def startworking(self, ctx, job):
+        bankinfo = collection.find_one({"user":ctx.author.id})
+        if not bankinfo:
+            await ctx.send("You dont have an account creating one for you!...")
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0, "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+            return
+        else:
+            checkjob = cursor.execute("SELECT * FROM jobs WHERE user=?", (ctx.author.id,)).fetchone()
+            if not checkjob:
+                for work in workstations:
+                    name = work["name"]
+                    if job == name:
+                        await ctx.send(f"You are now working as a {job}")
+                        cursor.execute("INSERT INTO jobs VALUES (?, ?)", (ctx.author.id, job))
+                        connection.commit()
+                        break
+                    else:
+                        await ctx.send("Thats not a valid job please check the available jobs for you by using `%worklist` command!")
+            else:
+                await ctx.send("You already have a job, stop being so stupid!")
+
+    @startworking.error
+    async def startworking_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("Bruh! You gotta send where you wanna work with your command!")
+
+    @commands.command()
+    async def stopworking(self, ctx):
+        bankinfo = collection.find_one({"user":ctx.author.id})
+        if not bankinfo:
+            await ctx.send("You dont have an account creating one for you!...")
+            collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
+            inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0, "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
+            return
+        else:
+            checkjob = cursor.execute("SELECT * FROM jobs WHERE user=?", (ctx.author.id,)).fetchone()
+            if not checkjob:
+                await ctx.send("You dont even have a job. Basically you are worthless!")
+            else:
+                await ctx.send(f"You resinged from being a {checkjob[1]}!")
+                cursor.execute("DELETE FROM jobs WHERE user=?", (ctx.author.id,))
+                connection.commit()
+
+
+
+    @commands.command()
+    @commands.cooldown(1, 4, BucketType.user)
     async def work(self, ctx, job=None):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
@@ -1002,6 +1057,8 @@ class Currency(commands.Cog):
             collection.insert_one({"user": ctx.author.id, "wallet": 0, "bank": 0})
             inv_collection.insert_one({"user": ctx.author.id, "watch": 0, "second_hand_laptop": 0, "hunting_rifle": 0, "fidget_spinner": 0, "fishing_rod": 0, "mobile_phone": 0, "bag_lock": 0, "apple": 0, "cookie": 0})
             return
+    
+            
 
 
 
