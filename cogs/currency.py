@@ -22,7 +22,7 @@ try:
         job TEXT
     );""")
 except:
-    pass
+    print("Problem while creating jobs table!")
 
 #MONGODB
 cluster = MongoClient("mongodb+srv://Admin-MyName:Parth!7730@my-dbs.xlx4y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
