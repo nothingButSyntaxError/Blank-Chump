@@ -22,7 +22,7 @@ try:
         job TEXT
     );""")
 except:
-    pass
+    print("Problem while creating jobs table!")
 
 #MONGODB
 cluster = MongoClient("mongodb+srv://Admin-MyName:Parth!7730@my-dbs.xlx4y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
@@ -1050,8 +1050,8 @@ class Currency(commands.Cog):
 
 
 
-    @commands.command()
-    @commands.cooldown(1, 4, BucketType.user)
+    #@commands.command()
+    #@commands.cooldown(1, 4, BucketType.user)
     async def work(self, ctx):
         bankinfo = collection.find_one({"user":ctx.author.id})
         if not bankinfo:
@@ -1065,7 +1065,17 @@ class Currency(commands.Cog):
                 await ctx.send("Go to hell. You dont have a job! Unempolyed Brats!")
             else:
                 if checkjob[1] == 'computer engineer':
-                    pass
+                    task = random.choice(["javascript", "python", "java"])
+                    await ctx.send(f"You have got a {task} task!")
+                    if task == "python":
+                        pytask = random.choice(["print", "fucntion"])
+                        if pytask == "print":
+                            printingwords = random.choice(["discord", "blank", "charge", "hello world"])
+                            await ctx.send(f"You have to perform a printing task. All you have to do is show me how to print **{printingwords}**")
+                            def check(m):
+                                return m.channel == ctx.channel and m.author == ctx.author
+                            if m.content == f'print("{printingwords}")':
+                                await ctx.send("Brilliant! You get {}")
 
 
 
