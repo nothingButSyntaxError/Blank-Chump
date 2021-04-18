@@ -196,7 +196,7 @@ class Currency(commands.Cog):
                     new_bank = collection.update_one({"user":ctx.author.id}, {"$set": {"bank":new_bank_money}})
                     await ctx.send("Withdrawed the amount from your bank account to your wallet!")
 
-    
+
     @commands.command(help="Use the command to play slots with the bot! Intresting isn't it?!")
     @commands.guild_only()
     @commands.cooldown(1, 30, BucketType.user)
@@ -331,7 +331,7 @@ class Currency(commands.Cog):
             err = error.retry_after
             await ctx.send(f"Hey Hey you will get more money after {round(err)} more seconds! You got that right?")
 
-    
+
     @commands.command(aliases=['cast'], help="Its time to use your fishing rod for fishing. Interesting but please do buy a fishing rod first!")
     @commands.check(fish_check)
     @commands.guild_only()
@@ -436,7 +436,7 @@ class Currency(commands.Cog):
             err = error.retry_after
             await ctx.send(f"If you play so much highlow, you will get high yourself. Please use the command only after {round(err)} more seconds!")
 
-    
+
     @commands.command(help="Use the command for robbing someone! Be careful sometimes they might have bag locks!", aliases=['steal'])
     @commands.cooldown(1, 70, BucketType.user)
     async def rob(self, ctx, member: discord.Member = None):
@@ -481,9 +481,9 @@ class Currency(commands.Cog):
     async def rob_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
             e = error.retry_after
-            await ctx.send(f"You can rob someone only after {round(e)} more seconds!")     
+            await ctx.send(f"You can rob someone only after {round(e)} more seconds!")
         else:
-            await ctx.send("There was an error executing the command try contacting the devs if you want!")               
+            await ctx.send("There was an error executing the command try contacting the devs if you want!")
 
 
 
@@ -568,7 +568,7 @@ class Currency(commands.Cog):
                         cursor.execute("INSERT INTO lottery VALUES(?, ?, ?)", (ctx.author.name, ctx.author.id, ticket))
                         connection.commit()
                 else:
-                    await ctx.send("You need to have atleast 100 coins in your wallet to buy the ticket idiot!")            
+                    await ctx.send("You need to have atleast 100 coins in your wallet to buy the ticket idiot!")
             elif msg.content == "no":
                 await ctx.send("Alright bro! Your wish!")
 
@@ -600,7 +600,7 @@ class Currency(commands.Cog):
         cursor.execute("DELETE FROM lottery")
         connection.commit()
 
-    
+
     @commands.Cog.listener()
     async def on_ready(self):
         self.lotteryloop.start()
@@ -718,7 +718,7 @@ class Currency(commands.Cog):
         else:
             embed = discord.Embed(title=f"**{self.bot.user}'s shop**", colour=discord.Colour.red())
             for item in mainshop:
-                name = item["name"] 
+                name = item["name"]
                 price = item["price"]
                 description = item["description"]
                 embed.add_field(name=f'**{name}--${price}**',value=f'description: {description}', inline=False)
@@ -888,7 +888,7 @@ class Currency(commands.Cog):
                     await ctx.send(f"Ohh you have bought Cookie! for {cook_cost}!")
                 elif cook_cost == wallet:
                     new_wallet_amt = wallet-cook_cost
-            
+
                     author_inv_lap = inv_collection.update_one(
                         {"user": ctx.author.id}, {"$inc": {'cookie': amount}})
                     author_wallet_watch = collection.update_one(
@@ -896,7 +896,7 @@ class Currency(commands.Cog):
                     await ctx.send(f"Ohh you have bought Cookie! for {cook_cost}!")
             else:
                 await ctx.send("**That Item Is Not Even there in the shop!**WHAT AN IDIOT!")
-     
+
     @commands.command(help="Use the command for using things in your inventory such as an apple or a mobile phone if you have!?")
     async def use(self, ctx, thing=None):
         bankinfo = collection.find_one({"user":ctx.author.id})
@@ -949,7 +949,7 @@ class Currency(commands.Cog):
                     inv_collection.update_one({"user":ctx.author.id}, {"$set":{"apple":apple_check_user-1}})
                 else:
                     await ctx.send("You dont have an apple to use it!")
-    
+
     @commands.command()
     async def sell(self, ctx, item, amount=1):
         bankinfo = collection.find_one({"user":ctx.author.id})
@@ -997,7 +997,7 @@ class Currency(commands.Cog):
         else:
             embed = discord.Embed(title="Available Jobs!", colour=discord.Colour.red())
             for job in workstations:
-                name = job["name"] 
+                name = job["name"]
                 salary = job["salary"]
                 embed.add_field(name=f'**{name}**', value=f"Salary = **{salary}**", inline=False)
                 embed.set_footer(text="To work somewhere use %work 'job name'")
@@ -1064,11 +1064,9 @@ class Currency(commands.Cog):
             if not checkjob:
                 await ctx.send("Go to hell. You dont have a job! Unempolyed Brats!")
             else:
-                if checkjob[1] == 'youtuber':
-                    youtuber = random.choice(['mr.beast', 'pewdiepie', 'dude perfect'])
-                    if youtuber == 'mr.beast':
-                        pass
-            
+                if checkjob[1] == 'computer engineer':
+                    pass
+
 
 
 
