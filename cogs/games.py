@@ -12,8 +12,8 @@ class games(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    #@commands.command()
-    #@commands.guild_only()
+    @commands.command()
+    @commands.guild_only()
     async def rps(self, ctx, mem_choice):
         bot_choice = random.choice(['rock', 'paper', 'scizzor'])
         if mem_choice == 'ROCK'.lower():
@@ -40,7 +40,7 @@ class games(commands.Cog):
                 await ctx.send(embed=e)
         elif mem_choice == 'paper':
             if bot_choice == 'rock':
-                em = discord.Embed(title=f"{ctx.author.name}'s Losing RPS Game!", colour=discord.Colour.red())
+                em = discord.Embed(title=f"{ctx.author.name}'s Winning RPS Game!", colour=discord.Colour.green())
                 em.add_field(name="Bot Played:", value="rock")
                 em.add_field(name=f"{ctx.author.name} Played:", value="paper")
                 em.set_thumbnail(url=ctx.author.avatar_url)
@@ -53,8 +53,15 @@ class games(commands.Cog):
                 embed.set_thumbnail(url=ctx.author.avatar_url)
                 embed.set_footer(text=f"{datetime.datetime.utcnow()} UTC")
                 await ctx.send(embed=embed)
-            
-    
+            elif bot_choice == 'scizzor':
+                em = discord.Embed(title=f"{ctx.author.name}'s Losing RPS Game!", colour=discord.Colour.red())
+                em.add_field(name="Bot Played", value="scizzor")
+                em.add_field(name=f"{ctx.author.name} Played", value="paper")
+                em.set_thumbnail(url=ctx.author.avatar_url)
+                em.set_footer(text=f"{datetime.datetime.utcnow()} UTC")
+                await ctx.send(embed=em)
+
+
 
 
 
