@@ -7,6 +7,11 @@ import random
 import os
 import datetime
 
+def bot_check(ctx):
+    if ctx.author.bot == True:
+        return False
+    else:
+        return True
 
 class games(commands.Cog):
     def __init__(self, bot):
@@ -14,6 +19,7 @@ class games(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
+    @commands.check(bot_check)
     async def rps(self, ctx, mem_choice):
         bot_choice = random.choice(['rock', 'paper', 'scizzor'])
         if mem_choice == 'ROCK'.lower():
@@ -83,6 +89,23 @@ class games(commands.Cog):
                 em.set_thumbnail(url=ctx.author.avatar_url)
                 await ctx.send(embed=em)
 
+    #@commands.command()
+    @commands.check(bot_check)
+    async def fight(self, ctx, member: discord.Member = None):
+        if member == None:
+            await ctx.send("You have to mention someone to fight them!!")
+        elif member != None:
+            player1 = ctx.author
+            if member.bot == True:
+                await ctx.reply("The mentioned person cannot be a bot. Idiot!!!")
+            else:
+                player2 = member
+                await ctx.send(f"{player1.mention}, You are now fighting {player2.mention}.")
+                await ctx.send(f"{player1.mention}What will be your first move against {player2.name}, you can **kick**, **punch**, **defend**, **end**")
+                def check(m):
+                    return m.author == player1 and m.channel == ctx.channel
+                player1Health = 100
+                player2Health = 100
 
 
 

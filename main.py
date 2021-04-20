@@ -2,7 +2,7 @@ from cogs.images import Images
 from cogs.games import games
 from discord.ext.commands.core import check
 from discord.flags import Intents
-import pymongo 
+import pymongo
 from pymongo import MongoClient
 import discord
 from discord.ext import commands
@@ -58,7 +58,7 @@ class MyHelp(commands.HelpCommand):
 
         channel = self.get_destination()
         await channel.send(embed=embed)
-        
+
 
     async def send_command_help(self, command):
         embed = discord.Embed(title=self.get_command_signature(command), colour=discord.Colour.orange())
@@ -84,7 +84,6 @@ bot.load_extension(f"cogs.games")
 bot.load_extension(f"cogs.images")
 bot.load_extension(f"cogs.admin")
 bot.load_extension(f"cogs.animals")
-bot.load_extension(f"cogs.functions")
 
 
 bot.run('ODA5NzM1NDgzNzEwMTExNzY0.YCZa7w.4qz1St9r9ktva6AANexlBNtEeeA')

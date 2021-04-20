@@ -92,7 +92,7 @@ class Images(commands.Cog):
         cap.paste(pfp, (320, 129))
         cap.save("captain_marvel_pfp.jpg")
         await ctx.send(file=discord.File("captain_marvel_pfp.jpg"))
-    
+
     @commands.command()
     async def uglier(self, ctx, member: discord.Member = None):
         if member == None:
@@ -174,10 +174,21 @@ class Images(commands.Cog):
         mando.save("mando_pfp.jpeg")
         await ctx.send(file=discord.File("mando_pfp.jpeg"))
 
-    
-    
-   
-    
+    @commands.command()
+    async def ricky(self, ctx, member: discord.Member = None):
+        if member == None:
+            member = ctx.author
+        ricky = Image.open("./cogs/img_src/ricky.png")
+        asset = member.avatar_url_as(size=128)
+        data = BytesIO(await asset.read())
+        pfp = Image.open(data)
+        pfp = pfp.resize((97, 117))
+        ricky.paste(pfp, (309, 13))
+        ricky.save("ricky_pfp.png")
+        await ctx.send(file=discord.File("ricky_pfp.png"))
+
+
+
 
 def setup(bot):
     bot.add_cog(Images(bot))
