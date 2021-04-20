@@ -25,14 +25,14 @@ class games(commands.Cog):
                 embed.set_footer(text=f"{datetime.datetime.utcnow()} UTC")
                 await ctx.send(embed=embed)
             elif bot_choice == 'paper':
-                em = discord.Embed(title=f"{ctx.author.name}'s Winning RPS Game!", colour=discord.Colour.green())
+                em = discord.Embed(title=f"{ctx.author.name}'s Losing RPS Game!", colour=discord.Colour.red())
                 em.add_field(name="Bot Played:", value="paper")
                 em.add_field(name=f"{ctx.author.name} Played:", value="rock")
                 em.set_thumbnail(url=ctx.author.avatar_url)
                 em.set_footer(text=f"{datetime.datetime.utcnow()} UTC")
                 await ctx.send(embed=em)
             elif bot_choice == 'scizzor':
-                e = discord.Embed(title=f"{ctx.author.name}'s Losing RPS Game!", colour=discord.Colour.red())
+                e = discord.Embed(title=f"{ctx.author.name}'s Winning RPS Game!", colour=discord.Colour.green())
                 e.add_field(name="Bot Played:", value="scizzor")
                 e.add_field(name=f"{ctx.author.name} Played:", value="rock")
                 e.set_thumbnail(url=ctx.author.avatar_url)
@@ -60,7 +60,28 @@ class games(commands.Cog):
                 em.set_thumbnail(url=ctx.author.avatar_url)
                 em.set_footer(text=f"{datetime.datetime.utcnow()} UTC")
                 await ctx.send(embed=em)
-
+        elif mem_choice == 'scizzor':
+            if bot_choice == 'rock':
+                em = discord.Embed(title=f"{ctx.author.name}'s Losing RPS Game!", colour=discord.Colour.red())
+                em.add_field(name="Bot Played", value="rock")
+                em.add_field(name=f"{ctx.author.name} Played", value="scizzor")
+                em.set_footer(text=f"{datetime.datetime.utcnow()} UTC")
+                em.set_thumbnail(url=ctx.author.avatar_url)
+                await ctx.send(embed=em)
+            elif bot_choice == 'paper':
+                em = discord.Embed(title=f"{ctx.author.name}'s Winning RPS Game!", colour=discord.Colour.green())
+                em.add_field(name="Bot Played", value="paper")
+                em.add_field(name=f"{ctx.author.name} Played", value="scizzor")
+                em.set_footer(text=f"{datetime.datetime.utcnow()} UTC")
+                em.set_thumbnail(url=ctx.author.avatar_url)
+                await ctx.send(embed=em)
+            elif bot_choice == 'scizzor':
+                em = discord.Embed(title=f"{ctx.author.name}'s Tied RPS Game!", colour=discord.Colour.gold())
+                em.add_field(name="Bot Played", value="scizzor")
+                em.add_field(name=f"{ctx.author.name} Played", value="scizzor")
+                em.set_footer(text=f"{datetime.datetime.utcnow()} UTC")
+                em.set_thumbnail(url=ctx.author.avatar_url)
+                await ctx.send(embed=em)
 
 
 
