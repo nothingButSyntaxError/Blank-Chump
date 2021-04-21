@@ -95,17 +95,36 @@ class games(commands.Cog):
         if member == None:
             await ctx.send("You have to mention someone to fight them!!")
         elif member != None:
-            player1 = ctx.author
             if member.bot == True:
                 await ctx.reply("The mentioned person cannot be a bot. Idiot!!!")
             else:
+                player1 = ctx.author
                 player2 = member
-                await ctx.send(f"{player1.mention}, You are now fighting {player2.mention}.")
-                await ctx.send(f"{player1.mention}What will be your first move against {player2.name}, you can **kick**, **punch**, **defend**, **end**")
-                def check(m):
-                    return m.author == player1 and m.channel == ctx.channel
-                player1Health = 100
-                player2Health = 100
+                await ctx.send(f"{player2.mention}, do you want to fight {player1.name}, if you accept the fight type the message `yes` below in the chat within 30 seconds!")
+                def confirmcheck(m):
+                    return m.author == player2 and m.channel == ctx.channel
+                msg = await self.bot.wait_for('message', check=confirmcheck, timeout=30)
+                if asyncio.TimeoutError:
+                    await ctx.send("The fight challenge timed out!")
+                elif msg.content == 'yes':
+                    player1Health = 100
+                    player2Health = 100
+                    for player1Health == 0 or player2Health == 0:
+                        await ctx.send(f"So what do you wanna do {player1.mention}, you can **punch**, **kick**, **defend**, **run away**")
+                        def check(m):
+                            return m.author == player1
+                        message = await self.bot.wait_for('message', check=check, timeout=15)
+                        if message.content == 'kick' or message.content == 'punch':
+                            damage = random.randrange(5, 27)
+                            await ctx.send(f"{player1.mention} landed a {message.content} on {player2} and dealt {damage} damage!")
+                            player2Health = player2Health - damage
+                        elif message.content == 'defend':
+                            await ctx.send(f"{player1.mention} defended and increased his health by 10!")
+                            player1Health = player1Health + 10
+                            await ctx.send(f"So what do you wanna do {player2.mention}, you can **punch**, **kick**, **defend**, **run away**")
+
+
+                
 
 
 
