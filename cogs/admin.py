@@ -14,7 +14,7 @@ class Admin(commands.Cog):
     @commands.command()
     @commands.is_owner()
     async def load(self, ctx, *, module):
-        try: 
+        try:
             self.bot.load_extension(f"cogs.{module}")
         except:
             await ctx.send("could not load the module")
@@ -23,9 +23,9 @@ class Admin(commands.Cog):
     @commands.is_owner()
     async def unload(self, ctx, *, module):
         """Loads a module."""
-        try: 
+        try:
             self.bot.unload_extension(f"cogs.{module}")
-        except:
+        except: 
             await ctx.send("could not load the module")
 
     @commands.command()

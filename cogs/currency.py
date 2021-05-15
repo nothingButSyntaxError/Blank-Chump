@@ -90,12 +90,19 @@ def hunt_check(ctx):
     else:
         return False
 
+def captcha(ctx):
+    if ctx.author.bot == True:
+        return False
+    else:
+        return True
+
 class Currency(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command(help="Use the command to check your balance or mention someone to check theirs(maybe check for robbing them):smile:", aliases=['bal'])
     @commands.guild_only()
+    @commands.check(captcha)
     async def balance(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
@@ -115,8 +122,14 @@ class Currency(commands.Cog):
             embed.set_thumbnail(url=member.avatar_url)
             await ctx.send(embed=embed)
 
+    @balance.error
+    async def balance_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure()):
+            await ctx.send("Hey Bot I will not respond to you!")
+
     @commands.command(help="Use the command to beg. Exactly like a begger :laughing:")
     @commands.guild_only()
+    @commands.check(captcha)
     @commands.cooldown(1, 65, BucketType.user)
     async def beg(self, ctx):
         bankinfo = collection.find_one({"user": ctx.author.id})

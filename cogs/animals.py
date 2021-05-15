@@ -15,11 +15,19 @@ from discord.ext.commands.cooldowns import BucketType
 
 
 #MONGODB
+<<<<<<< HEAD
 self.cluster = MongoClient("mongodb+srv://Admin-MyName:Parth!7730@my-dbs.xlx4y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 self.db = cluster["discord"]
 self.collection = db["user_data"]
 self.inv_db = cluster["discord"]
 self.inv_collection = db["inventory"]
+=======
+cluster = MongoClient("mongodb+srv://Admin-MyName:Parth!7730@my-dbs.xlx4y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+db = cluster["discord"]
+collection = db["user_data"]
+inv_db = cluster["discord"]
+inv_collection = db["inventory"]
+>>>>>>> refs/remotes/origin/master
 
 #SQLITE
 try:
