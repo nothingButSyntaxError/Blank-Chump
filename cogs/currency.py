@@ -1081,14 +1081,26 @@ class Currency(commands.Cog):
                     task = random.choice(["javascript", "python", "java"])
                     await ctx.send(f"You have got a {task} task!")
                     if task == "python":
-                        pytask = random.choice(["print", "fucntion"])
+                        pytask = random.choice(["print", "function"])
                         if pytask == "print":
                             printingwords = random.choice(["discord", "blank", "charge", "hello world"])
                             await ctx.send(f"You have to perform a printing task. All you have to do is show me how to print **{printingwords}**")
                             def check(m):
                                 return m.channel == ctx.channel and m.author == ctx.author
                             if m.content == f'print("{printingwords}")':
-                                await ctx.send("Brilliant! You get {}")
+                                await ctx.send(f"Brilliant! You get 11000")
+                                collection.update_one({"user":ctx.author.id}, {"$inc":{"wallet":11000}})
+                            else:
+                                await ctx.send("You are a failure as I thought you get some 100 bucks!")
+                                collection.update_one({"user":ctx.author.id}, {"$inc":{"wallet":100}})
+                        elif pytask == "function":
+                            functions = random.choice(["add", "subtract", "sayHello"])
+                            if functions == "add":
+                                await ctx.send("Make a function that adds 2 numbers!")
+                                def check(m):
+                                    return m.channel == ctx.channel and m.author == ctx.author
+                                if m.content == None:
+                                    pass
 
 
 

@@ -510,6 +510,7 @@ class Pets(commands.Cog):
                     inv_collection.update_one({"user":ctx.author.id}, {"$inc":{prey:n}})
 
 
+
     @commands.command(help = "list of prey and how much money you get if you sell them")
     @commands.guild_only()
     async def preylist(self, ctx):
