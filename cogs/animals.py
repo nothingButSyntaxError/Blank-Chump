@@ -15,11 +15,11 @@ from discord.ext.commands.cooldowns import BucketType
 
 
 #MONGODB
-cluster = MongoClient("mongodb+srv://Admin-MyName:Parth!7730@my-dbs.xlx4y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
-db = cluster["discord"]
-collection = db["user_data"] 
-inv_db = cluster["discord"]
-inv_collection = db["inventory"]
+self.cluster = MongoClient("mongodb+srv://Admin-MyName:Parth!7730@my-dbs.xlx4y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+self.db = cluster["discord"]
+self.collection = db["user_data"]
+self.inv_db = cluster["discord"]
+self.inv_collection = db["inventory"]
 
 #SQLITE
 try:
@@ -30,8 +30,8 @@ except Error:
     print(Error)
 
 pets = [{"name":"cat", "price":8000},
-        {"name":"owl", "price":12000},      
-        {"name":"parrot", "price":15000},    
+        {"name":"owl", "price":12000},
+        {"name":"parrot", "price":15000},
         {"name":"dog", "price":18000},
         {"name":"wolf", "price":25000},
         {"name":"snake", "price":28000},
@@ -41,8 +41,8 @@ pets = [{"name":"cat", "price":8000},
         {"name":"fox", "price":45000}]
 
 prey = [{"name":"rats", "price":8000},
-        {"name":"lizzards", "price":12000},      
-        {"name":"moles", "price":15000},    
+        {"name":"lizzards", "price":12000},
+        {"name":"moles", "price":15000},
         {"name":"beetles", "price":18000},
         {"name":"bread", "price":25000},
         {"name":"rabbits", "price":28000},
@@ -64,7 +64,7 @@ class Pets(commands.Cog):
             embed.set_footer(text="To buy something use %buypet 'pet'")
         await ctx.send(embed=embed)
 
-        
+
     @commands.command()
     async def buypet(self, ctx, pet, amount=1):
         bankinfo = collection.find_one({"user":ctx.author.id})
@@ -228,7 +228,7 @@ class Pets(commands.Cog):
             else:
                 await ctx.send("Hey there is no such thing in the pet list you idiot! Use the command petlist to see all the pets available!")
         else:
-            await ctx.send("Hey you already own a pet dont ya. Leave that pet if you want another one!")    
+            await ctx.send("Hey you already own a pet dont ya. Leave that pet if you want another one!")
 
 
 
@@ -244,7 +244,7 @@ class Pets(commands.Cog):
             embed.add_field(name="%disownpet", value="Use the command to disown your pet!")
             embed.add_field(name="%petplay", value="Use the command for playing with the pet!")
             embed.add_field(name="%petname", value="Use the command to change the pets name!")
-            await ctx.send(embed=embed) 
+            await ctx.send(embed=embed)
         else:
             await ctx.send("You should own a pet for this!")
 
@@ -520,11 +520,11 @@ class Pets(commands.Cog):
             embed.add_field(name=f'**{name}**', value=f"{price}", inline=False)
             embed.set_footer(text="To sell prey use %sellprey 'prey'")
         await ctx.send(embed=embed)
-        
-                
 
 
-            
+
+
+
 
     @commands.Cog.listener()
     async def on_ready(self):
