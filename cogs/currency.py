@@ -25,7 +25,7 @@ except:
     print("Problem while creating jobs table!")
 
 #MONGODB
-cluster = MongoClient("mongodb+srv://Admin-MyName:Parth!7730@my-dbs.xlx4y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+cluster = MongoClient("mongodb+srv://Admin-MyName:<Password>@my-dbs.xlx4y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 db = cluster["discord"]
 collection = db["user_data"]
 inv_db = cluster["discord"]
