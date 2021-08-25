@@ -13,7 +13,7 @@ from io import BytesIO
 import pywhatkit
 import wikipedia
 
-guild_cluster = MongoClient("mongodb+srv://Yash:BlankChump@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+guild_cluster = MongoClient("mongodb+srv://Yash:<Password>@cluster0.qbjak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 guild_db = guild_cluster["discord"]
 collection = guild_db["server_data"]
 
